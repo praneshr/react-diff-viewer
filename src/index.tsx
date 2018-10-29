@@ -9,6 +9,7 @@ interface DiffViewerProps {
   newValue: string;
   beautify?: (source: string) => string;
   splitView?: boolean;
+  worddiff?: boolean;
 }
 
 interface DiffViewerState {
@@ -32,9 +33,9 @@ const determineLineNumbers = (str: string) => str.split('\n').length
 
 const wordDiff = (str1: string, str2: string, hideType: string) => {
   const charDiff = diff.diffWordsWithSpace(str1, str2)
-  return charDiff.map((obj: any) => {
+  return charDiff.map((obj: any, i) => {
     if (obj[hideType]) return undefined
-    return <span className={cn(styles.wordDiff, { [styles.wordAdded]: obj.added, [styles.wordRemoved]: obj.removed })}>{obj.value}</span>
+    return <span className={cn(styles.wordDiff, { [styles.wordAdded]: obj.added, [styles.wordRemoved]: obj.removed })} key={i}>{obj.value}</span>
   })
 }
 class DiffViewer extends React.PureComponent<DiffViewerProps, DiffViewerState> {
@@ -43,13 +44,12 @@ class DiffViewer extends React.PureComponent<DiffViewerProps, DiffViewerState> {
     let leftLineNumber = 0
     let rightLineNumber = 0
 
-
     return () => diffArray.map((obj: diff.IDiffResult, i) => {
       const islineNumberNotEqual = obj.added
         && diffArray[i - 1]
         && diffArray[i - 1].removed
         && (determineLineNumbers(diffArray[i - 1].value) !== determineLineNumbers(obj.value))
-      return <div className={cn(styles.diffContainer, { [styles.clearFix]: islineNumberNotEqual })}>
+      return <div className={cn({ [styles.clearFix]: islineNumberNotEqual })} key={i}>
         <div className={styles.column}>
           {
             !obj.added
@@ -64,7 +64,7 @@ class DiffViewer extends React.PureComponent<DiffViewerProps, DiffViewerState> {
                   .filter((ch: string) => ch.length > 0)[num]
                 content = nextVal ? wordDiff(ch, nextVal, 'added') : ch
               }
-              return <div className={cn(styles.line, { [styles.diffRemoved]: obj.removed })}>
+              return <div className={cn(styles.line, { [styles.diffRemoved]: obj.removed })} key={num}>
                 <span className={styles.gutter}>
                   <span className={styles.lineNumber}>
                     <pre>
@@ -92,7 +92,7 @@ class DiffViewer extends React.PureComponent<DiffViewerProps, DiffViewerState> {
                   .filter((ch: string) => ch.length > 0)[num]
                 content = preValue ? wordDiff(preValue, ch, 'removed') : ch
               }
-              return <div className={cn(styles.line, { [styles.diffAdded]: obj.added })}>
+              return <div className={cn(styles.line, { [styles.diffAdded]: obj.added })} key={num}>
                 <span className={styles.gutter}>
                   <span className={styles.lineNumber}>
                     <pre>
@@ -110,6 +110,50 @@ class DiffViewer extends React.PureComponent<DiffViewerProps, DiffViewerState> {
     })
   }
 
+  inlineView = (diffArray: diff.IDiffResult[]) => {
+    let leftLineNumber = 0
+    let rightLineNumber = 0
+    return () => {
+      return diffArray.map(diffObj => {
+        return diffObj.value.split('\n')
+          .filter(ch => ch.length > 0)
+          .map((ch, num) => {
+            if (diffObj.added) {
+              rightLineNumber = rightLineNumber + 1
+            } else if (diffObj.removed) {
+              leftLineNumber = leftLineNumber + 1
+            } else {
+              rightLineNumber = rightLineNumber + 1
+              leftLineNumber = leftLineNumber + 1
+            }
+            return <div className={cn(styles.line, { [styles.diffAdded]: diffObj.added }, { [styles.diffRemoved]: diffObj.removed })} key={ch}>
+              <span className={styles.gutter}>
+                <span className={styles.lineNumber}>
+                  <pre style={{minWidth: 20}}>
+                    {
+                      !diffObj.added
+                      && leftLineNumber
+                    }
+                  </pre>
+                  <pre style={{minWidth: 20}}>
+                    {
+                      !diffObj.removed
+                      && rightLineNumber
+                    }
+                  </pre>
+                </span>
+                {diffObj.added && <span className={styles.marker}>+</span>}
+                {diffObj.removed && <span className={styles.marker}>-</span>}
+              </span>
+              <pre>
+                {ch}
+              </pre>
+            </div>
+          })
+      })
+    }
+  }
+
   render = () => {
     const {
       oldValue,
@@ -120,9 +164,12 @@ class DiffViewer extends React.PureComponent<DiffViewerProps, DiffViewerState> {
 
     const oldValueBeautified = beautifyValue(oldValue, beautify)
     const newValueBeautified = beautifyValue(newValue, beautify)
-    const nodes = splitView ? this.splitView(diff.diffLines(oldValueBeautified, newValueBeautified))() : <span>hello</span>
+    const diffLines = diff.diffLines(oldValueBeautified, newValueBeautified)
+    const nodes = splitView
+      ? this.splitView(diffLines)()
+      : this.inlineView(diffLines)()
     return (
-      <div>
+      <div className={styles.diffContainer}>
         {nodes}
       </div>
     )

@@ -53,6 +53,11 @@ export const gutter = css({
 export const lineNumber = css({
   opacity: 0.3,
   userSelect: 'none',
+  display: 'flex',
+})
+
+export const inlineNumbers = css({
+  marginLeft: 20,
 })
 
 export const clearFix = css({

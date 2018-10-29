@@ -3,7 +3,20 @@ import * as ReactDOM from 'react-dom'
 
 import ReactDiff from '../../lib/index'
 
-class Example extends React.Component {
+interface IExampleState {
+  splitView?: boolean;
+}
+class Example extends React.Component<{}, IExampleState> {
+
+  constructor(props: any) {
+    super(props)
+    this.state = {
+      splitView: false,
+    }
+  }
+
+  onChange = () => this.setState({ splitView: !this.state.splitView })
+
   render() {
     const a = {
       "stages": [{
@@ -113,9 +126,12 @@ class Example extends React.Component {
     }
     return (
       <div>
+        <label>
+          <input type="checkbox" name="toggle" id="toggle" onChange={this.onChange} checked={this.state.splitView}/> Split View
+        </label>
         <ReactDiff
           oldValue={JSON.stringify(a, null, 4).replace(/(?:\\n)/g, '\n \t\t\t')}
-          splitView
+          splitView={this.state.splitView}
           newValue={JSON.stringify(b, null, 4).replace(/(?:\\n)/g, '\n \t\t\t')}
         />
       </div>
