@@ -14,18 +14,11 @@ export interface ILine {
 
 export default ({ leftLineNumber, rightLineNumber, added, removed, content, onLineNumberClick = () => { } }: ILine) => {
   const onLineNumberClickProxy = (e: any) => onLineNumberClick(e.currentTarget.id)
-  return <tr className={cn(
-      styles.line,
+  return <tr className={styles.line}>
+    <td className={cn(styles.lineNumber, { [styles.diffAdded]: added, [styles.diffRemoved]: removed })}>
       {
-        [styles.diffAdded]: added,
-        [styles.diffRemoved]: removed,
-      },
-    )}>
-    <td>
-      {
-        leftLineNumber
+        leftLineNumber !== true
         && <pre
-          className={styles.lineNumber}
           {...(
             leftLineNumber !== true
             && {
@@ -38,11 +31,10 @@ export default ({ leftLineNumber, rightLineNumber, added, removed, content, onLi
         </pre>
       }
     </td>
-    <td>
+    <td className={cn(styles.lineNumber, { [styles.diffAdded]: added, [styles.diffRemoved]: removed })}>
       {
         rightLineNumber
         && <pre
-          className={styles.lineNumber}
           {...(
             rightLineNumber !== true
             && {
@@ -55,11 +47,11 @@ export default ({ leftLineNumber, rightLineNumber, added, removed, content, onLi
         </pre>
       }
     </td>
-    <td className={styles.gutter}>
-      {added && <span className={styles.marker}>+</span>}
-      {removed && <span className={styles.marker}>-</span>}
+    <td className={cn(styles.marker, { [styles.diffAdded]: added, [styles.diffRemoved]: removed })}>
+      {added && <pre>+</pre>}
+      {removed && <pre>-</pre>}
     </td>
-    <td>
+    <td className={cn({ [styles.diffAdded]: added, [styles.diffRemoved]: removed })}>
       <pre>
         {content}
       </pre>

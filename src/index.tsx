@@ -1,3 +1,4 @@
+import { cx } from 'emotion'
 import * as React from 'react'
 import * as diff from 'diff'
 import cn from 'classnames'
@@ -50,54 +51,81 @@ class DiffViewer extends React.PureComponent<DiffViewerProps, DiffViewerState> {
         && diffArray[i - 1]
         && diffArray[i - 1].removed
         && (determineLineNumbers(diffArray[i - 1].value) !== determineLineNumbers(obj.value))
-      return <div className={cn({ [styles.clearFix]: islineNumberNotEqual })} key={i}>
-        <div className={styles.column}>
-          {
-            !obj.added
-            && obj.value.split('\n')
+      return <>
+        {
+          obj.value.split('\n')
             .filter(ch => ch.length > 0)
             .map((ch, num) => {
-              rightLineNumber = rightLineNumber + 1
-              let content: any = ch
-              if (obj.removed && diffArray[i + 1] && diffArray[i + 1].added) {
-                const nextVal = diffArray[i + 1].value
-                  .split('\n')
-                  .filter((ch: string) => ch.length > 0)[num]
-                content = nextVal ? wordDiff(ch, nextVal, 'added') : ch
+              if (!obj.added && !obj.removed) {
+                rightLineNumber = rightLineNumber + 1
+                leftLineNumber = leftLineNumber + 1
+                return <tr className={styles.line}>
+                  <td className={styles.lineNumber}>
+                    <pre>{leftLineNumber}</pre>
+                  </td>
+                  <td></td>
+                  <td>
+                    <pre>{ch}</pre>
+                  </td>
+                  <td className={styles.lineNumber}>
+                    <pre>{rightLineNumber}</pre>
+                  </td>
+                  <td></td>
+                  <td>
+                    <pre>{ch}</pre>
+                  </td>
+                </tr>
               }
-              return <Line
-                onLineNumberClick={this.props.onLineNumberClick}
-                removed={obj.removed}
-                leftLineNumber={rightLineNumber}
-                content={content}
-              />
-            })
-          }
-        </div>
-        <div className={styles.column}>
-          {
-            !obj.removed
-            && obj.value.split('\n')
-            .filter(ch => ch.length > 0)
-            .map((ch, num) => {
-              leftLineNumber = leftLineNumber + 1
-              let content: any = ch
-              if (obj.added && diffArray[i - 1] && diffArray[i - 1].removed) {
-                const preValue = diffArray[i - 1].value
-                  .split('\n')
-                  .filter((ch: string) => ch.length > 0)[num]
-                content = preValue ? wordDiff(preValue, ch, 'removed') : ch
+              if (obj.added) {
+                rightLineNumber = rightLineNumber + 1
+                let preContent
+                let newContent
+                if (diffArray[i - 1] && diffArray[i - 1].removed) {
+                  const preValue = diffArray[i - 1].value
+                    .split('\n')
+                    .filter((ch: string) => ch.length > 0)[num]
+                  preContent = preValue && wordDiff(preValue, ch, 'added')
+                  newContent = preValue && wordDiff(preValue, ch, 'removed')
+                  if (preContent) {
+                    leftLineNumber = leftLineNumber + 1
+                  }
+                }
+                return <tr className={styles.line}>
+                  <td className={cn({[cx(styles.diffRemoved, styles.lineNumber)]: preContent})}>
+                    {
+                      preContent
+                      && <pre>{leftLineNumber}</pre>
+                    }
+                  </td>
+                  <td className={cn({ [cx(styles.marker, styles.diffRemoved)]: preContent })}>
+                    {
+                      preContent
+                      && <pre>-</pre>
+                    }
+                  </td>
+                  <td className={cn({[styles.diffRemoved]: preContent})}>
+                    <pre>{preContent}</pre>
+                  </td>
+                  <td className={cx(styles.diffAdded, styles.lineNumber)}>
+                    <pre>{rightLineNumber}</pre>
+                  </td>
+                  <td className={cn(styles.marker, styles.diffAdded)}>
+                    <pre>+</pre>
+                  </td>
+                  <td className={styles.diffAdded}>
+                    <pre>
+                      {
+                        preContent
+                          ? newContent
+                          : ch
+                      }
+                    </pre>
+                  </td>
+                </tr>
               }
-              return <Line
-                onLineNumberClick={this.props.onLineNumberClick}
-                rightLineNumber={leftLineNumber}
-                added={obj.added}
-                content={content}
-              />
             })
-          }
-        </div>
-      </div>
+        }
+      </>
     })
   }
 

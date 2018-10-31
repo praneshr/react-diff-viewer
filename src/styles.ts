@@ -43,9 +43,19 @@ export const diffAdded = css({
 })
 
 export const marker = css({
-  margin: '-1px 0 0 10px',
+  minWidth: 30,
   userSelect: 'none',
   label: 'marker',
+  [`&.${diffAdded}`]: {
+    pre: {
+      color: variables.addedColor,
+    }
+  },
+  [`&.${diffRemoved}`]: {
+    pre: {
+      color: variables.removedColor,
+    }
+  }
 })
 
 export const gutter = css({
@@ -56,16 +66,17 @@ export const gutter = css({
 })
 
 export const lineNumber = css({
-  opacity: 0.5,
   userSelect: 'none',
-  display: 'flex',
   minWidth: 30,
-  padding: '0 3px',
+  padding: '0 5px',
   label: 'line-number',
   cursor: 'pointer',
-  '&:hover': {
-    opacity: 1,
-  },
+  pre: {
+    opacity: 0.5,
+    '&:hover': {
+      opacity: 1,
+    },
+  }
 })
 
 export const clearFix = css({
@@ -78,8 +89,7 @@ export const clearFix = css({
 })
 
 export const line = css({
-  padding: '2px 0',
-  width: '100%',
+  verticalAlign: 'baseline',
   label: 'line',
 })
 

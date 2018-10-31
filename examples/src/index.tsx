@@ -11,7 +11,7 @@ class Example extends React.Component<{}, IExampleState> {
   constructor(props: any) {
     super(props)
     this.state = {
-      splitView: false,
+      splitView: true,
     }
   }
 
@@ -85,7 +85,7 @@ class Example extends React.Component<{}, IExampleState> {
         "order": 2,
         "type": "com.indix.holonet.core.pipeline.transforms.SqlTransform",
         "parameters": {
-          "sql": "SELECT * from #tableName where rnk <= 100"
+          "sql": "SELECT * from #tableName where rnk <= 160"
         },
         "group": "transformation"
       }],
