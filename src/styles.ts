@@ -1,25 +1,27 @@
 import { css } from 'emotion'
 
-const variables = {
-  addedBackground: '#E1FBDA',
-  addedColor: '#1B7C0E',
-  removedBackground: '#F5C9CF',
-  removedColor: '#A02A3B',
-  wordAddedBackground: '#97C391',
-  wordRemovedBackground: '#F48D8D',
+export const variables = {
+  addedBackground: '#e6ffed',
+  addedColor: '#24292e',
+  removedBackground: '#ffeef0',
+  removedColor: '#24292e',
+  wordAddedBackground: '#acf2bd',
+  wordRemovedBackground: '#fdb8c0',
 }
 
 export const diffContainer = css({
   'pre': {
     margin: 0,
-    padding: 0,
     whiteSpace: 'pre-wrap',
+    lineHeight: '25px',
   },
+  label: 'diff-container',
 })
 
 export const column = css({
   width: '50%',
   float: 'left',
+  label: 'column',
 })
 
 export const diffRemoved = css({
@@ -28,6 +30,7 @@ export const diffRemoved = css({
   pre: {
     color: variables.removedColor,
   },
+  label: 'diff-removed',
 })
 
 export const diffAdded = css({
@@ -36,28 +39,33 @@ export const diffAdded = css({
   pre: {
     color: variables.addedColor,
   },
+  label: 'diff-added',
 })
 
 export const marker = css({
-  marginTop: -4,
+  margin: '-1px 0 0 10px',
   userSelect: 'none',
+  label: 'marker',
 })
 
 export const gutter = css({
-  minWidth: 40,
   display: 'flex',
-  marginRight: 20,
+  marginRight: 40,
   justifyContent: 'space-between',
+  label: 'gutter',
 })
 
 export const lineNumber = css({
-  opacity: 0.3,
+  opacity: 0.5,
   userSelect: 'none',
   display: 'flex',
-})
-
-export const inlineNumbers = css({
-  marginLeft: 20,
+  minWidth: 30,
+  padding: '0 3px',
+  label: 'line-number',
+  cursor: 'pointer',
+  '&:hover': {
+    opacity: 1,
+  },
 })
 
 export const clearFix = css({
@@ -65,22 +73,28 @@ export const clearFix = css({
     content: '" "',
     display: 'table',
     clear: 'both',
-  }
+  },
+  label: 'clearfix',
 })
 
 export const line = css({
-  display: 'flex',
   padding: '2px 0',
+  width: '100%',
+  label: 'line',
 })
 
 export const wordDiff = css({
   padding: 2,
+  borderRadius: 1,
+  label: 'word-diff',
 })
 
 export const wordAdded = css({
   background: variables.wordAddedBackground,
+  label: 'word-added',
 })
 
 export const wordRemoved = css({
   background: variables.wordRemovedBackground,
+  label: 'word-removed',
 })

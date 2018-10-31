@@ -130,6 +130,7 @@ class Example extends React.Component<{}, IExampleState> {
           <input type="checkbox" name="toggle" id="toggle" onChange={this.onChange} checked={this.state.splitView}/> Split View
         </label>
         <ReactDiff
+          onLineNumberClick={(id) => console.log(id)}
           oldValue={JSON.stringify(a, null, 4).replace(/(?:\\n)/g, '\n \t\t\t')}
           splitView={this.state.splitView}
           newValue={JSON.stringify(b, null, 4).replace(/(?:\\n)/g, '\n \t\t\t')}
