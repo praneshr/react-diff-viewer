@@ -7,9 +7,14 @@ export const variables = {
   removedColor: '#24292e',
   wordAddedBackground: '#acf2bd',
   wordRemovedBackground: '#fdb8c0',
+  addedGutterBackground: '#cdffd8',
+  removedGutterBackground: '#ffdce0',
+  gutterBackground: '#f7f7f7',
+  gutterBackgroundDark: '#f3f1f1',
 }
 
 export const diffContainer = css({
+  width: '100%',
   'pre': {
     margin: 0,
     whiteSpace: 'pre-wrap',
@@ -43,7 +48,8 @@ export const diffAdded = css({
 })
 
 export const marker = css({
-  minWidth: 30,
+  minWidth: 50,
+  paddingLeft: 10,
   userSelect: 'none',
   label: 'marker',
   [`&.${diffAdded}`]: {
@@ -67,16 +73,27 @@ export const gutter = css({
 
 export const lineNumber = css({
   userSelect: 'none',
-  minWidth: 30,
-  padding: '0 5px',
+  minWidth: 40,
+  padding: '0 10px',
   label: 'line-number',
   cursor: 'pointer',
-  pre: {
-    opacity: 0.5,
-    '&:hover': {
+  textAlign: 'right',
+  background: variables.gutterBackground,
+  '&:hover': {
+    background: variables.gutterBackgroundDark,
+    pre: {
       opacity: 1,
     },
-  }
+  },
+  pre: {
+    opacity: 0.5,
+  },
+  [`&.${diffAdded}`]: {
+    background: variables.addedGutterBackground,
+  },
+  [`&.${diffRemoved}`]: {
+    background: variables.removedGutterBackground,
+  },
 })
 
 export const clearFix = css({
@@ -95,6 +112,7 @@ export const line = css({
 
 export const wordDiff = css({
   padding: 2,
+  display: 'inline',
   borderRadius: 1,
   label: 'word-diff',
 })

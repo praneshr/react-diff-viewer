@@ -1,7 +1,9 @@
+require('./style.scss')
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 
 import ReactDiff from '../../lib/index'
+
 
 interface IExampleState {
   splitView?: boolean;
@@ -124,12 +126,19 @@ class Example extends React.Component<{}, IExampleState> {
       },
       "namespace": "CS-RetailMeNot"
     }
+    const P = (window as any).Prism
     return (
       <div>
         <label>
           <input type="checkbox" name="toggle" id="toggle" onChange={this.onChange} checked={this.state.splitView}/> Split View
         </label>
         <ReactDiff
+          renderContent={(str) => {
+            return <pre
+              style={{ display: 'inline' }}
+              dangerouslySetInnerHTML={{ __html: P.highlight(str, P.languages.json, 'json')}}
+            />
+          }}
           onLineNumberClick={(id) => console.log(id)}
           oldValue={JSON.stringify(a, null, 4).replace(/(?:\\n)/g, '\n \t\t\t')}
           splitView={this.state.splitView}

@@ -4,7 +4,7 @@ import * as diff from 'diff'
 import cn from 'classnames'
 
 import * as styles from './styles'
-import Line from './line'
+import { InlineLine, DefaultLine } from './line'
 
 export interface DiffViewerProps {
   oldValue: string;
@@ -12,6 +12,7 @@ export interface DiffViewerProps {
   beautify?: (source: string) => string;
   splitView?: boolean;
   worddiff?: boolean;
+  renderContent?: (source: string) => JSX.Element;
   onLineNumberClick?: (lineId: string) => void;
 }
 
@@ -31,13 +32,22 @@ const beautifyValue = (source: string, customBeautify: (source: string) => strin
   }
 }
 
-const determineLineNumbers = (str: string) => str.split('\n').length
-
-const wordDiff = (str1: string, str2: string, hideType: string) => {
-  const charDiff = diff.diffWordsWithSpace(str1, str2)
+const wordDiff = (oldValue: string, newValue: string, hideType: string, renderContent?: (source: string) => JSX.Element) => {
+  const charDiff = diff.diffWordsWithSpace(oldValue, newValue)
   return charDiff.map((obj: any, i) => {
     if (obj[hideType]) return undefined
-    return <span className={cn(styles.wordDiff, { [styles.wordAdded]: obj.added, [styles.wordRemoved]: obj.removed })} key={i}>{obj.value}</span>
+    if (renderContent) {
+      return <span
+        className={cn(styles.wordDiff, { [styles.wordAdded]: obj.added, [styles.wordRemoved]: obj.removed })}
+        key={i}>
+        { renderContent(obj.value) }
+      </span>
+    }
+    return <pre
+      className={cn(styles.wordDiff, { [styles.wordAdded]: obj.added, [styles.wordRemoved]: obj.removed })}
+      key={i}>
+      { obj.value }
+    </pre>
   })
 }
 class DiffViewer extends React.PureComponent<DiffViewerProps, DiffViewerState> {
@@ -47,10 +57,6 @@ class DiffViewer extends React.PureComponent<DiffViewerProps, DiffViewerState> {
     let rightLineNumber = 0
 
     return () => diffArray.map((obj: diff.IDiffResult, i) => {
-      const islineNumberNotEqual = obj.added
-        && diffArray[i - 1]
-        && diffArray[i - 1].removed
-        && (determineLineNumbers(diffArray[i - 1].value) !== determineLineNumbers(obj.value))
       return <>
         {
           obj.value.split('\n')
@@ -59,22 +65,14 @@ class DiffViewer extends React.PureComponent<DiffViewerProps, DiffViewerState> {
               if (!obj.added && !obj.removed) {
                 rightLineNumber = rightLineNumber + 1
                 leftLineNumber = leftLineNumber + 1
-                return <tr className={styles.line}>
-                  <td className={styles.lineNumber}>
-                    <pre>{leftLineNumber}</pre>
-                  </td>
-                  <td></td>
-                  <td>
-                    <pre>{ch}</pre>
-                  </td>
-                  <td className={styles.lineNumber}>
-                    <pre>{rightLineNumber}</pre>
-                  </td>
-                  <td></td>
-                  <td>
-                    <pre>{ch}</pre>
-                  </td>
-                </tr>
+                return <DefaultLine
+                  leftLineNumber={leftLineNumber}
+                  rightLineNumber={rightLineNumber}
+                  leftContent={ch}
+                  rightContent={ch}
+                  renderContent={this.props.renderContent}
+                  onLineNumberClick={this.props.onLineNumberClick}
+                />
               }
               if (obj.added) {
                 rightLineNumber = rightLineNumber + 1
@@ -83,45 +81,23 @@ class DiffViewer extends React.PureComponent<DiffViewerProps, DiffViewerState> {
                 if (diffArray[i - 1] && diffArray[i - 1].removed) {
                   const preValue = diffArray[i - 1].value
                     .split('\n')
-                    .filter((ch: string) => ch.length > 0)[num]
-                  preContent = preValue && wordDiff(preValue, ch, 'added')
-                  newContent = preValue && wordDiff(preValue, ch, 'removed')
+                    .filter(Boolean)[num]
+                  preContent = preValue && wordDiff(preValue, ch, 'added', this.props.renderContent)
+                  newContent = preValue && wordDiff(preValue, ch, 'removed', this.props.renderContent)
                   if (preContent) {
                     leftLineNumber = leftLineNumber + 1
                   }
                 }
-                return <tr className={styles.line}>
-                  <td className={cn({[cx(styles.diffRemoved, styles.lineNumber)]: preContent})}>
-                    {
-                      preContent
-                      && <pre>{leftLineNumber}</pre>
-                    }
-                  </td>
-                  <td className={cn({ [cx(styles.marker, styles.diffRemoved)]: preContent })}>
-                    {
-                      preContent
-                      && <pre>-</pre>
-                    }
-                  </td>
-                  <td className={cn({[styles.diffRemoved]: preContent})}>
-                    <pre>{preContent}</pre>
-                  </td>
-                  <td className={cx(styles.diffAdded, styles.lineNumber)}>
-                    <pre>{rightLineNumber}</pre>
-                  </td>
-                  <td className={cn(styles.marker, styles.diffAdded)}>
-                    <pre>+</pre>
-                  </td>
-                  <td className={styles.diffAdded}>
-                    <pre>
-                      {
-                        preContent
-                          ? newContent
-                          : ch
-                      }
-                    </pre>
-                  </td>
-                </tr>
+                return <DefaultLine
+                  leftLineNumber={preContent && leftLineNumber}
+                  rightLineNumber={rightLineNumber}
+                  removed={Boolean(preContent)}
+                  added={obj.added}
+                  renderContent={this.props.renderContent}
+                  leftContent={preContent}
+                  rightContent={preContent ? newContent : ch}
+                  onLineNumberClick={this.props.onLineNumberClick}
+                />
               }
             })
         }
@@ -133,25 +109,40 @@ class DiffViewer extends React.PureComponent<DiffViewerProps, DiffViewerState> {
     let leftLineNumber = 0
     let rightLineNumber = 0
     return () => {
-      return diffArray.map(diffObj => {
+      return diffArray.map((diffObj, i) => {
         return diffObj.value.split('\n')
           .filter(ch => ch.length > 0)
           .map((ch, num) => {
+            let content
             if (diffObj.added) {
               rightLineNumber = rightLineNumber + 1
+              if (diffArray[i - 1] && diffArray[i - 1].removed) {
+                const preValue = diffArray[i - 1].value
+                  .split('\n')
+                  .filter(Boolean)[num]
+                  content = preValue ? wordDiff(preValue, ch, 'removed', this.props.renderContent) : ch
+              }
             } else if (diffObj.removed) {
               leftLineNumber = leftLineNumber + 1
+              if (diffArray[i + 1] && diffArray[i + 1].added) {
+                const nextVal = diffArray[i + 1].value
+                  .split('\n')
+                  .filter(Boolean)[num]
+                content = nextVal ? wordDiff(ch, nextVal, 'added', this.props.renderContent) : ch
+              }
             } else {
               rightLineNumber = rightLineNumber + 1
               leftLineNumber = leftLineNumber + 1
+              content = ch
             }
-            return <Line
+            return <InlineLine
               onLineNumberClick={this.props.onLineNumberClick}
               key={num}
+              renderContent={this.props.renderContent}
               removed={diffObj.removed}
               leftLineNumber={diffObj.added || leftLineNumber}
               rightLineNumber={diffObj.removed || rightLineNumber}
-              content={ch}
+              content={content}
               added={diffObj.added} />
           })
       })
