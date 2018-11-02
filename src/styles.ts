@@ -11,6 +11,8 @@ export const variables = {
   removedGutterBackground: '#ffdce0',
   gutterBackground: '#f7f7f7',
   gutterBackgroundDark: '#f3f1f1',
+  highlightBackground: '#fffbdd',
+  highlightGutterBackground: '#fff5b1',
 }
 
 export const diffContainer = css({
@@ -71,6 +73,15 @@ export const gutter = css({
   label: 'gutter',
 })
 
+export const hightlightedLine = css({
+  background: variables.highlightBackground,
+  label: 'hightlighted-line',
+})
+
+export const hightlightedGutter = css({
+  label: 'hightlighted-gutter',
+})
+
 export const lineNumber = css({
   userSelect: 'none',
   minWidth: 40,
@@ -93,6 +104,12 @@ export const lineNumber = css({
   },
   [`&.${diffRemoved}`]: {
     background: variables.removedGutterBackground,
+  },
+  [`&.${hightlightedGutter}`]: {
+    background: variables.highlightGutterBackground,
+    '&:hover': {
+      background: variables.highlightGutterBackground,
+    },
   },
 })
 

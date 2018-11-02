@@ -7,6 +7,7 @@ import ReactDiff from '../../lib/index'
 
 interface IExampleState {
   splitView?: boolean;
+  highlightLine?: string[];
 }
 class Example extends React.Component<{}, IExampleState> {
 
@@ -14,10 +15,30 @@ class Example extends React.Component<{}, IExampleState> {
     super(props)
     this.state = {
       splitView: true,
+      highlightLine: [],
     }
   }
 
   onChange = () => this.setState({ splitView: !this.state.splitView })
+
+  onLineNumberClick = (id: string, e: React.MouseEvent<HTMLTableCellElement>) => {
+    let highlightLine = [id]
+    if (e.shiftKey && this.state.highlightLine.length === 1) {
+      const [dir, oldId] = this.state.highlightLine[0].split('-')
+      const [newDir, newId] = id.split('-')
+      if (dir === newDir) {
+        highlightLine = []
+        const lowEnd = Math.min(Number(oldId), Number(newId))
+        const highEnd = Math.max(Number(oldId), Number(newId))
+        for (var i = lowEnd; i <= highEnd; i++) {
+          highlightLine.push(`${dir}-${i}`)
+        }
+      }
+    }
+    this.setState({
+      highlightLine,
+    })
+  }
 
   render() {
     const a = {
@@ -139,7 +160,8 @@ class Example extends React.Component<{}, IExampleState> {
               dangerouslySetInnerHTML={{ __html: P.highlight(str, P.languages.json, 'json')}}
             />
           }}
-          onLineNumberClick={(id) => console.log(id)}
+          highlightLines={this.state.highlightLine}
+          onLineNumberClick={this.onLineNumberClick}
           oldValue={JSON.stringify(a, null, 4).replace(/(?:\\n)/g, '\n \t\t\t')}
           splitView={this.state.splitView}
           newValue={JSON.stringify(b, null, 4).replace(/(?:\\n)/g, '\n \t\t\t')}

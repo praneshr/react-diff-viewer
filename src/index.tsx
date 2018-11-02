@@ -13,7 +13,8 @@ export interface DiffViewerProps {
   splitView?: boolean;
   wordDiff?: boolean;
   renderContent?: (source: string) => JSX.Element;
-  onLineNumberClick?: (lineId: string) => void;
+  onLineNumberClick?: (lineId: string, event: React.MouseEvent<HTMLTableCellElement>) => void;
+  highlightLines?: string[];
 }
 
 interface DiffViewerState {
@@ -40,8 +41,11 @@ const wordDiff = (oldValue: string, newValue: string, hideType: string, renderCo
 }
 class DiffViewer extends React.PureComponent<DiffViewerProps, DiffViewerState> {
 
-  static defaultProps = {
+  static defaultProps: DiffViewerProps = {
+    oldValue: '',
+    newValue: '',
     splitView: true,
+    highlightLines: [],
   }
 
   static propTypes = {
@@ -53,7 +57,7 @@ class DiffViewer extends React.PureComponent<DiffViewerProps, DiffViewerState> {
     onLineNumberClick: PropTypes.func,
   }
 
-  splitView = (diffArray: any[]) => {
+  private splitView = (diffArray: diff.IDiffResult[]) => {
     let leftLineNumber = 0
     let rightLineNumber = 0
 
@@ -71,6 +75,7 @@ class DiffViewer extends React.PureComponent<DiffViewerProps, DiffViewerState> {
                   rightLineNumber={rightLineNumber}
                   leftContent={ch}
                   rightContent={ch}
+                  hightlightLines={this.props.highlightLines}
                   renderContent={this.props.renderContent}
                   onLineNumberClick={this.props.onLineNumberClick}
                 />
@@ -94,6 +99,7 @@ class DiffViewer extends React.PureComponent<DiffViewerProps, DiffViewerState> {
                   rightLineNumber={rightLineNumber}
                   removed={Boolean(preContent)}
                   added={obj.added}
+                  hightlightLines={this.props.highlightLines}
                   renderContent={this.props.renderContent}
                   leftContent={preContent}
                   rightContent={preContent ? newContent : ch}
@@ -106,7 +112,7 @@ class DiffViewer extends React.PureComponent<DiffViewerProps, DiffViewerState> {
     })
   }
 
-  inlineView = (diffArray: diff.IDiffResult[]) => {
+  private inlineView = (diffArray: diff.IDiffResult[]) => {
     let leftLineNumber = 0
     let rightLineNumber = 0
     return () => {
@@ -144,13 +150,14 @@ class DiffViewer extends React.PureComponent<DiffViewerProps, DiffViewerState> {
               leftLineNumber={diffObj.added || leftLineNumber}
               rightLineNumber={diffObj.removed || rightLineNumber}
               content={content}
+              hightlightLines={this.props.highlightLines}
               added={diffObj.added} />
           })
       })
     }
   }
 
-  render = () => {
+  public render = () => {
     const {
       oldValue,
       newValue,
