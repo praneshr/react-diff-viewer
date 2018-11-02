@@ -44,6 +44,10 @@ module.exports = {
           'sass-loader',
         ],
       },
+      {
+        test: /\.xml|.rjs|.java/,
+        use: 'raw-loader',
+      },
     ],
   },
   plugins: [

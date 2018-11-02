@@ -1,80 +1,172 @@
 /**
- * Github-like theme for Prism.js
- * @author Luke Askew http://github.com/lukeaskew
+ * GHColors theme by Avi Aryan (http://aviaryan.in)
+ * Inspired by Github syntax coloring
  */
- code,
- code[class*='language-'],
- pre[class*='language-'] {
-   color: #333;
-   text-align: left;
-   white-space: pre;
-   word-spacing: normal;
-   tab-size: 4;
-   hyphens: none;
-   font-family: Consolas, 'Liberation Mono', Menlo, Courier, monospace;
-   line-height: 1.4;
-   direction: ltr;
-   cursor: text;
+
+ code[class*="language-"],
+ pre[class*="language-"] {
+     color: #393A34;
+     font-family: "Consolas", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace;
+     direction: ltr;
+     text-align: left;
+     white-space: pre;
+     word-spacing: normal;
+     word-break: normal;
+     font-size: 0.95em;
+     line-height: 1.2em;
+
+     -moz-tab-size: 4;
+     -o-tab-size: 4;
+     tab-size: 4;
+
+     -webkit-hyphens: none;
+     -moz-hyphens: none;
+     -ms-hyphens: none;
+     hyphens: none;
  }
 
- pre[class*='language-'] {
-   overflow: auto;
-   margin: 1em 0;
-   padding: 1.2em;
-   border-radius: 3px;
-   font-size: 85%;
+ pre[class*="language-"]::-moz-selection, pre[class*="language-"] ::-moz-selection,
+ code[class*="language-"]::-moz-selection, code[class*="language-"] ::-moz-selection {
+     background: #b3d4fc;
  }
 
- p code,
- li code,
- table code {
-   margin: 0;
-   border-radius: 3px;
-   padding: 0.2em 0;
-   font-size: 85%;
- }
- p code:before, p code:after,
- li code:before,
- li code:after,
- table code:before,
- table code:after {
-   letter-spacing: -0.2em;
-   content: '\00a0';
+ pre[class*="language-"]::selection, pre[class*="language-"] ::selection,
+ code[class*="language-"]::selection, code[class*="language-"] ::selection {
+     background: #b3d4fc;
  }
 
- code,
- :not(pre) > code[class*='language-'],
- pre[class*='language-'] {
-   background: #f7f7f7;
+ /* Code blocks */
+ pre[class*="language-"] {
+     padding: 1em;
+     margin: .5em 0;
+     overflow: auto;
+     border: 1px solid #dddddd;
+     background-color: white;
  }
 
- :not(pre) > code[class*='language-'] {
-   padding: 0.1em;
-   border-radius: 0.3em;
+ :not(pre) > code[class*="language-"],
+ pre[class*="language-"] {
  }
 
- .token.comment, .token.prolog, .token.doctype, .token.cdata {
-   color: #969896;
- }
- .token.punctuation, .token.string, .token.atrule, .token.attr-value {
-   color: #183691;
- }
- .token.property, .token.tag {
-   color: #63a35c;
- }
- .token.boolean, .token.number {
-   color: #0086b3;
- }
- .token.selector, .token.attr-name, .token.attr-value .punctuation:first-child, .token.keyword, .token.regex, .token.important {
-   color: #795da3;
- }
- .token.operator, .token.entity, .token.url, .language-css .token.string {
-   color: #a71d5d;
- }
- .token.entity {
-   cursor: help;
+ /* Inline code */
+ :not(pre) > code[class*="language-"] {
+     padding: .2em;
+     padding-top: 1px; padding-bottom: 1px;
+     background: #f8f8f8;
+     border: 1px solid #dddddd;
  }
 
- .namespace {
-   opacity: 0.7;
+ .token.comment,
+ .token.prolog,
+ .token.doctype,
+ .token.cdata {
+     color: #999988; font-style: italic;
+ }
+
+ .token.namespace {
+     opacity: .7;
+ }
+
+ .token.string,
+ .token.attr-value {
+     color: #e3116c;
+ }
+ .token.punctuation,
+ .token.operator {
+     color: #393A34; /* no highlight */
+ }
+
+ .token.entity,
+ .token.url,
+ .token.symbol,
+ .token.number,
+ .token.boolean,
+ .token.variable,
+ .token.constant,
+ .token.property,
+ .token.regex,
+ .token.inserted {
+     color: #36acaa;
+ }
+
+ .token.atrule,
+ .token.keyword,
+ .token.attr-name,
+ .language-autohotkey .token.selector {
+     color: #00a4db;
+ }
+
+ .token.function,
+ .token.deleted,
+ .language-autohotkey .token.tag {
+     color: #9a050f;
+ }
+
+ .token.tag,
+ .token.selector,
+ .language-autohotkey .token.keyword {
+     color: #00009f;
+ }
+
+ .token.important,
+ .token.function,
+ .token.bold {
+     font-weight: bold;
+ }
+
+ .token.italic {
+     font-style: italic;
+ }
+
+ @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,800');
+ body {
+  font-family: 'Poppins', sans-serif;
+ }
+ .react-diff-viewer-example {
+   .banner {
+     padding: 70px 15px;
+     .cta {
+       margin-top: 30px;
+       button {
+         margin-right: 30px;
+         font-size: 16px;
+       }
+     }
+     h1 {
+       font-weight: 900;
+       font-size: 62px;
+     }
+     p {
+       max-width: 700px;
+       margin-top: 20px;
+       font-size: 20px;
+     }
+   }
+   .controls {
+     margin: 50px 15px 15px;
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     label {
+       margin-left: 30px;
+     }
+     select {
+       background-color: #fff;
+       padding: 5px 15px;
+       border-radius: 4px;
+       border: 2px solid #ddd;
+     }
+   }
+   .diff-viewer {
+     margin: 0 15px 50px;
+     border-radius: 8px;
+     overflow-x: auto;
+     overflow-y: hidden;
+     white-space: nowrap;
+     border: 1px solid #eee;
+   }
+   footer {
+     padding: 0 15px 30px;
+     text-align: center;
+   }
  }
