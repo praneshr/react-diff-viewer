@@ -1,6 +1,7 @@
 import { cx } from 'emotion'
 import * as React from 'react'
 import * as diff from 'diff'
+import * as PropTypes from 'prop-types'
 import cn from 'classnames'
 
 import * as styles from './styles'
@@ -9,27 +10,14 @@ import { InlineLine, DefaultLine } from './line'
 export interface DiffViewerProps {
   oldValue: string;
   newValue: string;
-  beautify?: (source: string) => string;
   splitView?: boolean;
-  worddiff?: boolean;
+  wordDiff?: boolean;
   renderContent?: (source: string) => JSX.Element;
   onLineNumberClick?: (lineId: string) => void;
 }
 
 interface DiffViewerState {
 
-}
-
-const beautifyValue = (source: string, customBeautify: (source: string) => string ) => {
-  if (customBeautify) {
-    return customBeautify(source)
-  }
-
-  try {
-    return JSON.stringify(JSON.parse(source), null, 4)
-  } catch (e) {
-    return source
-  }
 }
 
 const wordDiff = (oldValue: string, newValue: string, hideType: string, renderContent?: (source: string) => JSX.Element) => {
@@ -51,6 +39,19 @@ const wordDiff = (oldValue: string, newValue: string, hideType: string, renderCo
   })
 }
 class DiffViewer extends React.PureComponent<DiffViewerProps, DiffViewerState> {
+
+  static defaultProps = {
+    splitView: true,
+  }
+
+  static propTypes = {
+    oldValue: PropTypes.string.isRequired,
+    newValue: PropTypes.string.isRequired,
+    splitView: PropTypes.bool,
+    wordDiff: PropTypes.bool,
+    renderContent: PropTypes.func,
+    onLineNumberClick: PropTypes.func,
+  }
 
   splitView = (diffArray: any[]) => {
     let leftLineNumber = 0
@@ -153,13 +154,10 @@ class DiffViewer extends React.PureComponent<DiffViewerProps, DiffViewerState> {
     const {
       oldValue,
       newValue,
-      beautify,
       splitView,
     } = this.props
 
-    const oldValueBeautified = beautifyValue(oldValue, beautify)
-    const newValueBeautified = beautifyValue(newValue, beautify)
-    const diffLines = diff.diffLines(oldValueBeautified, newValueBeautified)
+    const diffLines = diff.diffLines(oldValue, newValue)
     const nodes = splitView
       ? this.splitView(diffLines)()
       : this.inlineView(diffLines)()
