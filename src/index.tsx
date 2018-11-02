@@ -1,132 +1,229 @@
+import { cx } from 'emotion'
 import * as React from 'react'
 import * as diff from 'diff'
+import * as PropTypes from 'prop-types'
 import cn from 'classnames'
 
 import * as styles from './styles'
+import { InlineLine, DefaultLine } from './line'
 
-interface DiffViewerProps {
-  oldValue: string;
-  newValue: string;
-  beautify?: (source: string) => string;
+export interface DiffViewerProps {
+  oldValue: string | Object;
+  newValue: string | Object;
   splitView?: boolean;
+  wordDiff?: boolean;
+  renderContent?: (source: string) => JSX.Element;
+  onLineNumberClick?: (lineId: string, event: React.MouseEvent<HTMLTableCellElement>) => void;
+  highlightLines?: string[];
+  mode?: 'lines' | 'json';
 }
 
 interface DiffViewerState {
 
 }
 
-const beautifyValue = (source: string, customBeautify: (source: string) => string ) => {
-  if (customBeautify) {
-    console.log(source);
-    return customBeautify(source)
-  }
-
-  try {
-    return JSON.stringify(JSON.parse(source), null, 4)
-  } catch (e) {
-    return source
-  }
-}
-
-const determineLineNumbers = (str: string) => str.split('\n').length
-
-const wordDiff = (str1: string, str2: string, hideType: string) => {
-  const charDiff = diff.diffWordsWithSpace(str1, str2)
-  return charDiff.map((obj: any) => {
+const wordDiff = (oldValue: string, newValue: string, hideType: string, renderContent?: (source: string) => JSX.Element) => {
+  const charDiff = diff.diffWordsWithSpace(oldValue, newValue)
+  return charDiff.map((obj: any, i) => {
     if (obj[hideType]) return undefined
-    return <span className={cn(styles.wordDiff, { [styles.wordAdded]: obj.added, [styles.wordRemoved]: obj.removed })}>{obj.value}</span>
+    if (renderContent) {
+      return <span
+        className={cn(styles.wordDiff, { [styles.wordAdded]: obj.added, [styles.wordRemoved]: obj.removed })}
+        key={i}>
+        { renderContent(obj.value) }
+      </span>
+    }
+    return <pre
+      className={cn(styles.wordDiff, { [styles.wordAdded]: obj.added, [styles.wordRemoved]: obj.removed })}
+      key={i}>
+      { obj.value }
+    </pre>
   })
 }
 class DiffViewer extends React.PureComponent<DiffViewerProps, DiffViewerState> {
 
-  splitView = (diffArray: any[]) => {
+  static defaultProps: DiffViewerProps = {
+    oldValue: '',
+    newValue: '',
+    splitView: true,
+    highlightLines: [],
+    mode: 'lines',
+  }
+
+  static propTypes = {
+    oldValue: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.object,
+    ]),
+    newValue: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.object,
+    ]),
+    splitView: PropTypes.bool,
+    wordDiff: PropTypes.bool,
+    renderContent: PropTypes.func,
+    onLineNumberClick: PropTypes.func,
+  }
+
+  private splitView = (diffArray: diff.IDiffResult[]) => {
     let leftLineNumber = 0
     let rightLineNumber = 0
 
-
     return () => diffArray.map((obj: diff.IDiffResult, i) => {
-      const islineNumberNotEqual = obj.added
-        && diffArray[i - 1]
-        && diffArray[i - 1].removed
-        && (determineLineNumbers(diffArray[i - 1].value) !== determineLineNumbers(obj.value))
-      return <div className={cn(styles.diffContainer, { [styles.clearFix]: islineNumberNotEqual })}>
-        <div className={styles.column}>
-          {
-            !obj.added
-            && obj.value.split('\n')
+      return <React.Fragment key={i}>
+        {
+          obj.value.split('\n')
             .filter(ch => ch.length > 0)
             .map((ch, num) => {
-              rightLineNumber = rightLineNumber + 1
-              let content: any = ch
-              if (obj.removed && diffArray[i + 1] && diffArray[i + 1].added) {
-                const nextVal = diffArray[i + 1].value
-                  .split('\n')
-                  .filter((ch: string) => ch.length > 0)[num]
-                content = nextVal ? wordDiff(ch, nextVal, 'added') : ch
+              if (!obj.added && !obj.removed) {
+                rightLineNumber = rightLineNumber + 1
+                leftLineNumber = leftLineNumber + 1
+                return <DefaultLine
+                  leftLineNumber={leftLineNumber}
+                  rightLineNumber={rightLineNumber}
+                  leftContent={ch}
+                  rightContent={ch}
+                  key={num}
+                  hightlightLines={this.props.highlightLines}
+                  renderContent={this.props.renderContent}
+                  onLineNumberClick={this.props.onLineNumberClick}
+                />
               }
-              return <div className={cn(styles.line, { [styles.diffRemoved]: obj.removed })}>
-                <span className={styles.gutter}>
-                  <span className={styles.lineNumber}>
-                    <pre>
-                      {rightLineNumber}
-                    </pre>
-                  </span>
-                  {obj.removed && <span className={styles.marker}>-</span>}
-                </span>
-                <pre>{content}</pre>
-              </div>
-            })
-          }
-        </div>
-        <div className={styles.column}>
-          {
-            !obj.removed
-            && obj.value.split('\n')
-            .filter(ch => ch.length > 0)
-            .map((ch, num) => {
-              leftLineNumber = leftLineNumber + 1
-              let content: any = ch
+
+              let leftContent
+              let rightContent
+              let removed = obj.removed
+              let added = obj.added
               if (obj.added && diffArray[i - 1] && diffArray[i - 1].removed) {
-                const preValue = diffArray[i - 1].value
-                  .split('\n')
-                  .filter((ch: string) => ch.length > 0)[num]
-                content = preValue ? wordDiff(preValue, ch, 'removed') : ch
+                const preValueCount = diffArray[i - 1].count
+                if (num <= (preValueCount - 1)) return undefined
+                rightLineNumber = rightLineNumber + 1
+                rightContent = ch
+              } else if (obj.removed && diffArray[i + 1] && !diffArray[i + 1].added) {
+                leftLineNumber = leftLineNumber + 1
+                leftContent = ch
+              } else if (obj.removed && diffArray[i + 1] && diffArray[i + 1].added) {
+                leftLineNumber = leftLineNumber + 1
+                rightLineNumber = rightLineNumber + 1
+                added = true
+                const nextVal = diffArray[i + 1].value
+                .split('\n')
+                  .filter(Boolean)[num]
+                leftContent = wordDiff(ch, nextVal, 'added', this.props.renderContent)
+                rightContent = wordDiff(ch, nextVal, 'removed', this.props.renderContent)
+              } else {
+                rightLineNumber = rightLineNumber + 1
+                rightContent = ch
               }
-              return <div className={cn(styles.line, { [styles.diffAdded]: obj.added })}>
-                <span className={styles.gutter}>
-                  <span className={styles.lineNumber}>
-                    <pre>
-                      {leftLineNumber}
-                    </pre>
-                  </span>
-                  {obj.added && <span className={styles.marker}>+</span>}
-                </span>
-                <pre>{content}</pre>
-              </div>
+              return <DefaultLine
+                leftLineNumber={!removed || leftLineNumber}
+                rightLineNumber={!added || rightLineNumber}
+                removed={removed}
+                added={added}
+                key={num}
+                hightlightLines={this.props.highlightLines}
+                renderContent={this.props.renderContent}
+                leftContent={leftContent}
+                rightContent={rightContent}
+                onLineNumberClick={this.props.onLineNumberClick}
+              />
             })
-          }
-        </div>
-      </div>
+        }
+      </React.Fragment>
     })
   }
 
-  render = () => {
+  private inlineView = (diffArray: diff.IDiffResult[]) => {
+    let leftLineNumber = 0
+    let rightLineNumber = 0
+    return () => {
+      return diffArray.map((diffObj, i) => {
+        return diffObj.value.split('\n')
+          .filter(ch => ch.length > 0)
+          .map((ch, num) => {
+            let content
+            if (diffObj.added) {
+              rightLineNumber = rightLineNumber + 1
+              if (diffArray[i - 1] && diffArray[i - 1].removed) {
+                const preValue = diffArray[i - 1].value
+                .split('\n')
+                .filter(Boolean)[num]
+                content = wordDiff(preValue, ch, 'removed', this.props.renderContent)
+              } else {
+                content = ch
+              }
+            } else if (diffObj.removed) {
+              leftLineNumber = leftLineNumber + 1
+              if (diffArray[i + 1] && diffArray[i + 1].added) {
+                const nextVal = diffArray[i + 1].value
+                .split('\n')
+                .filter(Boolean)[num]
+                content = wordDiff(ch, nextVal, 'added', this.props.renderContent)
+              } else {
+                content = ch
+              }
+            } else {
+              rightLineNumber = rightLineNumber + 1
+              leftLineNumber = leftLineNumber + 1
+              content = ch
+            }
+            return <InlineLine
+              onLineNumberClick={this.props.onLineNumberClick}
+              key={num}
+              renderContent={this.props.renderContent}
+              removed={diffObj.removed}
+              leftLineNumber={diffObj.added || leftLineNumber}
+              rightLineNumber={diffObj.removed || rightLineNumber}
+              content={content}
+              hightlightLines={this.props.highlightLines}
+              added={diffObj.added}
+            />
+          })
+      })
+    }
+  }
+
+  public render = () => {
+
     const {
       oldValue,
       newValue,
-      beautify,
       splitView,
+      mode,
     } = this.props
 
-    const oldValueBeautified = beautifyValue(oldValue, beautify)
-    const newValueBeautified = beautifyValue(newValue, beautify)
-    const nodes = splitView ? this.splitView(diff.diffLines(oldValueBeautified, newValueBeautified))() : <span>hello</span>
+    let diffArray
+    const m = mode.toLowerCase()
+
+    if (m === 'json' && typeof oldValue === 'object' && typeof newValue === 'object') {
+      diffArray = diff.diffJson(oldValue, newValue)
+    } else if (m === 'lines' && typeof oldValue === 'string' && typeof newValue === 'string') {
+      diffArray = diff.diffLines(oldValue, newValue)
+    } else {
+      let errorMessage
+      switch (m) {
+        case 'json':
+          errorMessage = `Ensure 'oldValue' and 'newValue' are objects`
+          break;
+        default:
+          errorMessage = `Ensure 'oldValue' and 'newValue' are strings`
+          break;
+      }
+      throw Error(`Unexpected data format for mode '${mode}'. ${errorMessage}`)
+    }
+
+    const nodes = splitView
+      ? this.splitView(diffArray)()
+      : this.inlineView(diffArray)()
     return (
-      <div>
-        {nodes}
-      </div>
+      <table className={styles.diffContainer}>
+        <tbody>
+          {nodes}
+        </tbody>
+      </table>
     )
   }
 }
 
 export default DiffViewer
+export { styles }

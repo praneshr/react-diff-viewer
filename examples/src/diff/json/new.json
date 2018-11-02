@@ -6,8 +6,6 @@
     "@types/react-dom": "^16.0.8",
     "@types/webpack": "^4.4.13",
     "css-loader": "^1.0.0",
-    "diff": "^3.5.0",
-    "emotion": "^9.2.10",
     "html-webpack-plugin": "^3.2.0",
     "mini-css-extract-plugin": "^0.4.3",
     "node-sass": "^4.9.3",
@@ -21,20 +19,24 @@
     "webpack-dev-server": "^3.1.9"
   },
   "name": "react-diff-viewer",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Text diff viewer for React",
   "main": "lib/index.js",
   "repository": "git@github.com:praneshr/react-diff-viewer.git",
   "author": "Pranesh Ravi<praneshpranesh@gmail.com>",
-  "license": "MIT",
+  "license": "BSD",
   "private": false,
   "scripts": {
     "build": "tsc --outDir lib/",
     "build:watch": "tsc --outDir lib/ -w",
-    "start:examples": "webpack-dev-server --open --hot --inline"
+    "start:examples": "webpack-dev-server --open --hot --inline",
+    "start": "webpack-dev-server --open --hot --inline"
   },
   "dependencies": {
-    "classnames": "^2.2.6",
-    "prop-types": "^15.6.2"
+    "classnames": "^2.2.6"
+  },
+  "peerDependencies": {
+    "react": "^16.5.2",
+    "react-dom": "^16.5.2"
   }
 }
