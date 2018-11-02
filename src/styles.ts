@@ -22,6 +22,20 @@ export const diffContainer = css({
     whiteSpace: 'pre-wrap',
     lineHeight: '25px',
   },
+  'tbody': {
+    tr: {
+      '&:first-child': {
+        td: {
+          paddingTop: 15,
+        },
+      },
+      '&:last-child': {
+        td: {
+          paddingBottom: 15,
+        },
+      },
+    },
+  },
   label: 'diff-container',
 })
 

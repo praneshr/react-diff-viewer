@@ -15,7 +15,6 @@ export interface DiffViewerProps {
   renderContent?: (source: string) => JSX.Element;
   onLineNumberClick?: (lineId: string, event: React.MouseEvent<HTMLTableCellElement>) => void;
   highlightLines?: string[];
-  mode?: 'lines' | 'json';
 }
 
 interface DiffViewerState {
@@ -47,7 +46,6 @@ class DiffViewer extends React.PureComponent<DiffViewerProps, DiffViewerState> {
     newValue: '',
     splitView: true,
     highlightLines: [],
-    mode: 'lines',
   }
 
   static propTypes = {
@@ -191,7 +189,11 @@ class DiffViewer extends React.PureComponent<DiffViewerProps, DiffViewerState> {
       throw Error('"oldValue" and "newValue" should be strings')
     }
 
-    const diffArray = diff.diffLines(oldValue, newValue)
+    const diffArray = diff.diffLines(oldValue, newValue, {
+      newlineIsToken: true,
+      ignoreWhitespace: false,
+      ignoreCase: false,
+    })
     const nodes = splitView
       ? this.splitView(diffArray)()
       : this.inlineView(diffArray)()

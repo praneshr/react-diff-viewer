@@ -166,9 +166,11 @@ export const DefaultLine = ({
       [styles.hightlightedLine]: hightlightLeftLine,
     })}>
       {
-        renderContent && typeof leftContent === 'string'
+        typeof leftContent === 'string'
+        && (renderContent
           ? renderContent(leftContent)
-          : leftContent
+          : <pre>{leftContent}</pre>)
+        || leftContent
       }
     </td>
     <td className={cn(
@@ -202,9 +204,11 @@ export const DefaultLine = ({
       [styles.hightlightedLine]: hightlightRightLine,
     })}>
       {
-        renderContent && typeof rightContent === 'string'
+        typeof rightContent === 'string'
+        && (renderContent
           ? renderContent(rightContent)
-          : rightContent
+          : <pre>{rightContent}</pre>)
+        || rightContent
       }
     </td>
   </tr>
