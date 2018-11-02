@@ -6,8 +6,7 @@
     "@types/react-dom": "^16.0.8",
     "@types/webpack": "^4.4.13",
     "css-loader": "^1.0.0",
-    "diff": "^3.5.0",
-    "emotion": "^9.2.10",
+    "gh-pages": "^2.0.1",
     "html-webpack-plugin": "^3.2.0",
     "mini-css-extract-plugin": "^0.4.3",
     "node-sass": "^4.9.3",
@@ -21,8 +20,8 @@
     "webpack-dev-server": "^3.1.9"
   },
   "name": "react-diff-viewer",
-  "version": "0.0.1",
-  "description": "Text diff viewer for React",
+  "version": "1.0.0-alpha.1",
+  "description": "The only text diff viewer needed for React",
   "main": "lib/index.js",
   "repository": "git@github.com:praneshr/react-diff-viewer.git",
   "author": "Pranesh Ravi<praneshpranesh@gmail.com>",
@@ -31,10 +30,15 @@
   "scripts": {
     "build": "tsc --outDir lib/",
     "build:watch": "tsc --outDir lib/ -w",
-    "start:examples": "webpack-dev-server --open --hot --inline"
+    "build:examples": "webpack --progress --colors",
+    "start:examples": "webpack-dev-server --open --hot --inline",
+    "prepublish": "yarn build",
+    "postpublish": "NODE_ENV=production yarn build:examples && gh-pages -d examples/dist"
   },
   "dependencies": {
     "classnames": "^2.2.6",
+    "diff": "^3.5.0",
+    "emotion": "^9.2.10",
     "prop-types": "^15.6.2"
   }
 }

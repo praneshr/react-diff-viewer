@@ -7,7 +7,9 @@ module.exports = {
   entry: {
     main: './examples/src/index.tsx',
   },
-  mode: 'development',
+  mode: process.env.NODE_ENV === 'production'
+    ? 'production'
+    : 'development',
   resolve: {
     extensions: ['.jsx', '.tsx', '.ts', '.scss', '.css', '.js'],
   },
