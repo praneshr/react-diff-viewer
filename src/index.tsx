@@ -62,7 +62,7 @@ class DiffViewer extends React.PureComponent<DiffViewerProps, DiffViewerState> {
     let rightLineNumber = 0
 
     return () => diffArray.map((obj: diff.IDiffResult, i) => {
-      return <>
+      return <React.Fragment key={i}>
         {
           obj.value.split('\n')
             .filter(ch => ch.length > 0)
@@ -75,6 +75,7 @@ class DiffViewer extends React.PureComponent<DiffViewerProps, DiffViewerState> {
                   rightLineNumber={rightLineNumber}
                   leftContent={ch}
                   rightContent={ch}
+                  key={num}
                   hightlightLines={this.props.highlightLines}
                   renderContent={this.props.renderContent}
                   onLineNumberClick={this.props.onLineNumberClick}
@@ -99,6 +100,7 @@ class DiffViewer extends React.PureComponent<DiffViewerProps, DiffViewerState> {
                   rightLineNumber={rightLineNumber}
                   removed={Boolean(preContent)}
                   added={obj.added}
+                  key={num}
                   hightlightLines={this.props.highlightLines}
                   renderContent={this.props.renderContent}
                   leftContent={preContent}
@@ -108,7 +110,7 @@ class DiffViewer extends React.PureComponent<DiffViewerProps, DiffViewerState> {
               }
             })
         }
-      </>
+      </React.Fragment>
     })
   }
 
@@ -151,7 +153,8 @@ class DiffViewer extends React.PureComponent<DiffViewerProps, DiffViewerState> {
               rightLineNumber={diffObj.removed || rightLineNumber}
               content={content}
               hightlightLines={this.props.highlightLines}
-              added={diffObj.added} />
+              added={diffObj.added}
+            />
           })
       })
     }
