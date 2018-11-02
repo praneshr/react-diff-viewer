@@ -8,8 +8,8 @@ import * as styles from './styles'
 import { InlineLine, DefaultLine } from './line'
 
 export interface DiffViewerProps {
-  oldValue: string | Object;
-  newValue: string | Object;
+  oldValue: string;
+  newValue: string;
   splitView?: boolean;
   wordDiff?: boolean;
   renderContent?: (source: string) => JSX.Element;
@@ -51,14 +51,8 @@ class DiffViewer extends React.PureComponent<DiffViewerProps, DiffViewerState> {
   }
 
   static propTypes = {
-    oldValue: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.object,
-    ]),
-    newValue: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.object,
-    ]),
+    oldValue: PropTypes.string.isRequired,
+    newValue: PropTypes.string.isRequired,
     splitView: PropTypes.bool,
     wordDiff: PropTypes.bool,
     renderContent: PropTypes.func,
@@ -104,13 +98,15 @@ class DiffViewer extends React.PureComponent<DiffViewerProps, DiffViewerState> {
                 leftContent = ch
               } else if (obj.removed && diffArray[i + 1] && diffArray[i + 1].added) {
                 leftLineNumber = leftLineNumber + 1
-                rightLineNumber = rightLineNumber + 1
-                added = true
                 const nextVal = diffArray[i + 1].value
-                .split('\n')
+                  .split('\n')
                   .filter(Boolean)[num]
-                leftContent = wordDiff(ch, nextVal, 'added', this.props.renderContent)
-                rightContent = wordDiff(ch, nextVal, 'removed', this.props.renderContent)
+                leftContent = nextVal ? wordDiff(ch, nextVal, 'added', this.props.renderContent) : ch
+                rightContent = nextVal && wordDiff(ch, nextVal, 'removed', this.props.renderContent)
+                if (nextVal) {
+                  rightLineNumber = rightLineNumber + 1
+                  added = true
+                }
               } else {
                 rightLineNumber = rightLineNumber + 1
                 rightContent = ch
@@ -148,7 +144,7 @@ class DiffViewer extends React.PureComponent<DiffViewerProps, DiffViewerState> {
                 const preValue = diffArray[i - 1].value
                 .split('\n')
                 .filter(Boolean)[num]
-                content = wordDiff(preValue, ch, 'removed', this.props.renderContent)
+                content = preValue ? wordDiff(preValue, ch, 'removed', this.props.renderContent) : ch
               } else {
                 content = ch
               }
@@ -158,7 +154,7 @@ class DiffViewer extends React.PureComponent<DiffViewerProps, DiffViewerState> {
                 const nextVal = diffArray[i + 1].value
                 .split('\n')
                 .filter(Boolean)[num]
-                content = wordDiff(ch, nextVal, 'added', this.props.renderContent)
+                content = nextVal ? wordDiff(ch, nextVal, 'added', this.props.renderContent) : ch
               } else {
                 content = ch
               }
@@ -189,29 +185,13 @@ class DiffViewer extends React.PureComponent<DiffViewerProps, DiffViewerState> {
       oldValue,
       newValue,
       splitView,
-      mode,
     } = this.props
 
-    let diffArray
-    const m = mode.toLowerCase()
-
-    if (m === 'json' && typeof oldValue === 'object' && typeof newValue === 'object') {
-      diffArray = diff.diffJson(oldValue, newValue)
-    } else if (m === 'lines' && typeof oldValue === 'string' && typeof newValue === 'string') {
-      diffArray = diff.diffLines(oldValue, newValue)
-    } else {
-      let errorMessage
-      switch (m) {
-        case 'json':
-          errorMessage = `Ensure 'oldValue' and 'newValue' are objects`
-          break;
-        default:
-          errorMessage = `Ensure 'oldValue' and 'newValue' are strings`
-          break;
-      }
-      throw Error(`Unexpected data format for mode '${mode}'. ${errorMessage}`)
+    if (typeof oldValue !== 'string' || typeof newValue !== 'string') {
+      throw Error('"oldValue" and "newValue" should be strings')
     }
 
+    const diffArray = diff.diffLines(oldValue, newValue)
     const nodes = splitView
       ? this.splitView(diffArray)()
       : this.inlineView(diffArray)()
