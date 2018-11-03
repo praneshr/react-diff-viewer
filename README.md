@@ -1,4 +1,4 @@
-# <img src='logo.svg' height='130' alt='React Diff Viewer' />
+<img src='logo.svg' height='200' alt='React Diff Viewer' />
 
 A simple and beautiful text diff viewer made with Diff and React JS.
 
