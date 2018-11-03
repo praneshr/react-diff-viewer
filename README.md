@@ -1,6 +1,9 @@
 <p align="center">
-  <img src='https://image.ibb.co/i9kKdL/rdv.png' width="100%" alt='React Diff Viewer' />
+  <img src='https://image.ibb.co/dO5cyL/rdv.png' width="80%" alt='React Diff Viewer' />
 </p>
+<br/>
+<br/>
+<br/>
 
 A simple and beautiful text diff viewer made with [Diff](https://github.com/kpdecker/jsdiff) and [React JS](https://reactjs.org).
 
