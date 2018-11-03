@@ -1,4 +1,3 @@
-import { cx } from 'emotion'
 import * as React from 'react'
 import * as diff from 'diff'
 import * as PropTypes from 'prop-types'
@@ -15,7 +14,6 @@ export interface IReactDiffViewerProps {
   oldValue: string;
   newValue: string;
   splitView?: boolean;
-  wordDiff?: boolean;
   renderContent?: (source: string) => JSX.Element;
   onLineNumberClick?: (lineId: string, event: React.MouseEvent<HTMLTableCellElement>) => void;
   highlightLines?: string[];
@@ -38,19 +36,32 @@ const wordDiff = (
     if (obj[hideType]) return undefined
     if (renderContent) {
       return <span
-        className={cn(styles.wordDiff, { [styles.wordAdded]: obj.added, [styles.wordRemoved]: obj.removed })}
+        className={cn(
+          styles.wordDiff,
+          {
+            [styles.wordAdded]: obj.added,
+            [styles.wordRemoved]: obj.removed,
+          },
+        )}
         key={i}>
         { renderContent(obj.value) }
       </span>
     }
     return <pre
-      className={cn(styles.wordDiff, { [styles.wordAdded]: obj.added, [styles.wordRemoved]: obj.removed })}
+      className={cn(
+        styles.wordDiff,
+        {
+          [styles.wordAdded]: obj.added,
+          [styles.wordRemoved]: obj.removed,
+        },
+      )}
       key={i}>
       { obj.value }
     </pre>
   })
 }
-class DiffViewer extends React.PureComponent<IReactDiffViewerProps, IReactDiffViewerState> {
+
+class DiffViewer extends React.Component<IReactDiffViewerProps, IReactDiffViewerState> {
 
   static defaultProps: IReactDiffViewerProps = {
     oldValue: '',
@@ -64,9 +75,10 @@ class DiffViewer extends React.PureComponent<IReactDiffViewerProps, IReactDiffVi
     oldValue: PropTypes.string.isRequired,
     newValue: PropTypes.string.isRequired,
     splitView: PropTypes.bool,
-    wordDiff: PropTypes.bool,
     renderContent: PropTypes.func,
     onLineNumberClick: PropTypes.func,
+    styles: PropTypes.object,
+    highlightLines: PropTypes.arrayOf(PropTypes.string),
   }
 
   private splitView = (diffArray: diff.IDiffResult[], styles: IReactDiffViewerStyles) => {

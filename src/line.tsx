@@ -1,4 +1,3 @@
-import { cx } from 'emotion'
 import * as React from 'react'
 import cn from 'classnames'
 
@@ -93,7 +92,7 @@ export const InlineLine = ({
         />
       }
     </td>
-    <td className={cx(
+    <td className={cn(
       styles.marker,
       {
         [styles.diffAdded]: added,
@@ -103,7 +102,7 @@ export const InlineLine = ({
       {added && <pre>+</pre>}
       {removed && <pre>-</pre>}
     </td>
-    <td className={cx({
+    <td className={cn({
       [styles.diffAdded]: added,
       [styles.diffRemoved]: removed,
       [styles.hightlightedLine]: hightlightLine,
@@ -155,16 +154,19 @@ export const DefaultLine = ({
         />
       }
     </td>
-    <td className={cx({
-      [cx(styles.marker, styles.diffRemoved)]: removed,
-      [styles.hightlightedLine]: hightlightLeftLine,
-    })}>
+    <td className={cn(
+      styles.marker,
+      {
+        [styles.diffRemoved]: removed,
+        [styles.hightlightedLine]: hightlightLeftLine,
+      },
+    )}>
       {
         removed
         && <pre>-</pre>
       }
     </td>
-    <td className={cx({
+    <td className={cn({
       [styles.diffRemoved]: removed,
       [styles.hightlightedLine]: hightlightLeftLine,
     })}>
@@ -190,7 +192,7 @@ export const DefaultLine = ({
         prefix={rightLineNumberPrefix}
       />
     </td>
-    <td className={cx(
+    <td className={cn(
       styles.marker,
       {
         [styles.diffAdded]: added,
@@ -202,7 +204,7 @@ export const DefaultLine = ({
         && <pre>+</pre>
       }
     </td>
-    <td className={cx({
+    <td className={cn({
       [styles.diffAdded]: added,
       [styles.hightlightedLine]: hightlightRightLine,
     })}>
