@@ -1,4 +1,38 @@
 {
+  "name": "react-diff-viewer",
+  "version": "1.0.0-beta-3",
+  "private": false,
+  "description": "The only text diff viewer needed for React",
+  "keywords": [
+    "code-review",
+    "diff",
+    "diff-viewer",
+    "github",
+    "react",
+    "react-component",
+    "ui"
+  ],
+  "repository": "git@github.com:praneshr/react-diff-viewer.git",
+  "license": "MIT",
+  "author": "Pranesh Ravi<praneshpranesh@gmail.com>",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "tsc --outDir lib/",
+    "build:examples": "webpack --progress --colors",
+    "build:watch": "tsc --outDir lib/ -w",
+    "prepublish": "yarn build",
+    "postpublish": "yarn publish:site",
+    "publish:site": "NODE_ENV=production yarn build:examples && gh-pages -d examples/dist",
+    "start:examples": "webpack-dev-server --open --hot --inline --host 192.168.31.72",
+    "test": "mocha --require ts-node/register --require enzyme.ts ./test/index.tsx",
+    "test:watch": "mocha --require ts-node/register --require enzyme.ts --watch-extensions ts,tsx --watch ./test/index.tsx"
+  },
+  "dependencies": {
+    "classnames": "^2.2.6",
+    "diff": "^3.5.0",
+    "emotion": "^9.2.10",
+    "prop-types": "^15.6.2"
+  },
   "devDependencies": {
     "@types/classnames": "^2.2.6",
     "@types/diff": "^3.5.1",
@@ -34,29 +68,8 @@
     "webpack-cli": "^3.1.1",
     "webpack-dev-server": "^3.1.9"
   },
-  "name": "react-diff-viewer",
-  "version": "1.0.0-beta-3",
-  "description": "The only text diff viewer needed for React",
-  "main": "lib/index.js",
-  "repository": "git@github.com:praneshr/react-diff-viewer.git",
-  "author": "Pranesh Ravi<praneshpranesh@gmail.com>",
-  "license": "MIT",
-  "private": false,
-  "scripts": {
-    "build": "tsc --outDir lib/",
-    "build:watch": "tsc --outDir lib/ -w",
-    "build:examples": "webpack --progress --colors",
-    "start:examples": "webpack-dev-server --open --hot --inline --host 192.168.31.72",
-    "prepublish": "yarn build",
-    "publish:site": "NODE_ENV=production yarn build:examples && gh-pages -d examples/dist",
-    "postpublish": "yarn publish:site",
-    "test": "mocha --require ts-node/register --require enzyme.ts ./test/index.tsx",
-    "test:watch": "mocha --require ts-node/register --require enzyme.ts --watch-extensions ts,tsx --watch ./test/index.tsx"
-  },
-  "dependencies": {
-    "classnames": "^2.2.6",
-    "diff": "^3.5.0",
-    "emotion": "^9.2.10",
-    "prop-types": "^15.6.2"
+  "peerDependencies": {
+    "react": "^15.3.0 || ^16.0.0",
+    "react-dom": "^15.3.0 || ^16.0.0"
   }
 }
