@@ -203,3 +203,17 @@ body {
     text-align: center;
   }
 }
+
+@media (max-width: 767px) {
+  .react-diff-viewer-example {
+    .banner {
+      h1 {
+        font-weight: 900;
+        font-size: 36px;
+      }
+      p {
+        font-size: 18px;
+      }
+    }
+  }
+}

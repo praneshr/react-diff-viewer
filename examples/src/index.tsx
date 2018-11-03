@@ -113,7 +113,7 @@ class Example extends React.Component<{}, IExampleState> {
           <p>
             A simple and beautiful text diff viewer made
             with <a href="https://github.com/kpdecker/jsdiff" target="_blank">Diff </a>
-            and <a href="https://reactjs.org" target="_blank">React JS. </a>
+            and <a href="https://reactjs.org" target="_blank">React. </a>
             Featuring split view, unified view, word diff and line highlight.
           </p>
           <div className="cta">
