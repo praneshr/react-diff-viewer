@@ -40,7 +40,7 @@ class Example extends React.Component<{}, IExampleState> {
 
   onChange = () => this.setState({ splitView: !this.state.splitView })
 
-  onLanguageChange = (e: any) => this.setState({ language: e.target.value })
+  onLanguageChange = (e: any) => this.setState({ language: e.target.value, highlightLine: [] })
 
   onLineNumberClick = (id: string, e: React.MouseEvent<HTMLTableCellElement>) => {
     let highlightLine = [id]

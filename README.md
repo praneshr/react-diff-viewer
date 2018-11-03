@@ -57,20 +57,20 @@ class Diff extends PureComponent {
 ```
 
 ## Props
-|Prop              |Type         |Default         |Description                                   |
-|------------------|-------------|----------------|----------------------------------------------|
-|oldValue          |`string`       |`''`          |Old value as sting.                           |
-|newVlaue          |`string`       |`''`          |New value as sting.                           |
+|Prop              |Type           |Default       |Description                                   |
+|------------------|---------------|--------------|----------------------------------------------|
+|oldValue          |`string`       |`''`          |Old value as string.                          |
+|newVlaue          |`string`       |`''`          |New value as string.                          |
 |splitView         |`boolean`      |`true`        |Switch between `unified` and `split` view.    |
-|disableWordDiff   |`boolean`      |`false`       |Do not show word diff in a diff line.         |
+|disableWordDiff   |`boolean`      |`false`       |Show and hide word diff in a diff line.       |
 |renderContent     |`function`     |`undefined`   |Render Prop API to render code in the diff viewer. Helpful for [syntax highlighting](#syntax-highlighting)   |
 |onLineNumberClick |`function`     |`undefined`   |Event handler for line number click. `(lineId: string) => void`          |
-|hightlightLines   |`array[string]`|`[]`          |List of lines to be highlighted. Works together with `onLineNumberClick`. Line number are prefixed with `L` and `R` for the line numbers on the left and right section of the diff viewer. Example, `L-20` means 20th line in the left pane. To highlight a range of line numbers, pass the prefixed line number as an array. For example, `[L-2, L-3, L-4, L-5]` will highlight the lines `2-5` in the left pane.   |
+|hightlightLines   |`array[string]`|`[]`          |List of lines to be highlighted. Works together with `onLineNumberClick`. Line number are prefixed with `L` and `R` for the left and right section of the diff viewer, respectively. For example, `L-20` means 20th line in the left pane. To highlight a range of line numbers, pass the prefixed line number as an array. For example, `[L-2, L-3, L-4, L-5]` will highlight the lines `2-5` in the left pane.   |
 |styles            |`object`       |`{}`          |To override style variables and styles. Learn more about [overriding styles](#overriding-styles)  |
 
 ## Syntax Highlighting
 
-Syntax highlighting is a bit tricky when combined with diff. But, React Diff Viewer provides a simple render prop API to handle syntax highlighting. Use `renderContent(content: string) => JSX.Element` and your favorite syntax highlighting library to acheive this.
+Syntax highlighting is a bit tricky when combined with diff. Here, React Diff Viewer provides a simple render prop API to handle syntax highlighting. Use `renderContent(content: string) => JSX.Element` and your favorite syntax highlighting library to acheive this.
 
 An example using [Prism JS](https://prismjs.com)
 
@@ -166,7 +166,7 @@ const defaultStyles = {
 }
 ```
 
-To override any style, simple pass the new style object to the `styles` prop. New style will be computed using `Object.assign(default, override)`.
+To override any style, just pass the new style object to the `styles` prop. New style will be computed using `Object.assign(default, override)`.
 
 For keys other than `variables`, the value can either be an object or string interpolation. Emotion's dynamic styles are not yet supported.
 
