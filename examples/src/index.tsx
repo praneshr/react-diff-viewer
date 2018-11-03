@@ -65,13 +65,13 @@ class Example extends React.Component<{}, IExampleState> {
     let language
     switch (this.state.language) {
       case 'xml':
-        language = P.highlight(str, P.languages.markup, 'xml')
+        language = P.highlight(str, P.languages.markup)
         break
       case 'json':
-        language = P.highlight(str, P.languages.json, 'json')
+        language = P.highlight(str, P.languages.json)
         break
       case 'javascript':
-        language = P.highlight(str, P.languages.javascript, 'javascript')
+        language = P.highlight(str, P.languages.javascript)
         break
       default:
         break
