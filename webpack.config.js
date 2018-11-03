@@ -2,6 +2,7 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
 const css = require('mini-css-extract-plugin')
+const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 
 module.exports = {
   entry: {
@@ -48,12 +49,17 @@ module.exports = {
         test: /\.xml|.rjs|.java/,
         use: 'raw-loader',
       },
+      {
+        test: /\.svg|.png/,
+        use: 'file-loader',
+      },
     ],
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: './examples/src/index.ejs',
     }),
+    new FaviconsWebpackPlugin('./logo-standalone.svg'),
     new css({
       filename: 'main.css',
     }),

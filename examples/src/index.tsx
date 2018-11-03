@@ -11,6 +11,8 @@ const newXml = require('./diff/xml/new.xml')
 const oldJs = require('./diff/javascript/old.rjs')
 const newJs = require('./diff/javascript/new.rjs')
 
+const logo = require('../../logo-standalone.svg')
+
 interface IExampleState {
   splitView?: boolean;
   highlightLine?: string[];
@@ -104,26 +106,33 @@ class Example extends React.Component<{}, IExampleState> {
     return (
       <div className="react-diff-viewer-example">
         <div className="banner">
+          <div className="img-container">
+            <img src={logo} alt="React Diff Viewer Logo"/>
+          </div>
           <h1>React Diff Viewer</h1>
           <p>
             A simple and beautiful text diff viewer made
             with <a href="https://github.com/kpdecker/jsdiff" target="_blank">Diff </a>
-            and <a href="https://reactjs.org" target="_blank">React JS </a>
-            featuring split view, unified view and line highlight.
+            and <a href="https://reactjs.org" target="_blank">React JS. </a>
+            Featuring split view, unified view, word diff and line highlight.
           </p>
           <div className="cta">
-            <button
-              type="button"
-              className="btn btn-primary btn-lg"
-            >
-              Documentation
-            </button>
-            <button
-              type="button"
-              className="btn btn-primary btn-lg"
-            >
-              Github
-            </button>
+            <a href="https://github.com/praneshr/react-diff-viewer#install">
+              <button
+                type="button"
+                className="btn btn-primary btn-lg"
+              >
+                Documentation
+              </button>
+            </a>
+            <a href="https://github.com/praneshr/react-diff-viewer">
+              <button
+                type="button"
+                className="btn btn-primary btn-lg"
+              >
+                Github
+              </button>
+            </a>
           </div>
         </div>
         <div className="controls">
