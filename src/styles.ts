@@ -4,7 +4,6 @@ import { Interpolation } from 'create-emotion'
 
 export interface IReactDiffViewerStyles {
   diffContainer?: string;
-  column?: string;
   diffRemoved?: string;
   diffAdded?: string;
   line?: string;
@@ -16,7 +15,6 @@ export interface IReactDiffViewerStyles {
   wordDiff?: string;
   wordAdded?: string;
   wordRemoved?: string;
-  clearFix?: string;
 }
 
 export interface IReactDiffViewerStylesOverride {
@@ -35,7 +33,6 @@ export interface IReactDiffViewerStylesOverride {
     highlightGutterBackground?: string,
   },
   diffContainer?: Interpolation;
-  column?: Interpolation;
   diffRemoved?: Interpolation;
   diffAdded?: Interpolation;
   marker?: Interpolation;
@@ -95,12 +92,6 @@ export default (styleOverride: IReactDiffViewerStylesOverride) => {
       },
     },
     label: 'diff-container',
-  })
-
-  const column = css({
-    width: '50%',
-    float: 'left',
-    label: 'column',
   })
 
   const diffRemoved = css({
@@ -185,15 +176,6 @@ export default (styleOverride: IReactDiffViewerStylesOverride) => {
     },
   })
 
-  const clearFix = css({
-    '&:after': {
-      content: '" "',
-      display: 'table',
-      clear: 'both',
-    },
-    label: 'clearfix',
-  })
-
   const line = css({
     verticalAlign: 'baseline',
     label: 'line',
@@ -218,7 +200,6 @@ export default (styleOverride: IReactDiffViewerStylesOverride) => {
 
   const defaultStyles: any = {
     diffContainer,
-    column,
     diffRemoved,
     diffAdded,
     marker,
@@ -226,7 +207,6 @@ export default (styleOverride: IReactDiffViewerStylesOverride) => {
     hightlightedGutter,
     hightlightedLine,
     lineNumber,
-    clearFix,
     line,
     wordDiff,
     wordAdded,
