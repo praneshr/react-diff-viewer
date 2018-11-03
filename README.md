@@ -1,6 +1,6 @@
 <img src='logo.svg' height='200' alt='React Diff Viewer' />
 
-A simple and beautiful text diff viewer made with Diff and React JS.
+A simple and beautiful text diff viewer made with [Diff](https://github.com/kpdecker/jsdiff) and [React JS](https://reactjs.org).
 
 Inspired from Github's diff viewer, it includes features like split view, unified view, word diff and line highlight. It is highly customizable and it supports almost all languages.
 
