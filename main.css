@@ -165,3 +165,10 @@ body {
   padding: 0 15px 30px;
   text-align: center; }
 
+@media (max-width: 767px) {
+  .react-diff-viewer-example .banner h1 {
+    font-weight: 900;
+    font-size: 36px; }
+  .react-diff-viewer-example .banner p {
+    font-size: 18px; } }
+
