@@ -1,4 +1,6 @@
-<img src='logo.svg' height='200' alt='React Diff Viewer' />
+<p align="center">
+  <img src='https://image.ibb.co/i9kKdL/rdv.png' width="100%" alt='React Diff Viewer' />
+</p>
 
 A simple and beautiful text diff viewer made with [Diff](https://github.com/kpdecker/jsdiff) and [React JS](https://reactjs.org).
 
@@ -40,7 +42,7 @@ if(a === 10) {
 }
 `
 
-class Diff from PureComponent {
+class Diff extends PureComponent {
   render = () => {
     return (
       <ReactDiffViewer
@@ -56,21 +58,25 @@ class Diff from PureComponent {
 ## Props
 |Prop              |Type         |Default       |Description                                   |
 |------------------|-------------|--------------|----------------------------------------------|
-|oldValue          |`string`       |''            |Old value as sting.                           |
-|newVlaue          |`string`       |''            |New value as sting.                           |
+|oldValue          |`string`       |`''`            |Old value as sting.                           |
+|newVlaue          |`string`       |`''`            |New value as sting.                           |
 |splitView         |`boolean`      |`true`        |Switch between `unified` and `split` view.    |
 |renderContent     |`function`     |`undefined`   |Render Prop API to render code in the diff viewer. Helpful for [syntax highlighting](#syntax-highlighting)   |
-|onLineNumberClick |`function`     |`undefined`   |Event handler for line number click.          |
-|hightlightLines   |`array[string]`|`[]`          |List of line number to be highlighted. Works together with `onLineNumberClick`. Line number are prefixed with `L` and `R` for the line numbers on the left and right section of the diff viewer. Example, `L-20` means 20th line in the left pane. To highlight a range of line numbers, pass the line number range prefixed as an array. For example, `[L-2, L-3, L-4, L-5]` will highlight line numbers `2-5` in the left pane.   |
-|styles            |`object`       |`{}`          |Object consisting of variable and style overrides. Learn more about [overriding styles](#overriding-styles)  |
+|onLineNumberClick |`function`     |`undefined`   |Event handler for line number click. `(lineId: string) => void`          |
+|hightlightLines   |`array[string]`|`[]`          |List of lines to be highlighted. Works together with `onLineNumberClick`. Line number are prefixed with `L` and `R` for the line numbers on the left and right section of the diff viewer. Example, `L-20` means 20th line in the left pane. To highlight a range of line numbers, pass the prefixed line number as an array. For example, `[L-2, L-3, L-4, L-5]` will highlight the lines `2-5` in the left pane.   |
+|styles            |`object`       |`{}`          |To override style variables and styles. Learn more about [overriding styles](#overriding-styles)  |
 
 ## Syntax Highlighting
 
 Syntax highlighting is a bit tricky when combined with diff. But, React Diff Viewer provides a simple render prop API to handle syntax highlighting. Use `renderContent(content: string) => JSX.Element` and your favorite syntax highlighting library to acheive this.
 
+An example using [Prism JS](https://prismjs.com)
+
 ```html
+// Load Prism CSS
 <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/prism.min.css" />
 
+// Load Prism JS
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/prism.min.js"></script>
 ```
 
@@ -98,10 +104,10 @@ if(a === 10) {
 }
 `
 
-class Diff from PureComponent {
+class Diff extends PureComponent {
   highlightSyntax = str => <pre
     style={{ display: 'inline' }}
-    dangerouslySetInnerHTML={{ __html: P.highlight(str, P.languages.javascript, 'javascript') }}
+    dangerouslySetInnerHTML={{ __html: Prism.highlight(str, Prism.languages.javascript) }}
   />
 
   render = () => {
@@ -121,6 +127,8 @@ class Diff from PureComponent {
 ## Overriding Styles
 
 React Diff Viewer uses [emotion](https://emotion.sh/) for styling. It also offers a simple way to override styles and style variables.
+
+Below are the default style variables and style object keys.
 
 ```javascript
 
@@ -158,7 +166,7 @@ const defaultStyles = {
 
 To override any style, simple pass the new style object to the `styles` prop. New style will be computed using `Object.assign(default, override)`.
 
-For keys other than `variables`, the value can be an object or string interpolation. Emotion's dynamic styles are not yet supported.
+For keys other than `variables`, the value can either be an object or string interpolation. Emotion's dynamic styles are not yet supported.
 
 ```javascript
 import React, { PureComponent } from 'react'
@@ -184,11 +192,11 @@ if(a === 10) {
 }
 `
 
-class Diff from PureComponent {
+class Diff extends PureComponent {
 
   highlightSyntax = str => <pre
     style={{ display: 'inline' }}
-    dangerouslySetInnerHTML={{ __html: P.highlight(str, P.languages.javascript, 'javascript') }}
+    dangerouslySetInnerHTML={{ __html: Prism.highlight(str, Prism.languages.javascript) }}
   />
 
   render = () => {
