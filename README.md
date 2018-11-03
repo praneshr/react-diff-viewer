@@ -3,7 +3,7 @@
 </p>
 <br/>
 
-A simple and beautiful text diff viewer made with [Diff](https://github.com/kpdecker/jsdiff) and [React JS](https://reactjs.org).
+A simple and beautiful text diff viewer made with [Diff](https://github.com/kpdecker/jsdiff) and [React](https://reactjs.org).
 
 Inspired from Github's diff viewer, it includes features like split view, unified view, word diff and line highlight. It is highly customizable and it supports almost all languages.  Check out the [demo](https://praneshravi.in/react-diff-viewer/).
 
@@ -57,11 +57,12 @@ class Diff extends PureComponent {
 ```
 
 ## Props
-|Prop              |Type         |Default       |Description                                   |
-|------------------|-------------|--------------|----------------------------------------------|
-|oldValue          |`string`       |`''`            |Old value as sting.                           |
-|newVlaue          |`string`       |`''`            |New value as sting.                           |
+|Prop              |Type         |Default         |Description                                   |
+|------------------|-------------|----------------|----------------------------------------------|
+|oldValue          |`string`       |`''`          |Old value as sting.                           |
+|newVlaue          |`string`       |`''`          |New value as sting.                           |
 |splitView         |`boolean`      |`true`        |Switch between `unified` and `split` view.    |
+|disableWordDiff   |`boolean`      |`false`       |Do not show word diff in a diff line.         |
 |renderContent     |`function`     |`undefined`   |Render Prop API to render code in the diff viewer. Helpful for [syntax highlighting](#syntax-highlighting)   |
 |onLineNumberClick |`function`     |`undefined`   |Event handler for line number click. `(lineId: string) => void`          |
 |hightlightLines   |`array[string]`|`[]`          |List of lines to be highlighted. Works together with `onLineNumberClick`. Line number are prefixed with `L` and `R` for the line numbers on the left and right section of the diff viewer. Example, `L-20` means 20th line in the left pane. To highlight a range of line numbers, pass the prefixed line number as an array. For example, `[L-2, L-3, L-4, L-5]` will highlight the lines `2-5` in the left pane.   |
