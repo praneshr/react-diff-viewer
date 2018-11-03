@@ -103,6 +103,10 @@
   version "1.20.3"
   resolved "http://registry.npmjs.org/@types/expect/-/expect-1.20.3.tgz#a99d059ace4bd051332faf03f5b4b4266149a501"
 
+"@types/memoize-one@^3.1.1":
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/@types/memoize-one/-/memoize-one-3.1.1.tgz#0e21a1b91dc031fb59c1e1657b807ca9aec77475"
+
 "@types/mocha@^5.2.5":
   version "5.2.5"
   resolved "https://registry.yarnpkg.com/@types/mocha/-/mocha-5.2.5.tgz#8a4accfc403c124a0bafe8a9fc61a05ec1032073"
@@ -3154,6 +3158,10 @@ mem@^4.0.0:
     map-age-cleaner "^0.1.1"
     mimic-fn "^1.0.0"
     p-is-promise "^1.1.0"
+
+memoize-one@^4.0.2:
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/memoize-one/-/memoize-one-4.0.2.tgz#3fb8db695aa14ab9c0f1644e1585a8806adc1aee"
 
 memory-fs@^0.4.0, memory-fs@~0.4.1:
   version "0.4.1"

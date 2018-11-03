@@ -2,12 +2,16 @@ import { cx } from 'emotion'
 import * as React from 'react'
 import * as diff from 'diff'
 import * as PropTypes from 'prop-types'
+import memoize from 'memoize-one'
 import cn from 'classnames'
 
-import * as styles from './styles'
+import computeStyles, {
+  IReactDiffViewerStyles,
+  IReactDiffViewerStylesOverride,
+} from './styles'
 import { InlineLine, DefaultLine } from './line'
 
-export interface DiffViewerProps {
+export interface IReactDiffViewerProps {
   oldValue: string;
   newValue: string;
   splitView?: boolean;
@@ -15,13 +19,20 @@ export interface DiffViewerProps {
   renderContent?: (source: string) => JSX.Element;
   onLineNumberClick?: (lineId: string, event: React.MouseEvent<HTMLTableCellElement>) => void;
   highlightLines?: string[];
+  styles?: IReactDiffViewerStylesOverride,
 }
 
-interface DiffViewerState {
+export interface IReactDiffViewerState {
 
 }
 
-const wordDiff = (oldValue: string, newValue: string, hideType: string, renderContent?: (source: string) => JSX.Element) => {
+const wordDiff = (
+  oldValue: string,
+  newValue: string,
+  hideType: string,
+  styles: IReactDiffViewerStyles,
+  renderContent?: (source: string) => JSX.Element,
+) => {
   const charDiff = diff.diffWordsWithSpace(oldValue, newValue)
   return charDiff.map((obj: any, i) => {
     if (obj[hideType]) return undefined
@@ -39,13 +50,14 @@ const wordDiff = (oldValue: string, newValue: string, hideType: string, renderCo
     </pre>
   })
 }
-class DiffViewer extends React.PureComponent<DiffViewerProps, DiffViewerState> {
+class DiffViewer extends React.PureComponent<IReactDiffViewerProps, IReactDiffViewerState> {
 
-  static defaultProps: DiffViewerProps = {
+  static defaultProps: IReactDiffViewerProps = {
     oldValue: '',
     newValue: '',
     splitView: true,
     highlightLines: [],
+    styles: {},
   }
 
   static propTypes = {
@@ -57,7 +69,7 @@ class DiffViewer extends React.PureComponent<DiffViewerProps, DiffViewerState> {
     onLineNumberClick: PropTypes.func,
   }
 
-  private splitView = (diffArray: diff.IDiffResult[]) => {
+  private splitView = (diffArray: diff.IDiffResult[], styles: IReactDiffViewerStyles) => {
     let leftLineNumber = 0
     let rightLineNumber = 0
 
@@ -71,6 +83,7 @@ class DiffViewer extends React.PureComponent<DiffViewerProps, DiffViewerState> {
                 rightLineNumber = rightLineNumber + 1
                 leftLineNumber = leftLineNumber + 1
                 return <DefaultLine
+                  styles={styles}
                   leftLineNumber={leftLineNumber}
                   rightLineNumber={rightLineNumber}
                   leftContent={ch}
@@ -99,8 +112,8 @@ class DiffViewer extends React.PureComponent<DiffViewerProps, DiffViewerState> {
                 const nextVal = diffArray[i + 1].value
                   .split('\n')
                   .filter(Boolean)[num]
-                leftContent = nextVal ? wordDiff(ch, nextVal, 'added', this.props.renderContent) : ch
-                rightContent = nextVal && wordDiff(ch, nextVal, 'removed', this.props.renderContent)
+                leftContent = nextVal ? wordDiff(ch, nextVal, 'added', styles, this.props.renderContent) : ch
+                rightContent = nextVal && wordDiff(ch, nextVal, 'removed', styles, this.props.renderContent)
                 if (nextVal) {
                   rightLineNumber = rightLineNumber + 1
                   added = true
@@ -110,6 +123,7 @@ class DiffViewer extends React.PureComponent<DiffViewerProps, DiffViewerState> {
                 rightContent = ch
               }
               return <DefaultLine
+                styles={styles}
                 leftLineNumber={!removed || leftLineNumber}
                 rightLineNumber={!added || rightLineNumber}
                 removed={removed}
@@ -127,7 +141,7 @@ class DiffViewer extends React.PureComponent<DiffViewerProps, DiffViewerState> {
     })
   }
 
-  private inlineView = (diffArray: diff.IDiffResult[]) => {
+  private inlineView = (diffArray: diff.IDiffResult[], styles: IReactDiffViewerStyles) => {
     let leftLineNumber = 0
     let rightLineNumber = 0
     return () => {
@@ -142,7 +156,7 @@ class DiffViewer extends React.PureComponent<DiffViewerProps, DiffViewerState> {
                 const preValue = diffArray[i - 1].value
                 .split('\n')
                 .filter(Boolean)[num]
-                content = preValue ? wordDiff(preValue, ch, 'removed', this.props.renderContent) : ch
+                content = preValue ? wordDiff(preValue, ch, 'removed', styles, this.props.renderContent) : ch
               } else {
                 content = ch
               }
@@ -152,7 +166,7 @@ class DiffViewer extends React.PureComponent<DiffViewerProps, DiffViewerState> {
                 const nextVal = diffArray[i + 1].value
                 .split('\n')
                 .filter(Boolean)[num]
-                content = nextVal ? wordDiff(ch, nextVal, 'added', this.props.renderContent) : ch
+                content = nextVal ? wordDiff(ch, nextVal, 'added', styles, this.props.renderContent) : ch
               } else {
                 content = ch
               }
@@ -162,6 +176,7 @@ class DiffViewer extends React.PureComponent<DiffViewerProps, DiffViewerState> {
               content = ch
             }
             return <InlineLine
+              styles={styles}
               onLineNumberClick={this.props.onLineNumberClick}
               key={num}
               renderContent={this.props.renderContent}
@@ -177,6 +192,8 @@ class DiffViewer extends React.PureComponent<DiffViewerProps, DiffViewerState> {
     }
   }
 
+  private computeStyles = memoize(computeStyles)
+
   public render = () => {
 
     const {
@@ -189,16 +206,20 @@ class DiffViewer extends React.PureComponent<DiffViewerProps, DiffViewerState> {
       throw Error('"oldValue" and "newValue" should be strings')
     }
 
+    const newStyles: any = this.computeStyles(this.props.styles)
+
     const diffArray = diff.diffLines(oldValue, newValue, {
       newlineIsToken: true,
       ignoreWhitespace: false,
       ignoreCase: false,
     })
+
     const nodes = splitView
-      ? this.splitView(diffArray)()
-      : this.inlineView(diffArray)()
+      ? this.splitView(diffArray, newStyles)()
+      : this.inlineView(diffArray, newStyles)()
+
     return (
-      <table className={styles.diffContainer}>
+      <table className={newStyles.diffContainer}>
         <tbody>
           {nodes}
         </tbody>
@@ -208,4 +229,4 @@ class DiffViewer extends React.PureComponent<DiffViewerProps, DiffViewerState> {
 }
 
 export default DiffViewer
-export { styles }
+export { IReactDiffViewerStylesOverride }

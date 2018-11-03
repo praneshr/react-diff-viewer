@@ -2,7 +2,7 @@ import { cx } from 'emotion'
 import * as React from 'react'
 import cn from 'classnames'
 
-import * as styles from './styles'
+import { IReactDiffViewerStyles } from './styles'
 
 
 interface ICommon {
@@ -13,6 +13,7 @@ interface ICommon {
   onLineNumberClick: (lineId: string, event: React.MouseEvent<HTMLTableDataCellElement>) => void;
   renderContent?: (source: string) => JSX.Element;
   hightlightLines?: string[];
+  styles: IReactDiffViewerStyles;
 }
 interface IInlineLine extends ICommon {
   content?: string | JSX.Element | JSX.Element[];
@@ -50,6 +51,7 @@ export const InlineLine = ({
   onLineNumberClick = () => { },
   renderContent,
   hightlightLines = [],
+  styles,
 }: IInlineLine) => {
   const hightlightLine = (leftLineNumber !== true || rightLineNumber !== true)
     && (
@@ -128,6 +130,7 @@ export const DefaultLine = ({
   removed,
   renderContent,
   hightlightLines = [],
+  styles,
 }: IDefaultLine) => {
   const hightlightLeftLine = leftLineNumber !== true
     && hightlightLines.includes(`${leftLineNumberPrefix}-${leftLineNumber}`)
