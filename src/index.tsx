@@ -14,6 +14,7 @@ export interface IReactDiffViewerProps {
   oldValue: string;
   newValue: string;
   splitView?: boolean;
+  disableWordDiff?: boolean;
   renderContent?: (source: string) => JSX.Element;
   onLineNumberClick?: (lineId: string, event: React.MouseEvent<HTMLTableCellElement>) => void;
   highlightLines?: string[];
@@ -68,6 +69,7 @@ class DiffViewer extends React.Component<IReactDiffViewerProps, IReactDiffViewer
     newValue: '',
     splitView: true,
     highlightLines: [],
+    disableWordDiff: false,
     styles: {},
   }
 
@@ -75,6 +77,7 @@ class DiffViewer extends React.Component<IReactDiffViewerProps, IReactDiffViewer
     oldValue: PropTypes.string.isRequired,
     newValue: PropTypes.string.isRequired,
     splitView: PropTypes.bool,
+    disableWordDiff: PropTypes.bool,
     renderContent: PropTypes.func,
     onLineNumberClick: PropTypes.func,
     styles: PropTypes.object,
@@ -124,8 +127,12 @@ class DiffViewer extends React.Component<IReactDiffViewerProps, IReactDiffViewer
                 const nextVal = diffArray[i + 1].value
                   .split('\n')
                   .filter(Boolean)[num]
-                leftContent = nextVal ? wordDiff(ch, nextVal, 'added', styles, this.props.renderContent) : ch
-                rightContent = nextVal && wordDiff(ch, nextVal, 'removed', styles, this.props.renderContent)
+                leftContent = (nextVal && !this.props.disableWordDiff)
+                  ? wordDiff(ch, nextVal, 'added', styles, this.props.renderContent)
+                  : ch
+                rightContent = (nextVal && !this.props.disableWordDiff)
+                  ? wordDiff(ch, nextVal, 'removed', styles, this.props.renderContent)
+                  : nextVal
                 if (nextVal) {
                   rightLineNumber = rightLineNumber + 1
                   added = true
@@ -168,7 +175,7 @@ class DiffViewer extends React.Component<IReactDiffViewerProps, IReactDiffViewer
                 const preValue = diffArray[i - 1].value
                 .split('\n')
                 .filter(Boolean)[num]
-                content = preValue ? wordDiff(preValue, ch, 'removed', styles, this.props.renderContent) : ch
+                content = (preValue && !this.props.disableWordDiff) ? wordDiff(preValue, ch, 'removed', styles, this.props.renderContent) : ch
               } else {
                 content = ch
               }
@@ -178,7 +185,7 @@ class DiffViewer extends React.Component<IReactDiffViewerProps, IReactDiffViewer
                 const nextVal = diffArray[i + 1].value
                 .split('\n')
                 .filter(Boolean)[num]
-                content = nextVal ? wordDiff(ch, nextVal, 'added', styles, this.props.renderContent) : ch
+                content = (nextVal && !this.props.disableWordDiff) ? wordDiff(ch, nextVal, 'added', styles, this.props.renderContent) : ch
               } else {
                 content = ch
               }
