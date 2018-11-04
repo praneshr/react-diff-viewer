@@ -1,6 +1,6 @@
 {
   "name": "react-diff-viewer",
-  "version": "1.0.0-beta-3",
+  "version": "1.0.0",
   "private": false,
   "description": "The only text diff viewer needed for React",
   "keywords": [
