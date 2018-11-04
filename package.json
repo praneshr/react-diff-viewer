@@ -20,7 +20,6 @@
     "build": "tsc --outDir lib/",
     "build:examples": "webpack --progress --colors",
     "build:watch": "tsc --outDir lib/ -w",
-    "prepublish": "yarn build",
     "publish:examples": "NODE_ENV=production yarn build:examples && gh-pages -d examples/dist -r $GITHUB_REPO_URL",
     "publish:examples:local": "NODE_ENV=production yarn build:examples && gh-pages -d examples/dist",
     "start:examples": "webpack-dev-server --open --hot --inline --host 192.168.31.72",
