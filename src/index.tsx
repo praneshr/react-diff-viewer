@@ -1,8 +1,10 @@
 import * as React from 'react'
 import * as diff from 'diff'
 import * as PropTypes from 'prop-types'
-import memoize from 'memoize-one'
 import cn from 'classnames'
+
+const m = require('memoize-one')
+const memoize = m.default || m
 
 import computeStyles, {
   IReactDiffViewerStyles,
