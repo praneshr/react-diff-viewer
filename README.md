@@ -4,6 +4,9 @@
 <br/>
 
 [![Build Status](https://travis-ci.com/praneshr/react-diff-viewer.svg?branch=master)](https://travis-ci.com/praneshr/react-diff-viewer)
+ [![npm version](https://badge.fury.io/js/react-diff-viewer.svg)](https://badge.fury.io/js/react-diff-viewer)
+ [![GitHub license](https://img.shields.io/github/license/praneshr/react-diff-viewer.svg)](https://github.com/praneshr/react-diff-viewer/blob/master/LICENSE)
+
 
 A simple and beautiful text diff viewer made with [Diff](https://github.com/kpdecker/jsdiff) and [React](https://reactjs.org).
 
