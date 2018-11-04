@@ -1,0 +1,13 @@
+language: node_js
+node_js: 8
+before_script: yarn build
+after_success: ./publish-examples.sh
+deploy:
+  provider: npm
+  email: praneshpranesh@gmail.com
+  api_key:
+    secure: De9/Mvzh3gEjhfhUjnnLQIL5eTOImEGjVI6ZwDSMu/qZ9MjI/bFr6PYIMVIjYHD6YWB/pP8a3F49NmLPQUnOrY/YTkvA1N4cqEm+EWluECm6b1GFansSz/RINy9ftG52c6dxOt3ArghLDmgryxxF/uOzgAQ7vrBLwACza+J/qqlpuCiryUKHVXcUp0VFroIUMZb+2HytRlLN8B/CvFIk2YrvbhgiqGKyjvDKLe8YlU/kIeyzFpVhmMRW5IN4ZbVRg7lMRmBcR7/HwB66h8DUTHRDql3g5/Hu622H4XT9NYEq7MinWLbK0Xr0jNOfFFr5ynSSOmFfFDj2ecVq1XS4Of/HDB6PjdJEVQ2xbqJbl9wyhG0Hu+Cm4qRpplQlU0K1TPkWKoyd5HAeYrD2UMUeVqZc3muhVe70Iv6UsGH+auJhsuCEWM7fRM4vQHSuXCJMoZZ6umhRk/YAETCswEo9PadU43V5zOsxxU29gG74EZN/69Sok9MvAFdHRHp2ff2K3kINRNvyFaTF/Lp1XrGzyuYS2kZGoz+XMj/fayLbv4ArmmgmEzV2JKXkmZivfNfLvbns+IofI1eYHF/MQpXBTn79VgD2xlStibNbtlueXY2YaRwSK2+2PmGv6ykIk/nXuZnu+PgTIb/EmwAzT7UfOduF3XKJKW0O5BD9g120nlE=
+  on:
+    tags: true
+    repo: praneshr/react-diff-viewer
+    branch: master
