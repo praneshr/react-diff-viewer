@@ -10,7 +10,8 @@
     "downlevelIteration": true,
     "lib": ["es2017", "dom"],
     "types": [
-      "mocha"
+      "mocha",
+      "node"
     ]
   },
   "include": ["./src/*", "enzyme.js"],

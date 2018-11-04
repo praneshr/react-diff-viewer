@@ -21,8 +21,8 @@
     "build:examples": "webpack --progress --colors",
     "build:watch": "tsc --outDir lib/ -w",
     "prepublish": "yarn build",
-    "postpublish": "yarn publish:site",
-    "publish:site": "NODE_ENV=production yarn build:examples && gh-pages -d examples/dist",
+    "publish:examples": "NODE_ENV=production yarn build:examples && gh-pages -d examples/dist -r $GITHUB_REPO_URL",
+    "publish:examples:local": "NODE_ENV=production yarn build:examples && gh-pages -d examples/dist",
     "start:examples": "webpack-dev-server --open --hot --inline --host 192.168.31.72",
     "test": "mocha --require ts-node/register --require enzyme.ts ./test/index.tsx",
     "test:watch": "mocha --require ts-node/register --require enzyme.ts --watch-extensions ts,tsx --watch ./test/index.tsx"
@@ -31,6 +31,7 @@
     "classnames": "^2.2.6",
     "diff": "^3.5.0",
     "emotion": "^9.2.10",
+    "memoize-one": "^4.0.2",
     "prop-types": "^15.6.2"
   },
   "devDependencies": {
@@ -41,6 +42,7 @@
     "@types/expect": "^1.20.3",
     "@types/memoize-one": "^3.1.1",
     "@types/mocha": "^5.2.5",
+    "@types/node": "^10.12.2",
     "@types/react": "^16.4.14",
     "@types/react-dom": "^16.0.8",
     "@types/webpack": "^4.4.13",
@@ -52,7 +54,6 @@
     "file-loader": "^2.0.0",
     "gh-pages": "^2.0.1",
     "html-webpack-plugin": "^3.2.0",
-    "memoize-one": "^4.0.2",
     "mini-css-extract-plugin": "^0.4.3",
     "mocha": "^5.2.0",
     "node-sass": "^4.9.3",
