@@ -23,7 +23,7 @@
     "build:watch": "tsc --outDir lib/ -w",
     "publish:examples": "NODE_ENV=production yarn build:examples && gh-pages -d examples/dist -r $GITHUB_REPO_URL",
     "publish:examples:local": "NODE_ENV=production yarn build:examples && gh-pages -d examples/dist",
-    "start:examples": "webpack-dev-server --open --hot --inline --host 192.168.31.72",
+    "start:examples": "webpack-dev-server --open --hot --inline",
     "test": "mocha --require ts-node/register --require enzyme.ts ./test/index.tsx",
     "test:watch": "mocha --require ts-node/register --require enzyme.ts --watch-extensions ts,tsx --watch ./test/index.tsx"
   },

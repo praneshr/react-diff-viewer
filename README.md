@@ -68,6 +68,7 @@ class Diff extends PureComponent {
 |newVlaue          |`string`       |`''`          |New value as string.                          |
 |splitView         |`boolean`      |`true`        |Switch between `unified` and `split` view.    |
 |disableWordDiff   |`boolean`      |`false`       |Show and hide word diff in a diff line.       |
+|hideLineNumbers   |`boolean`      |`false`       |Show and hide line numbers.                   |
 |renderContent     |`function`     |`undefined`   |Render Prop API to render code in the diff viewer. Helpful for [syntax highlighting](#syntax-highlighting)   |
 |onLineNumberClick |`function`     |`undefined`   |Event handler for line number click. `(lineId: string) => void`          |
 |hightlightLines   |`array[string]`|`[]`          |List of lines to be highlighted. Works together with `onLineNumberClick`. Line number are prefixed with `L` and `R` for the left and right section of the diff viewer, respectively. For example, `L-20` means 20th line in the left pane. To highlight a range of line numbers, pass the prefixed line number as an array. For example, `[L-2, L-3, L-4, L-5]` will highlight the lines `2-5` in the left pane.   |
@@ -161,9 +162,10 @@ const defaultStyles = {
   diffAdded: {}, // style object
   marker: {}, // style object
   gutter: {}, // style object
+  leftGutter: {}, // style object
+  rightGutter: {}, // style object
   hightlightedLine: {}, // style object
   hightlightedGutter: {}, // style object
-  lineNumber: {}, // style object
   line: {}, // style object
   wordDiff: {}, // style object
   wordAdded: {}, // style object

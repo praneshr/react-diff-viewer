@@ -17,6 +17,7 @@ export interface IReactDiffViewerProps {
   newValue: string;
   splitView?: boolean;
   disableWordDiff?: boolean;
+  hideLineNumbers?: boolean;
   renderContent?: (source: string) => JSX.Element;
   onLineNumberClick?: (lineId: string, event: React.MouseEvent<HTMLTableCellElement>) => void;
   highlightLines?: string[];
@@ -73,6 +74,7 @@ class DiffViewer extends React.Component<IReactDiffViewerProps, IReactDiffViewer
     highlightLines: [],
     disableWordDiff: false,
     styles: {},
+    hideLineNumbers: false,
   }
 
   static propTypes = {
@@ -83,6 +85,7 @@ class DiffViewer extends React.Component<IReactDiffViewerProps, IReactDiffViewer
     renderContent: PropTypes.func,
     onLineNumberClick: PropTypes.func,
     styles: PropTypes.object,
+    hideLineNumbers: PropTypes.bool,
     highlightLines: PropTypes.arrayOf(PropTypes.string),
   }
 
@@ -101,6 +104,7 @@ class DiffViewer extends React.Component<IReactDiffViewerProps, IReactDiffViewer
                 leftLineNumber = leftLineNumber + 1
                 return <DefaultLine
                   styles={styles}
+                  hideLineNumbers={this.props.hideLineNumbers}
                   leftLineNumber={leftLineNumber}
                   rightLineNumber={rightLineNumber}
                   leftContent={ch}
@@ -150,6 +154,7 @@ class DiffViewer extends React.Component<IReactDiffViewerProps, IReactDiffViewer
                 removed={removed}
                 added={added}
                 key={num}
+                hideLineNumbers={this.props.hideLineNumbers}
                 hightlightLines={this.props.highlightLines}
                 renderContent={this.props.renderContent}
                 leftContent={leftContent}
@@ -200,6 +205,7 @@ class DiffViewer extends React.Component<IReactDiffViewerProps, IReactDiffViewer
               styles={styles}
               onLineNumberClick={this.props.onLineNumberClick}
               key={num}
+              hideLineNumbers={this.props.hideLineNumbers}
               renderContent={this.props.renderContent}
               removed={diffObj.removed}
               leftLineNumber={diffObj.added || leftLineNumber}

@@ -7,14 +7,15 @@ export interface IReactDiffViewerStyles {
   diffRemoved?: string;
   diffAdded?: string;
   line?: string;
-  gutter?: string;
   hightlightedGutter?: string;
-  lineNumber?: string;
+  gutter?: string;
   hightlightedLine?: string;
   marker?: string;
   wordDiff?: string;
   wordAdded?: string;
   wordRemoved?: string;
+  leftGutter?: string;
+  rightGutter?: string;
 }
 
 export interface IReactDiffViewerStylesOverride {
@@ -36,14 +37,15 @@ export interface IReactDiffViewerStylesOverride {
   diffRemoved?: Interpolation;
   diffAdded?: Interpolation;
   marker?: Interpolation;
-  gutter?: Interpolation;
   hightlightedLine?: Interpolation;
   hightlightedGutter?: Interpolation;
-  lineNumber?: Interpolation;
+  gutter?: Interpolation;
   line?: Interpolation;
   wordDiff?: Interpolation;
   wordAdded?: Interpolation;
   wordRemoved?: Interpolation;
+  leftGutter?: Interpolation;
+  rightGutter?: Interpolation;
 }
 
 export default (styleOverride: IReactDiffViewerStylesOverride) => {
@@ -129,13 +131,6 @@ export default (styleOverride: IReactDiffViewerStylesOverride) => {
     }
   })
 
-  const gutter = css({
-    display: 'flex',
-    marginRight: 40,
-    justifyContent: 'space-between',
-    label: 'gutter',
-  })
-
   const hightlightedLine = css({
     background: variables.highlightBackground,
     label: 'hightlighted-line',
@@ -145,11 +140,11 @@ export default (styleOverride: IReactDiffViewerStylesOverride) => {
     label: 'hightlighted-gutter',
   })
 
-  const lineNumber = css({
+  const gutter = css({
     userSelect: 'none',
     minWidth: 40,
     padding: '0 10px',
-    label: 'line-number',
+    label: 'gutter',
     cursor: 'pointer',
     textAlign: 'right',
     background: variables.gutterBackground,
@@ -183,7 +178,7 @@ export default (styleOverride: IReactDiffViewerStylesOverride) => {
 
   const wordDiff = css({
     padding: 2,
-    display: 'inline',
+    display: 'inline-flex',
     borderRadius: 1,
     label: 'word-diff',
   })
@@ -198,19 +193,28 @@ export default (styleOverride: IReactDiffViewerStylesOverride) => {
     label: 'word-removed',
   })
 
+  const leftGutter = css({
+    label: 'left-gutter',
+  })
+
+  const rightGutter = css({
+    label: 'right-gutter',
+  })
+
   const defaultStyles: any = {
     diffContainer,
     diffRemoved,
     diffAdded,
     marker,
-    gutter,
     hightlightedGutter,
     hightlightedLine,
-    lineNumber,
+    gutter,
     line,
     wordDiff,
     wordAdded,
     wordRemoved,
+    leftGutter,
+    rightGutter,
   }
 
   const computerOverrideStyles: any = Object.keys(styles)

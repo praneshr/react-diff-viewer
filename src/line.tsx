@@ -2,8 +2,6 @@ import * as React from 'react'
 import cn from 'classnames'
 
 import { IReactDiffViewerStyles } from './styles'
-
-
 interface ICommon {
   leftLineNumber?: number | boolean;
   rightLineNumber?: number | boolean;
@@ -13,6 +11,7 @@ interface ICommon {
   renderContent?: (source: string) => JSX.Element;
   hightlightLines?: string[];
   styles: IReactDiffViewerStyles;
+  hideLineNumbers?: boolean;
 }
 interface IInlineLine extends ICommon {
   content?: string | JSX.Element | JSX.Element[];
@@ -51,6 +50,7 @@ export const InlineLine = ({
   renderContent,
   hightlightLines = [],
   styles,
+  hideLineNumbers,
 }: IInlineLine) => {
   const hightlightLine = (leftLineNumber !== true || rightLineNumber !== true)
     && (
@@ -58,40 +58,47 @@ export const InlineLine = ({
     || hightlightLines.includes(`${rightLineNumberPrefix}-${rightLineNumber}`)
   )
   return <tr className={styles.line}>
-    <td className={cn(
-      styles.lineNumber,
-      {
-        [styles.diffAdded]: added,
-        [styles.diffRemoved]: removed,
-        [styles.hightlightedGutter]: hightlightLine,
-      })}
-      onClick={onLineNumberClickProxy(onLineNumberClick, `${leftLineNumberPrefix}-${leftLineNumber}`)}
-    >
-      {
-        leftLineNumber !== true
-        && <LineNumber
-          lineNumber={leftLineNumber as number}
-          prefix={leftLineNumberPrefix}
-        />
-      }
-    </td>
-    <td className={cn(
-      styles.lineNumber,
-      {
-        [styles.diffAdded]: added,
-        [styles.diffRemoved]: removed,
-        [styles.hightlightedGutter]: hightlightLine,
-      })}
-      onClick={onLineNumberClickProxy(onLineNumberClick, `${rightLineNumberPrefix}-${rightLineNumber}`)}
-    >
-      {
-        rightLineNumber !== true
-        && <LineNumber
-          lineNumber={rightLineNumber as number}
-          prefix={rightLineNumberPrefix}
-        />
-      }
-    </td>
+    {
+      !hideLineNumbers
+      && <React.Fragment>
+        <td className={cn(
+          styles.gutter,
+          styles.leftGutter,
+          {
+            [styles.diffAdded]: added,
+            [styles.diffRemoved]: removed,
+            [styles.hightlightedGutter]: hightlightLine,
+          })}
+          onClick={onLineNumberClickProxy(onLineNumberClick, `${leftLineNumberPrefix}-${leftLineNumber}`)}
+        >
+          {
+            leftLineNumber !== true
+            && <LineNumber
+              lineNumber={leftLineNumber as number}
+              prefix={leftLineNumberPrefix}
+            />
+          }
+        </td>
+        <td className={cn(
+          styles.gutter,
+          styles.rightGutter,
+          {
+            [styles.diffAdded]: added,
+            [styles.diffRemoved]: removed,
+            [styles.hightlightedGutter]: hightlightLine,
+          })}
+          onClick={onLineNumberClickProxy(onLineNumberClick, `${rightLineNumberPrefix}-${rightLineNumber}`)}
+        >
+          {
+            rightLineNumber !== true
+            && <LineNumber
+              lineNumber={rightLineNumber as number}
+              prefix={rightLineNumberPrefix}
+            />
+          }
+        </td>
+      </React.Fragment>
+    }
     <td className={cn(
       styles.marker,
       {
@@ -130,6 +137,7 @@ export const DefaultLine = ({
   renderContent,
   hightlightLines = [],
   styles,
+  hideLineNumbers,
 }: IDefaultLine) => {
   const hightlightLeftLine = leftLineNumber !== true
     && hightlightLines.includes(`${leftLineNumberPrefix}-${leftLineNumber}`)
@@ -137,23 +145,27 @@ export const DefaultLine = ({
     && hightlightLines.includes(`${rightLineNumberPrefix}-${rightLineNumber}`)
 
   return <tr className={styles.line}>
-    <td className={cn(
-      styles.lineNumber,
-      {
-        [styles.diffRemoved]: removed,
-        [styles.hightlightedGutter]: hightlightLeftLine,
-      },
-    )}
-      onClick={onLineNumberClickProxy(onLineNumberClick, `${leftLineNumberPrefix}-${leftLineNumber}`)}
-    >
-      {
-        leftLineNumber
-        && <LineNumber
-          lineNumber={leftLineNumber as number}
-          prefix={leftLineNumberPrefix}
-        />
-      }
-    </td>
+    {
+      !hideLineNumbers
+      && <td className={cn(
+        styles.gutter,
+        styles.leftGutter,
+        {
+          [styles.diffRemoved]: removed,
+          [styles.hightlightedGutter]: hightlightLeftLine,
+        },
+      )}
+        onClick={onLineNumberClickProxy(onLineNumberClick, `${leftLineNumberPrefix}-${leftLineNumber}`)}
+      >
+        {
+          leftLineNumber
+          && <LineNumber
+            lineNumber={leftLineNumber as number}
+            prefix={leftLineNumberPrefix}
+          />
+        }
+      </td>
+    }
     <td className={cn(
       styles.marker,
       {
@@ -178,20 +190,24 @@ export const DefaultLine = ({
         || leftContent
       }
     </td>
-    <td className={cn(
-      styles.lineNumber,
-      {
-        [styles.diffAdded]: added,
-        [styles.hightlightedGutter]: hightlightRightLine,
-      },
-    )}
-      onClick={onLineNumberClickProxy(onLineNumberClick, `${rightLineNumberPrefix}-${rightLineNumber}`)}
-    >
-      <LineNumber
-        lineNumber={rightLineNumber as number}
-        prefix={rightLineNumberPrefix}
-      />
-    </td>
+    {
+      !hideLineNumbers
+      && <td className={cn(
+        styles.gutter,
+        styles.rightGutter,
+        {
+          [styles.diffAdded]: added,
+          [styles.hightlightedGutter]: hightlightRightLine,
+        },
+      )}
+        onClick={onLineNumberClickProxy(onLineNumberClick, `${rightLineNumberPrefix}-${rightLineNumber}`)}
+      >
+        <LineNumber
+          lineNumber={rightLineNumber as number}
+          prefix={rightLineNumberPrefix}
+        />
+      </td>
+    }
     <td className={cn(
       styles.marker,
       {
