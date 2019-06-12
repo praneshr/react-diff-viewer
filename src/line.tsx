@@ -20,6 +20,7 @@ interface IInlineLine extends ICommon {
 interface IDefaultLine extends ICommon {
   leftContent?: string | JSX.Element | JSX.Element[];
   rightContent?: string | JSX.Element | JSX.Element[];
+  reverse: boolean;
 }
 
 interface ILineNumber {
@@ -138,99 +139,119 @@ export const DefaultLine = ({
   hightlightLines = [],
   styles,
   hideLineNumbers,
+  reverse,
 }: IDefaultLine) => {
   const hightlightLeftLine = leftLineNumber !== true
     && hightlightLines.includes(`${leftLineNumberPrefix}-${leftLineNumber}`)
   const hightlightRightLine = rightLineNumber !== true
     && hightlightLines.includes(`${rightLineNumberPrefix}-${rightLineNumber}`)
 
-  return <tr className={styles.line}>
-    {
-      !hideLineNumbers
-      && <td className={cn(
-        styles.gutter,
-        styles.leftGutter,
+  const olderColumns = (
+    <>
+      {
+        !hideLineNumbers
+        && <td className={cn(
+          styles.gutter,
+          styles.leftGutter,
+          {
+            [styles.diffRemoved]: removed,
+            [styles.hightlightedGutter]: hightlightLeftLine,
+          },
+        )}
+          onClick={onLineNumberClickProxy(onLineNumberClick, `${leftLineNumberPrefix}-${leftLineNumber}`)}
+        >
+          {
+            leftLineNumber
+            && <LineNumber
+              lineNumber={leftLineNumber as number}
+              prefix={leftLineNumberPrefix}
+            />
+          }
+        </td>
+      }
+      <td className={cn(
+        styles.marker,
         {
           [styles.diffRemoved]: removed,
-          [styles.hightlightedGutter]: hightlightLeftLine,
+          [styles.hightlightedLine]: hightlightLeftLine,
         },
-      )}
-        onClick={onLineNumberClickProxy(onLineNumberClick, `${leftLineNumberPrefix}-${leftLineNumber}`)}
-      >
+      )}>
         {
-          leftLineNumber
-          && <LineNumber
-            lineNumber={leftLineNumber as number}
-            prefix={leftLineNumberPrefix}
-          />
+          removed
+          && <pre>-</pre>
         }
       </td>
-    }
-    <td className={cn(
-      styles.marker,
-      {
+      <td className={cn({
         [styles.diffRemoved]: removed,
         [styles.hightlightedLine]: hightlightLeftLine,
-      },
-    )}>
+      })}>
+        {
+          typeof leftContent === 'string'
+          && (renderContent
+            ? renderContent(leftContent)
+            : <pre>{leftContent}</pre>)
+          || leftContent
+        }
+      </td>
+    </>
+  );
+
+  const newerColumns = (
+    <>
       {
-        removed
-        && <pre>-</pre>
+        !hideLineNumbers
+        && <td className={cn(
+          styles.gutter,
+          styles.rightGutter,
+          {
+            [styles.diffAdded]: added,
+            [styles.hightlightedGutter]: hightlightRightLine,
+          },
+        )}
+          onClick={onLineNumberClickProxy(onLineNumberClick, `${rightLineNumberPrefix}-${rightLineNumber}`)}
+        >
+          <LineNumber
+            lineNumber={rightLineNumber as number}
+            prefix={rightLineNumberPrefix}
+          />
+        </td>
       }
-    </td>
-    <td className={cn({
-      [styles.diffRemoved]: removed,
-      [styles.hightlightedLine]: hightlightLeftLine,
-    })}>
-      {
-        typeof leftContent === 'string'
-        && (renderContent
-          ? renderContent(leftContent)
-          : <pre>{leftContent}</pre>)
-        || leftContent
-      }
-    </td>
-    {
-      !hideLineNumbers
-      && <td className={cn(
-        styles.gutter,
-        styles.rightGutter,
+      <td className={cn(
+        styles.marker,
         {
           [styles.diffAdded]: added,
-          [styles.hightlightedGutter]: hightlightRightLine,
+          [styles.hightlightedLine]: hightlightRightLine,
         },
-      )}
-        onClick={onLineNumberClickProxy(onLineNumberClick, `${rightLineNumberPrefix}-${rightLineNumber}`)}
-      >
-        <LineNumber
-          lineNumber={rightLineNumber as number}
-          prefix={rightLineNumberPrefix}
-        />
+      )}>
+        {
+          added
+          && <pre>+</pre>
+        }
       </td>
-    }
-    <td className={cn(
-      styles.marker,
-      {
+      <td className={cn({
         [styles.diffAdded]: added,
         [styles.hightlightedLine]: hightlightRightLine,
-      },
-    )}>
-      {
-        added
-        && <pre>+</pre>
-      }
-    </td>
-    <td className={cn({
-      [styles.diffAdded]: added,
-      [styles.hightlightedLine]: hightlightRightLine,
-    })}>
-      {
-        typeof rightContent === 'string'
-        && (renderContent
-          ? renderContent(rightContent)
-          : <pre>{rightContent}</pre>)
-        || rightContent
-      }
-    </td>
+      })}>
+        {
+          typeof rightContent === 'string'
+          && (renderContent
+            ? renderContent(rightContent)
+            : <pre>{rightContent}</pre>)
+          || rightContent
+        }
+      </td>
+    </>
+  );
+
+  let leftColumns = olderColumns;
+  let rightColumns = newerColumns;
+  if (reverse) {
+    leftColumns = newerColumns;
+    rightColumns = olderColumns;
+  }
+
+  return <tr className={styles.line}>
+    {leftColumns}
+    {rightColumns}
   </tr>
 }

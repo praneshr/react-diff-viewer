@@ -22,6 +22,7 @@ export interface IReactDiffViewerProps {
   onLineNumberClick?: (lineId: string, event: React.MouseEvent<HTMLTableCellElement>) => void;
   highlightLines?: string[];
   styles?: IReactDiffViewerStylesOverride,
+  reverse?: boolean,
 }
 
 export interface IReactDiffViewerState {
@@ -75,6 +76,7 @@ class DiffViewer extends React.Component<IReactDiffViewerProps, IReactDiffViewer
     disableWordDiff: false,
     styles: {},
     hideLineNumbers: false,
+    reverse: false,
   }
 
   static propTypes = {
@@ -113,6 +115,7 @@ class DiffViewer extends React.Component<IReactDiffViewerProps, IReactDiffViewer
                   hightlightLines={this.props.highlightLines}
                   renderContent={this.props.renderContent}
                   onLineNumberClick={this.props.onLineNumberClick}
+                  reverse={this.props.reverse}
                 />
               }
 
@@ -160,6 +163,7 @@ class DiffViewer extends React.Component<IReactDiffViewerProps, IReactDiffViewer
                 leftContent={leftContent}
                 rightContent={rightContent}
                 onLineNumberClick={this.props.onLineNumberClick}
+                reverse={this.props.reverse}
               />
             })
         }
