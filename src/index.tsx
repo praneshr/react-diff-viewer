@@ -89,6 +89,7 @@ class DiffViewer extends React.Component<IReactDiffViewerProps, IReactDiffViewer
     styles: PropTypes.object,
     hideLineNumbers: PropTypes.bool,
     highlightLines: PropTypes.arrayOf(PropTypes.string),
+    reverse: PropTypes.bool
   }
 
   private splitView = (diffArray: diff.IDiffResult[], styles: IReactDiffViewerStyles) => {
