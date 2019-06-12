@@ -18,6 +18,7 @@ interface IExampleState {
   highlightLine?: string[];
   language?: string;
   enableSyntaxHighlighting?: boolean;
+  reverse: boolean;
 }
 
 const P = (window as any).Prism
@@ -31,12 +32,17 @@ class Example extends React.Component<{}, IExampleState> {
       highlightLine: [],
       language: 'javascript',
       enableSyntaxHighlighting: true,
+      reverse: false
     }
   }
 
   toggleSyntaxHighlighting = () => this.setState({
     enableSyntaxHighlighting: !this.state.enableSyntaxHighlighting,
   })
+
+  toggleReverse = () => this.setState(prevState => ({ 
+    reverse: !prevState.reverse 
+  }));
 
   onChange = () => this.setState({ splitView: !this.state.splitView })
 
@@ -150,6 +156,14 @@ class Example extends React.Component<{}, IExampleState> {
             <label>
               <input
                 type="checkbox"
+                name="toggle-3"
+                id="toggle-3"
+                onChange={this.toggleReverse}
+                checked={this.state.reverse} /> Reverse
+            </label>
+            <label>
+              <input
+                type="checkbox"
                 name="toggle-2"
                 id="toggle-2"
                 onChange={this.toggleSyntaxHighlighting}
@@ -173,6 +187,7 @@ class Example extends React.Component<{}, IExampleState> {
             splitView={this.state.splitView}
             newValue={newValue}
             renderContent={this.state.enableSyntaxHighlighting && this.syntaxHighlight}
+            reverse={this.state.reverse}
           />
         </div>
         <footer>
