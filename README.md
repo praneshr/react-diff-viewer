@@ -1,3 +1,6 @@
+> I'm working on the new version of React Diff Viewer. It will be a full code and design refresh. If you feel something should be added, please create an issue.
+
+
 <p align="center">
   <img src='https://image.ibb.co/dO5cyL/rdv.png' width="80%" alt='React Diff Viewer' />
 </p>
