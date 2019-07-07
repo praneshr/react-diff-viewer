@@ -1,6 +1,6 @@
 {
   "name": "react-diff-viewer",
-  "version": "1.1.0",
+  "version": "2.0.0-unreleased",
   "private": false,
   "description": "The only text diff viewer needed for React",
   "keywords": [
@@ -46,9 +46,16 @@
     "@types/react": "^16.4.14",
     "@types/react-dom": "^16.0.8",
     "@types/webpack": "^4.4.13",
+    "@typescript-eslint/eslint-plugin": "^1.11.0",
+    "@typescript-eslint/parser": "^1.11.0",
     "css-loader": "^1.0.0",
     "enzyme": "^3.7.0",
     "enzyme-adapter-react-16": "^1.6.0",
+    "eslint": "5.3.0",
+    "eslint-config-airbnb": "17.1.1",
+    "eslint-plugin-import": "^2.18.0",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-react": "^7.14.2",
     "expect": "^23.6.0",
     "favicons-webpack-plugin": "^0.0.9",
     "file-loader": "^2.0.0",
@@ -64,7 +71,7 @@
     "spy": "^1.0.0",
     "ts-loader": "^5.2.1",
     "ts-node": "^7.0.1",
-    "typescript": "^3.1.1",
+    "typescript": "^3.5.2",
     "webpack": "^4.20.2",
     "webpack-cli": "^3.1.1",
     "webpack-dev-server": "^3.1.9"
