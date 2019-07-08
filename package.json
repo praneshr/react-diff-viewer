@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "classnames": "^2.2.6",
+    "create-emotion": "^10.0.14",
     "diff": "^4.0.1",
     "emotion": "^10.0.14",
     "memoize-one": "^5.0.4",

@@ -7,7 +7,7 @@ export enum DiffType {
 }
 
 export interface DiffInformation {
-  value?: string;
+  value?: string | DiffInformation[];
   lineNumber?: number;
   type?: DiffType;
 }
@@ -18,8 +18,13 @@ export interface LineInformation {
 }
 
 export interface ComputedLineInformation {
-  lineInformation: LineInformation[]
+  lineInformation: LineInformation[];
   diffLines: number[];
+}
+
+export interface WordDiffInformation {
+  left?: DiffInformation[];
+  right?: DiffInformation[];
 }
 
 /**
@@ -51,6 +56,37 @@ const constructLines = (value: string): string[] => {
     lines.shift();
   }
   return lines;
+};
+
+const computeWordDiff = (oldValue: string, newValue: string): WordDiffInformation => {
+  const diffArray = diff
+    .diffChars(oldValue, newValue);
+  const wordDiff: WordDiffInformation = {
+    left: [],
+    right: [],
+  };
+  diffArray
+    .forEach(({ added, removed, value }): DiffInformation => {
+      const diffInformation: DiffInformation = {};
+      if (added) {
+        diffInformation.type = DiffType.ADDED;
+        diffInformation.value = value;
+        wordDiff.right.push(diffInformation);
+      }
+      if (removed) {
+        diffInformation.type = DiffType.REMOVED;
+        diffInformation.value = value;
+        wordDiff.left.push(diffInformation);
+      }
+      if (!removed && !added) {
+        diffInformation.type = DiffType.DEFAULT;
+        diffInformation.value = value;
+        wordDiff.right.push(diffInformation);
+        wordDiff.left.push(diffInformation);
+      }
+      return diffInformation;
+    });
+  return wordDiff;
 };
 
 /**
@@ -113,7 +149,9 @@ const computeLineInformation = (
             ignoreDiffIndexes.push(diffIndex + 1);
             right.lineNumber = lineNumber;
             right.type = type;
-            right.value = rightValue;
+            const wordDiff = computeWordDiff(line, rightValue);
+            right.value = wordDiff.right;
+            left.value = wordDiff.left;
           }
         } else {
           rightLineNumber += 1;

@@ -6,6 +6,7 @@
     "max-len": ["error", {
       "code": 100
     }],
+    "arrow-body-style": "off",
   },
   "env": {
     "mocha": true,

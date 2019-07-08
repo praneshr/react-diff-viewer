@@ -1,5 +1,5 @@
-import { css, cx } from 'emotion'
-import { Interpolation } from 'create-emotion'
+import { css, cx } from 'emotion';
+import { Interpolation } from 'create-emotion';
 
 
 export interface IReactDiffViewerStyles {
@@ -14,23 +14,29 @@ export interface IReactDiffViewerStyles {
   wordDiff?: string;
   wordAdded?: string;
   wordRemoved?: string;
+  expandGutter?: string;
+  emptyLine?: string;
+  expandLine?: string;
 }
 
 export interface IReactDiffViewerStylesOverride {
   variables?: {
-    addedBackground?: string,
-    addedColor?: string,
-    removedBackground?: string,
-    removedColor?: string,
-    wordAddedBackground?: string,
-    wordRemovedBackground?: string,
-    addedGutterBackground?: string,
-    removedGutterBackground?: string,
-    gutterBackground?: string,
-    gutterBackgroundDark?: string,
-    highlightBackground?: string,
-    highlightGutterBackground?: string,
-  },
+    addedBackground?: string;
+    addedColor?: string;
+    removedBackground?: string;
+    removedColor?: string;
+    wordAddedBackground?: string;
+    wordRemovedBackground?: string;
+    addedGutterBackground?: string;
+    removedGutterBackground?: string;
+    gutterBackground?: string;
+    gutterBackgroundDark?: string;
+    highlightBackground?: string;
+    highlightGutterBackground?: string;
+    expandGutterBackground?: string;
+    expandLineBackground?: string;
+    emptyLineBackground?: string;
+  };
   diffContainer?: Interpolation;
   diffRemoved?: Interpolation;
   diffAdded?: Interpolation;
@@ -42,13 +48,15 @@ export interface IReactDiffViewerStylesOverride {
   wordDiff?: Interpolation;
   wordAdded?: Interpolation;
   wordRemoved?: Interpolation;
+  expandGutter?: Interpolation;
+  emptyLine?: Interpolation;
 }
 
 export default (styleOverride: IReactDiffViewerStylesOverride): any => {
   const {
     variables: overrideVariables,
     ...styles
-  } = styleOverride
+  } = styleOverride;
 
   const variables = {
     ...{
@@ -64,9 +72,12 @@ export default (styleOverride: IReactDiffViewerStylesOverride): any => {
       gutterBackgroundDark: '#f3f1f1',
       highlightBackground: '#fffbdd',
       highlightGutterBackground: '#fff5b1',
+      expandGutterBackground: '#dbedff',
+      expandLineBackground: '#f1f8ff',
+      emptyLineBackground: '#fafbfc',
     },
-    ...overrideVariables
-  }
+    ...overrideVariables,
+  };
 
   const diffContainer = css({
     width: '100%',
@@ -74,20 +85,6 @@ export default (styleOverride: IReactDiffViewerStylesOverride): any => {
       margin: 0,
       whiteSpace: 'pre-wrap',
       lineHeight: '25px',
-    },
-    tbody: {
-      tr: {
-        '&:first-child': {
-          td: {
-            paddingTop: 15,
-          },
-        },
-        '&:last-child': {
-          td: {
-            paddingBottom: 15,
-          },
-        },
-      },
     },
     label: 'diff-container',
   });
@@ -108,10 +105,33 @@ export default (styleOverride: IReactDiffViewerStylesOverride): any => {
       color: variables.addedColor,
     },
     label: 'diff-added',
-  })
+  });
+
+  const expandGutter = css({
+    backgroundColor: variables.expandGutterBackground,
+  });
+
+  const expandLine = css({
+    backgroundColor: variables.expandLineBackground,
+    height: 40,
+    fontSize: 14,
+    fontWeight: 700,
+    a: {
+      textDecoration: 'underline !important',
+      cursor: 'pointer',
+      pre: {
+        display: 'inline',
+      },
+    },
+  });
+
+  const emptyLine = css({
+    backgroundColor: variables.emptyLineBackground,
+    label: 'empty-line',
+  });
 
   const marker = css({
-    minWidth: 50,
+    width: 25,
     paddingLeft: 10,
     userSelect: 'none',
     label: 'marker',
@@ -123,18 +143,18 @@ export default (styleOverride: IReactDiffViewerStylesOverride): any => {
     [`&.${diffRemoved}`]: {
       pre: {
         color: variables.removedColor,
-      }
-    }
-  })
+      },
+    },
+  });
 
   const hightlightedLine = css({
     background: variables.highlightBackground,
     label: 'hightlighted-line',
-  })
+  });
 
   const hightlightedGutter = css({
     label: 'hightlighted-gutter',
-  })
+  });
 
   const gutter = css({
     userSelect: 'none',
@@ -201,6 +221,9 @@ export default (styleOverride: IReactDiffViewerStylesOverride): any => {
     wordDiff,
     wordAdded,
     wordRemoved,
+    expandGutter,
+    expandLine,
+    emptyLine,
   }
 
   const computerOverrideStyles: any = Object.keys(styles)
@@ -220,4 +243,4 @@ export default (styleOverride: IReactDiffViewerStylesOverride): any => {
           : defaultStyles[key],
       },
     }), {})
-}
+};
