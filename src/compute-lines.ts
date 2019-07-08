@@ -149,7 +149,7 @@ const computeLineInformation = (
             ignoreDiffIndexes.push(diffIndex + 1);
             right.lineNumber = lineNumber;
             right.type = type;
-            const wordDiff = computeWordDiff(line, rightValue);
+            const wordDiff = computeWordDiff(line, rightValue as string);
             right.value = wordDiff.right;
             left.value = wordDiff.left;
           }
