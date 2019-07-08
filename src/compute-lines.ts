@@ -64,7 +64,7 @@ const constructLines = (value: string): string[] => {
  * @param diffArray Files diff array from js diff module.
  */
 const computeLineInformation = (
-  diffArray: diff.IDiffResult[],
+  diffArray: diff.Change[],
 ): ComputedLineInformation => {
   let rightLineNumber = 0;
   let leftLineNumber = 0;
@@ -139,7 +139,7 @@ const computeLineInformation = (
   };
 
   diffArray
-    .forEach(({ added, removed, value }: diff.IDiffResult, index): void => {
+    .forEach(({ added, removed, value }: diff.Change, index): void => {
       lineInformation = [
         ...lineInformation,
         ...getLineInformation(value, index, added, removed),
