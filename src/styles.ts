@@ -14,8 +14,6 @@ export interface IReactDiffViewerStyles {
   wordDiff?: string;
   wordAdded?: string;
   wordRemoved?: string;
-  leftGutter?: string;
-  rightGutter?: string;
 }
 
 export interface IReactDiffViewerStylesOverride {
@@ -44,11 +42,9 @@ export interface IReactDiffViewerStylesOverride {
   wordDiff?: Interpolation;
   wordAdded?: Interpolation;
   wordRemoved?: Interpolation;
-  leftGutter?: Interpolation;
-  rightGutter?: Interpolation;
 }
 
-export default (styleOverride: IReactDiffViewerStylesOverride) => {
+export default (styleOverride: IReactDiffViewerStylesOverride): any => {
   const {
     variables: overrideVariables,
     ...styles
@@ -74,12 +70,12 @@ export default (styleOverride: IReactDiffViewerStylesOverride) => {
 
   const diffContainer = css({
     width: '100%',
-    'pre': {
+    pre: {
       margin: 0,
       whiteSpace: 'pre-wrap',
       lineHeight: '25px',
     },
-    'tbody': {
+    tbody: {
       tr: {
         '&:first-child': {
           td: {
@@ -94,7 +90,7 @@ export default (styleOverride: IReactDiffViewerStylesOverride) => {
       },
     },
     label: 'diff-container',
-  })
+  });
 
   const diffRemoved = css({
     background: variables.removedBackground,
@@ -193,14 +189,6 @@ export default (styleOverride: IReactDiffViewerStylesOverride) => {
     label: 'word-removed',
   })
 
-  const leftGutter = css({
-    label: 'left-gutter',
-  })
-
-  const rightGutter = css({
-    label: 'right-gutter',
-  })
-
   const defaultStyles: any = {
     diffContainer,
     diffRemoved,
@@ -213,8 +201,6 @@ export default (styleOverride: IReactDiffViewerStylesOverride) => {
     wordDiff,
     wordAdded,
     wordRemoved,
-    leftGutter,
-    rightGutter,
   }
 
   const computerOverrideStyles: any = Object.keys(styles)

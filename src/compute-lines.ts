@@ -17,6 +17,11 @@ export interface LineInformation {
   right?: DiffInformation;
 }
 
+export interface ComputedLineInformation {
+  lineInformation: LineInformation[]
+  diffLines: number[];
+}
+
 /**
  * Splits diff text by new line and computes final list of diff lines based on
  * conditions.
@@ -60,10 +65,12 @@ const constructLines = (value: string): string[] => {
  */
 const computeLineInformation = (
   diffArray: diff.IDiffResult[],
-): LineInformation[] => {
+): ComputedLineInformation => {
   let rightLineNumber = 0;
   let leftLineNumber = 0;
   let lineInformation: LineInformation[] = [];
+  let counter = 0;
+  const diffLines: number[] = [];
   const ignoreDiffIndexes: number[] = [];
   const getLineInformation = (
     value: string,
@@ -80,6 +87,9 @@ const computeLineInformation = (
       const left: DiffInformation = {};
       const right: DiffInformation = {};
       if (added || removed) {
+        if (!diffLines.includes(counter)) {
+          diffLines.push(counter);
+        }
         if (removed) {
           leftLineNumber += 1;
           left.lineNumber = leftLineNumber;
@@ -108,7 +118,7 @@ const computeLineInformation = (
         } else {
           rightLineNumber += 1;
           right.lineNumber = rightLineNumber;
-          right.type = DiffType.REMOVED;
+          right.type = DiffType.ADDED;
           right.value = line;
         }
       } else {
@@ -122,6 +132,8 @@ const computeLineInformation = (
         right.type = DiffType.DEFAULT;
         right.value = line;
       }
+
+      counter += 1;
       return { right, left };
     });
   };
@@ -133,8 +145,9 @@ const computeLineInformation = (
         ...getLineInformation(value, index, added, removed),
       ];
     });
-
-  return lineInformation;
+  return {
+    lineInformation, diffLines,
+  };
 };
 
 export default computeLineInformation;

@@ -1,73 +1,46 @@
-import * as React from 'react'
-import * as diff from 'diff'
-import * as PropTypes from 'prop-types'
-import cn from 'classnames'
+import * as React from 'react';
+import * as diff from 'diff';
+import * as PropTypes from 'prop-types';
+import cn from 'classnames';
 
-const m = require('memoize-one')
-const memoize = m.default || m
-
+import computeLines, {
+  LineInformation,
+  DiffInformation,
+  DiffType,
+} from './compute-lines';
 import computeStyles, {
-  IReactDiffViewerStyles,
   IReactDiffViewerStylesOverride,
-} from './styles'
-import { InlineLine, DefaultLine } from './line'
+  IReactDiffViewerStyles,
+} from './styles';
 
-export interface IReactDiffViewerProps {
+const m = require('memoize-one');
+const memoize = m.default || m;
+
+export enum LineNumberPrefix {
+  LEFT = 'L',
+  RIGHT = 'R',
+}
+
+export interface ReactDiffViewerProps {
   oldValue: string;
   newValue: string;
   splitView?: boolean;
   disableWordDiff?: boolean;
   hideLineNumbers?: boolean;
+  showDiffOnly?: boolean;
   renderContent?: (source: string) => JSX.Element;
-  onLineNumberClick?: (lineId: string, event: React.MouseEvent<HTMLTableCellElement>) => void;
+  onLineNumberClick?: (
+    lineId: string,
+    event: React.MouseEvent<HTMLTableCellElement>,
+  ) => void;
   highlightLines?: string[];
-  styles?: IReactDiffViewerStylesOverride,
+  styles?: IReactDiffViewerStylesOverride;
 }
 
-export interface IReactDiffViewerState {
+class DiffViewer extends React.Component<ReactDiffViewerProps, {}> {
+  private styles: IReactDiffViewerStyles;
 
-}
-
-const wordDiff = (
-  oldValue: string,
-  newValue: string,
-  hideType: string,
-  styles: IReactDiffViewerStyles,
-  renderContent?: (source: string) => JSX.Element,
-) => {
-  const charDiff = diff.diffWordsWithSpace(oldValue, newValue)
-  return charDiff.map((obj: any, i) => {
-    if (obj[hideType]) return undefined
-    if (renderContent) {
-      return <span
-        className={cn(
-          styles.wordDiff,
-          {
-            [styles.wordAdded]: obj.added,
-            [styles.wordRemoved]: obj.removed,
-          },
-        )}
-        key={i}>
-        { renderContent(obj.value) }
-      </span>
-    }
-    return <pre
-      className={cn(
-        styles.wordDiff,
-        {
-          [styles.wordAdded]: obj.added,
-          [styles.wordRemoved]: obj.removed,
-        },
-      )}
-      key={i}>
-      { obj.value }
-    </pre>
-  })
-}
-
-class DiffViewer extends React.Component<IReactDiffViewerProps, IReactDiffViewerState> {
-
-  static defaultProps: IReactDiffViewerProps = {
+  public static defaultProps: ReactDiffViewerProps = {
     oldValue: '',
     newValue: '',
     splitView: true,
@@ -75,9 +48,10 @@ class DiffViewer extends React.Component<IReactDiffViewerProps, IReactDiffViewer
     disableWordDiff: false,
     styles: {},
     hideLineNumbers: false,
-  }
+    showDiffOnly: false,
+  };
 
-  static propTypes = {
+  public static propTypes = {
     oldValue: PropTypes.string.isRequired,
     newValue: PropTypes.string.isRequired,
     splitView: PropTypes.bool,
@@ -86,174 +60,250 @@ class DiffViewer extends React.Component<IReactDiffViewerProps, IReactDiffViewer
     onLineNumberClick: PropTypes.func,
     styles: PropTypes.object,
     hideLineNumbers: PropTypes.bool,
+    showDiffOnly: PropTypes.bool,
     highlightLines: PropTypes.arrayOf(PropTypes.string),
-  }
+  };
 
-  private splitView = (diffArray: diff.IDiffResult[], styles: IReactDiffViewerStyles) => {
-    let leftLineNumber = 0
-    let rightLineNumber = 0
+  private computeStyles = memoize(computeStyles);
 
-    return () => diffArray.map((obj: diff.IDiffResult, i) => {
-      return <React.Fragment key={i}>
-        {
-          obj.value.split('\n')
-            .filter(ch => ch.length > 0)
-            .map((ch, num) => {
-              if (!obj.added && !obj.removed) {
-                rightLineNumber = rightLineNumber + 1
-                leftLineNumber = leftLineNumber + 1
-                return <DefaultLine
-                  styles={styles}
-                  hideLineNumbers={this.props.hideLineNumbers}
-                  leftLineNumber={leftLineNumber}
-                  rightLineNumber={rightLineNumber}
-                  leftContent={ch}
-                  rightContent={ch}
-                  key={num}
-                  hightlightLines={this.props.highlightLines}
-                  renderContent={this.props.renderContent}
-                  onLineNumberClick={this.props.onLineNumberClick}
-                />
-              }
-
-              let leftContent
-              let rightContent
-              let removed = obj.removed
-              let added = obj.added
-              if (obj.added && diffArray[i - 1] && diffArray[i - 1].removed) {
-                const preValueCount = diffArray[i - 1].count
-                if (num <= (preValueCount - 1)) return undefined
-                rightLineNumber = rightLineNumber + 1
-                rightContent = ch
-              } else if (obj.removed && diffArray[i + 1] && !diffArray[i + 1].added) {
-                leftLineNumber = leftLineNumber + 1
-                leftContent = ch
-              } else if (obj.removed && diffArray[i + 1] && diffArray[i + 1].added) {
-                leftLineNumber = leftLineNumber + 1
-                const nextVal = diffArray[i + 1].value
-                  .split('\n')
-                  .filter(Boolean)[num]
-                leftContent = (nextVal && !this.props.disableWordDiff)
-                  ? wordDiff(ch, nextVal, 'added', styles, this.props.renderContent)
-                  : ch
-                rightContent = (nextVal && !this.props.disableWordDiff)
-                  ? wordDiff(ch, nextVal, 'removed', styles, this.props.renderContent)
-                  : nextVal
-                if (nextVal) {
-                  rightLineNumber = rightLineNumber + 1
-                  added = true
-                }
-              } else {
-                rightLineNumber = rightLineNumber + 1
-                rightContent = ch
-              }
-              return <DefaultLine
-                styles={styles}
-                leftLineNumber={!removed || leftLineNumber}
-                rightLineNumber={!added || rightLineNumber}
-                removed={removed}
-                added={added}
-                key={num}
-                hideLineNumbers={this.props.hideLineNumbers}
-                hightlightLines={this.props.highlightLines}
-                renderContent={this.props.renderContent}
-                leftContent={leftContent}
-                rightContent={rightContent}
-                onLineNumberClick={this.props.onLineNumberClick}
-              />
-            })
-        }
-      </React.Fragment>
-    })
-  }
-
-  private inlineView = (diffArray: diff.IDiffResult[], styles: IReactDiffViewerStyles) => {
-    let leftLineNumber = 0
-    let rightLineNumber = 0
-    return () => {
-      return diffArray.map((diffObj, i) => {
-        return diffObj.value.split('\n')
-          .filter(ch => ch.length > 0)
-          .map((ch, num) => {
-            let content
-            if (diffObj.added) {
-              rightLineNumber = rightLineNumber + 1
-              if (diffArray[i - 1] && diffArray[i - 1].removed) {
-                const preValue = diffArray[i - 1].value
-                .split('\n')
-                .filter(Boolean)[num]
-                content = (preValue && !this.props.disableWordDiff) ? wordDiff(preValue, ch, 'removed', styles, this.props.renderContent) : ch
-              } else {
-                content = ch
-              }
-            } else if (diffObj.removed) {
-              leftLineNumber = leftLineNumber + 1
-              if (diffArray[i + 1] && diffArray[i + 1].added) {
-                const nextVal = diffArray[i + 1].value
-                .split('\n')
-                .filter(Boolean)[num]
-                content = (nextVal && !this.props.disableWordDiff) ? wordDiff(ch, nextVal, 'added', styles, this.props.renderContent) : ch
-              } else {
-                content = ch
-              }
-            } else {
-              rightLineNumber = rightLineNumber + 1
-              leftLineNumber = leftLineNumber + 1
-              content = ch
-            }
-            return <InlineLine
-              styles={styles}
-              onLineNumberClick={this.props.onLineNumberClick}
-              key={num}
-              hideLineNumbers={this.props.hideLineNumbers}
-              renderContent={this.props.renderContent}
-              removed={diffObj.removed}
-              leftLineNumber={diffObj.added || leftLineNumber}
-              rightLineNumber={diffObj.removed || rightLineNumber}
-              content={content}
-              hightlightLines={this.props.highlightLines}
-              added={diffObj.added}
-            />
-          })
-      })
+  private onLineNumberClickProxy = (id: string): any => {
+    if (this.props.onLineNumberClick) {
+      return (e: any): void => this.props.onLineNumberClick(id, e);
     }
-  }
+    return (): void => {};
+  };
 
-  private computeStyles = memoize(computeStyles)
+  private renderLine = (
+    lineNumber: number,
+    type: DiffType,
+    prefix: LineNumberPrefix,
+    value: string,
+    additionalLineNumber?: number,
+  ): JSX.Element => {
+    const lineNumberTemplate = `${prefix}-${lineNumber}`;
+    const highlightLine = this.props.highlightLines.includes(
+      lineNumberTemplate,
+    );
+    // if (this.props.showDiffOnly && type === DiffType.DEFAULT) {
+    //   return null;
+    // }
+    const added = type === DiffType.ADDED;
+    const removed = type === DiffType.REMOVED;
+    return (
+      <React.Fragment>
+        <td
+          onClick={this.onLineNumberClickProxy(lineNumberTemplate)}
+          className={cn(this.styles.gutter, {
+            [this.styles.diffAdded]: added,
+            [this.styles.diffRemoved]: removed,
+            [this.styles.hightlightedGutter]: highlightLine,
+          })}
+        >
+          <pre>{lineNumber}</pre>
+        </td>
+        {!this.props.splitView && (
+          <td
+            onClick={this.onLineNumberClickProxy(lineNumberTemplate)}
+            className={cn(this.styles.gutter, {
+              [this.styles.diffAdded]: added,
+              [this.styles.diffRemoved]: removed,
+              [this.styles.hightlightedGutter]: highlightLine,
+            })}
+          >
+            <pre>{additionalLineNumber}</pre>
+          </td>
+        )}
+        <td
+          className={cn(this.styles.marker, {
+            [this.styles.diffAdded]: added,
+            [this.styles.diffRemoved]: removed,
+            [this.styles.hightlightedLine]: highlightLine,
+          })}
+        >
+          <pre>
+            {added && '+'}
+            {removed && '-'}
+          </pre>
+        </td>
+        <td
+          className={cn({
+            [this.styles.diffAdded]: added,
+            [this.styles.diffRemoved]: removed,
+            [this.styles.hightlightedLine]: highlightLine,
+          })}
+        >
+          <pre>
+            {this.props.renderContent ? this.props.renderContent(value) : value}
+          </pre>
+        </td>
+      </React.Fragment>
+    );
+  };
 
-  public render = () => {
+  private renderSplitView = (
+    { left, right }: LineInformation,
+    index: number,
+    diffIndexes?: number[],
+  ): JSX.Element => {
+    return (
+      <tr key={index}>
+        {this.renderLine(
+          left.lineNumber,
+          left.type,
+          LineNumberPrefix.LEFT,
+          left.value,
+        )}
+        {this.renderLine(
+          right.lineNumber,
+          right.type,
+          LineNumberPrefix.RIGHT,
+          right.value,
+        )}
+      </tr>
+    );
+  };
 
-    const {
-      oldValue,
-      newValue,
-      splitView,
-    } = this.props
+  public renderInlineView = (
+    { left, right }: LineInformation,
+    index: number,
+    diffIndexes?: number[],
+  ): JSX.Element => {
+    let content;
+    if (left.type === DiffType.REMOVED && right.type === DiffType.ADDED) {
+      content = (
+        <React.Fragment>
+          {this.renderLine(
+            left.lineNumber,
+            left.type,
+            LineNumberPrefix.LEFT,
+            left.value,
+            null,
+          )}
+          {this.renderLine(
+            null,
+            right.type,
+            LineNumberPrefix.LEFT,
+            right.value,
+            right.lineNumber,
+          )}
+        </React.Fragment>
+      );
+    }
+    if (left.type === DiffType.REMOVED) {
+      content = this.renderLine(
+        left.lineNumber,
+        left.type,
+        LineNumberPrefix.LEFT,
+        left.value,
+        null,
+      );
+    }
+    if (left.type === DiffType.DEFAULT) {
+      content = this.renderLine(
+        left.lineNumber,
+        left.type,
+        LineNumberPrefix.LEFT,
+        left.value,
+        right.lineNumber,
+      );
+    }
+    if (right.type === DiffType.ADDED) {
+      content = this.renderLine(
+        null,
+        right.type,
+        LineNumberPrefix.RIGHT,
+        right.value,
+        right.lineNumber,
+      );
+    }
+
+    return <tr key={index}>{content}</tr>;
+  };
+
+  private renderSkippedLineIndicator = (
+    num: number,
+    i: number,
+  ): JSX.Element => {
+    return (
+      <tr
+        key={Math.round(100).toString()}
+        style={{ background: '#f1f8ff', fontSize: 14 }}
+      >
+        <td />
+        <td />
+        <td>Skipped {num} lines...</td>
+        <td />
+        <td />
+        <td />
+      </tr>
+    );
+  };
+
+  public render = (): JSX.Element => {
+    const { oldValue, newValue, splitView } = this.props;
 
     if (typeof oldValue !== 'string' || typeof newValue !== 'string') {
-      throw Error('"oldValue" and "newValue" should be strings')
+      throw Error('"oldValue" and "newValue" should be strings');
     }
 
-    const newStyles: any = this.computeStyles(this.props.styles)
+    this.styles = this.computeStyles(this.props.styles);
 
-    const diffArray = diff.diffLines(oldValue, newValue, {
-      newlineIsToken: true,
-      ignoreWhitespace: false,
-      ignoreCase: false,
-    })
+    const diffArray = diff.diffLines(
+      oldValue.trimRight(),
+      newValue.trimRight(),
+      {
+        newlineIsToken: true,
+        ignoreWhitespace: false,
+        ignoreCase: false,
+      },
+    );
 
-    const nodes = splitView
-      ? this.splitView(diffArray, newStyles)()
-      : this.inlineView(diffArray, newStyles)()
+    const { lineInformation, diffLines } = computeLines(diffArray);
+    let skippedLineCounter = 0;
+    const nodes = lineInformation.map(
+      (line: LineInformation, i: number): JSX.Element => {
+        const firstDiffLine = diffLines[0];
+        const diffPosition = firstDiffLine - i;
+        if (this.props.showDiffOnly) {
+          if (diffPosition === -3) {
+            skippedLineCounter = 0;
+            diffLines.shift();
+          }
+          if (
+            line.left.type === DiffType.DEFAULT &&
+            (diffPosition > 3 || typeof firstDiffLine === 'undefined')
+          ) {
+            skippedLineCounter += 1;
+            if (i === lineInformation.length - 1 && skippedLineCounter > 0) {
+              return this.renderSkippedLineIndicator(skippedLineCounter, i);
+            }
+            return null;
+          }
+        }
+
+        const diffNodes = splitView
+          ? this.renderSplitView(line, i)
+          : this.renderInlineView(line, i);
+
+        if (diffPosition === 3 && skippedLineCounter > 0) {
+          return (
+            <React.Fragment key={i}>
+              {this.renderSkippedLineIndicator(skippedLineCounter, i)}
+              {diffNodes}
+            </React.Fragment>
+          );
+        }
+        return diffNodes;
+      },
+    );
 
     return (
-      <table className={newStyles.diffContainer}>
-        <tbody>
-          {nodes}
-        </tbody>
+      <table className={this.styles.diffContainer}>
+        <tbody>{nodes}</tbody>
       </table>
-    )
-  }
+    );
+  };
 }
 
-export default DiffViewer
-export { IReactDiffViewerStylesOverride }
+export default DiffViewer;
+export { IReactDiffViewerStylesOverride };
