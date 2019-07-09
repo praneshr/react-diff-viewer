@@ -1,25 +1,25 @@
 import { css, cx } from 'emotion';
 import { Interpolation } from 'create-emotion';
 
-
-export interface IReactDiffViewerStyles {
+export interface ReactDiffViewerStyles {
   diffContainer?: string;
   diffRemoved?: string;
   diffAdded?: string;
   line?: string;
-  hightlightedGutter?: string;
+  highlightedGutter?: string;
   gutter?: string;
-  hightlightedLine?: string;
+  highlightedLine?: string;
   marker?: string;
   wordDiff?: string;
   wordAdded?: string;
   wordRemoved?: string;
-  expandGutter?: string;
+  codeFoldGutter?: string;
   emptyLine?: string;
-  expandLine?: string;
+  codeFold?: string;
+  [key: string]: string;
 }
 
-export interface IReactDiffViewerStylesOverride {
+export interface ReactDiffViewerStylesOverride {
   variables?: {
     addedBackground?: string;
     addedColor?: string;
@@ -33,26 +33,26 @@ export interface IReactDiffViewerStylesOverride {
     gutterBackgroundDark?: string;
     highlightBackground?: string;
     highlightGutterBackground?: string;
-    expandGutterBackground?: string;
-    expandLineBackground?: string;
+    codeFoldGutterBackground?: string;
+    codeFoldBackground?: string;
     emptyLineBackground?: string;
   };
   diffContainer?: Interpolation;
   diffRemoved?: Interpolation;
   diffAdded?: Interpolation;
   marker?: Interpolation;
-  hightlightedLine?: Interpolation;
-  hightlightedGutter?: Interpolation;
+  highlightedLine?: Interpolation;
+  highlightedGutter?: Interpolation;
   gutter?: Interpolation;
   line?: Interpolation;
   wordDiff?: Interpolation;
   wordAdded?: Interpolation;
   wordRemoved?: Interpolation;
-  expandGutter?: Interpolation;
+  codeFoldGutter?: Interpolation;
   emptyLine?: Interpolation;
 }
 
-export default (styleOverride: IReactDiffViewerStylesOverride): any => {
+export default (styleOverride: ReactDiffViewerStylesOverride): ReactDiffViewerStyles => {
   const {
     variables: overrideVariables,
     ...styles
@@ -72,8 +72,8 @@ export default (styleOverride: IReactDiffViewerStylesOverride): any => {
       gutterBackgroundDark: '#f3f1f1',
       highlightBackground: '#fffbdd',
       highlightGutterBackground: '#fff5b1',
-      expandGutterBackground: '#dbedff',
-      expandLineBackground: '#f1f8ff',
+      codeFoldGutterBackground: '#dbedff',
+      codeFoldBackground: '#f1f8ff',
       emptyLineBackground: '#fafbfc',
     },
     ...overrideVariables,
@@ -96,7 +96,7 @@ export default (styleOverride: IReactDiffViewerStylesOverride): any => {
       color: variables.removedColor,
     },
     label: 'diff-removed',
-  })
+  });
 
   const diffAdded = css({
     background: variables.addedBackground,
@@ -107,15 +107,17 @@ export default (styleOverride: IReactDiffViewerStylesOverride): any => {
     label: 'diff-added',
   });
 
-  const expandGutter = css({
-    backgroundColor: variables.expandGutterBackground,
+  const codeFoldGutter = css({
+    backgroundColor: variables.codeFoldGutterBackground,
+    label: 'code-fold-gutter',
   });
 
-  const expandLine = css({
-    backgroundColor: variables.expandLineBackground,
+  const codeFold = css({
+    backgroundColor: variables.codeFoldBackground,
     height: 40,
     fontSize: 14,
     fontWeight: 700,
+    label: 'code-fold',
     a: {
       textDecoration: 'underline !important',
       cursor: 'pointer',
@@ -138,7 +140,7 @@ export default (styleOverride: IReactDiffViewerStylesOverride): any => {
     [`&.${diffAdded}`]: {
       pre: {
         color: variables.addedColor,
-      }
+      },
     },
     [`&.${diffRemoved}`]: {
       pre: {
@@ -147,13 +149,13 @@ export default (styleOverride: IReactDiffViewerStylesOverride): any => {
     },
   });
 
-  const hightlightedLine = css({
+  const highlightedLine = css({
     background: variables.highlightBackground,
-    label: 'hightlighted-line',
+    label: 'highlighted-line',
   });
 
-  const hightlightedGutter = css({
-    label: 'hightlighted-gutter',
+  const highlightedGutter = css({
+    label: 'highlighted-gutter',
   });
 
   const gutter = css({
@@ -179,68 +181,68 @@ export default (styleOverride: IReactDiffViewerStylesOverride): any => {
     [`&.${diffRemoved}`]: {
       background: variables.removedGutterBackground,
     },
-    [`&.${hightlightedGutter}`]: {
+    [`&.${highlightedGutter}`]: {
       background: variables.highlightGutterBackground,
       '&:hover': {
         background: variables.highlightGutterBackground,
       },
     },
-  })
+  });
 
   const line = css({
     verticalAlign: 'baseline',
     label: 'line',
-  })
+  });
 
   const wordDiff = css({
     padding: 2,
     display: 'inline-flex',
     borderRadius: 1,
     label: 'word-diff',
-  })
+  });
 
   const wordAdded = css({
     background: variables.wordAddedBackground,
     label: 'word-added',
-  })
+  });
 
   const wordRemoved = css({
     background: variables.wordRemovedBackground,
     label: 'word-removed',
-  })
+  });
 
   const defaultStyles: any = {
     diffContainer,
     diffRemoved,
     diffAdded,
     marker,
-    hightlightedGutter,
-    hightlightedLine,
+    highlightedGutter,
+    highlightedLine,
     gutter,
     line,
     wordDiff,
     wordAdded,
     wordRemoved,
-    expandGutter,
-    expandLine,
+    codeFoldGutter,
+    codeFold,
     emptyLine,
-  }
+  };
 
-  const computerOverrideStyles: any = Object.keys(styles)
-    .reduce((acc, key) => ({
+  const computerOverrideStyles: ReactDiffViewerStyles = Object.keys(styles)
+    .reduce((acc, key): ReactDiffViewerStyles => ({
       ...acc,
       ...{
         [key]: css((styles as any)[key]),
-      }
-    }), {})
+      },
+    }), {});
 
   return Object.keys(defaultStyles)
-    .reduce((acc, key) => ({
+    .reduce((acc, key): ReactDiffViewerStyles => ({
       ...acc,
       ...{
         [key]: computerOverrideStyles[key]
           ? cx(defaultStyles[key], computerOverrideStyles[key])
           : defaultStyles[key],
       },
-    }), {})
+    }), {});
 };

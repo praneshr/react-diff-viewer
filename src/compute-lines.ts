@@ -101,6 +101,7 @@ const computeWordDiff = (oldValue: string, newValue: string): WordDiffInformatio
  */
 const computeLineInformation = (
   diffArray: diff.Change[],
+  disableWordDiff: boolean = false,
 ): ComputedLineInformation => {
   let rightLineNumber = 0;
   let leftLineNumber = 0;
@@ -149,9 +150,13 @@ const computeLineInformation = (
             ignoreDiffIndexes.push(diffIndex + 1);
             right.lineNumber = lineNumber;
             right.type = type;
-            const wordDiff = computeWordDiff(line, rightValue as string);
-            right.value = wordDiff.right;
-            left.value = wordDiff.left;
+            if (disableWordDiff) {
+              right.value = rightValue;
+            } else {
+              const wordDiff = computeWordDiff(line, rightValue as string);
+              right.value = wordDiff.right;
+              left.value = wordDiff.left;
+            }
           }
         } else {
           rightLineNumber += 1;
