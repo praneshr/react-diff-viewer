@@ -131,13 +131,13 @@ const computeLineInformation = (
           leftLineNumber += 1;
           left.lineNumber = leftLineNumber;
           left.type = DiffType.REMOVED;
-          left.value = line;
+          left.value = line || ' ';
           // When the current line is of type REMOVED, check the next item in
           // the diff array whether it is of type ADDED. If true, the current
           // diff will be marked as both REMOVED and ADDED. Meaning, the
           // current line is a modification.
           const nextDiff = diffArray[diffIndex + 1];
-          if (nextDiff.added) {
+          if (nextDiff && nextDiff.added) {
             const {
               value:
               rightValue,
