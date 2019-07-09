@@ -1,15 +1,10 @@
-> I'm working on the new version of React Diff Viewer. It will be a full code and design refresh. If you feel something should be added, please create an issue.
+> This is an alpha version. Not ready for production yet. Please report any bug if discovered.
 
-
-<p align="center">
-  <img src='https://image.ibb.co/dO5cyL/rdv.png' width="80%" alt='React Diff Viewer' />
-</p>
-<br/>
+# React Diff Viewer
 
 [![Build Status](https://travis-ci.com/praneshr/react-diff-viewer.svg?branch=master)](https://travis-ci.com/praneshr/react-diff-viewer)
  [![npm version](https://badge.fury.io/js/react-diff-viewer.svg)](https://badge.fury.io/js/react-diff-viewer)
  [![GitHub license](https://img.shields.io/github/license/praneshr/react-diff-viewer.svg)](https://github.com/praneshr/react-diff-viewer/blob/master/LICENSE)
-
 
 A simple and beautiful text diff viewer made with [Diff](https://github.com/kpdecker/jsdiff) and [React](https://reactjs.org).
 
@@ -18,11 +13,11 @@ Inspired from Github's diff viewer, it includes features like split view, unifie
 ## Install
 
 ```bash
-yarn add react-diff-viewer
+yarn add react-diff-viewer@alpha
 
 # or
 
-npm i react-diff-viewer
+npm i react-diff-viewer@alpha
 ```
 
 ## Usage
@@ -75,6 +70,9 @@ class Diff extends PureComponent {
 |renderContent     |`function`     |`undefined`   |Render Prop API to render code in the diff viewer. Helpful for [syntax highlighting](#syntax-highlighting)   |
 |onLineNumberClick |`function`     |`undefined`   |Event handler for line number click. `(lineId: string) => void`          |
 |hightlightLines   |`array[string]`|`[]`          |List of lines to be highlighted. Works together with `onLineNumberClick`. Line number are prefixed with `L` and `R` for the left and right section of the diff viewer, respectively. For example, `L-20` means 20th line in the left pane. To highlight a range of line numbers, pass the prefixed line number as an array. For example, `[L-2, L-3, L-4, L-5]` will highlight the lines `2-5` in the left pane.   |
+|showDiffOnly      |`boolean`      |`true`        |Shows only the diffed lines and folds the unchanged lines|
+|extraLinesSurroundingDiff|`number`|`3`           |Number of extra unchanged lines surrounding the diff. Works along with `showDiffOnly`.|
+|codeFoldMessageRenderer|`function`|`Expand {number} of lines ...`   |Render Prop API to render code fold message.|
 |styles            |`object`       |`{}`          |To override style variables and styles. Learn more about [overriding styles](#overriding-styles)  |
 
 ## Syntax Highlighting
@@ -159,26 +157,29 @@ const defaultStyles = {
     gutterBackgroundDark: '#f3f1f1',
     highlightBackground: '#fffbdd',
     highlightGutterBackground: '#fff5b1',
+    codeFoldGutterBackground: '#dbedff',
+    codeFoldBackground: '#f1f8ff',
+    emptyLineBackground: '#fafbfc',
   },
-  diffContainer: {}, // style object
-  diffRemoved: {}, // style object
-  diffAdded: {}, // style object
-  marker: {}, // style object
-  gutter: {}, // style object
-  leftGutter: {}, // style object
-  rightGutter: {}, // style object
-  hightlightedLine: {}, // style object
-  hightlightedGutter: {}, // style object
-  line: {}, // style object
-  wordDiff: {}, // style object
-  wordAdded: {}, // style object
-  wordRemoved: {}, // style object
+  diffContainer?: {}; //style object
+  diffRemoved?: {}; //style object
+  diffAdded?: {}; //style object
+  marker?: {}; //style object
+  highlightedLine?: {}; //style object
+  highlightedGutter?: {}; //style object
+  gutter?: {}; //style object
+  line?: {}; //style object
+  wordDiff?: {}; //style object
+  wordAdded?: {}; //style object
+  wordRemoved?: {}; //style object
+  codeFoldGutter?: {}; //style object
+  emptyLine?: {}; //style object
 }
 ```
 
 To override any style, just pass the new style object to the `styles` prop. New style will be computed using `Object.assign(default, override)`.
 
-For keys other than `variables`, the value can either be an object or string interpolation. Emotion's dynamic styles are not yet supported.
+For keys other than `variables`, the value can either be an object or string interpolation.
 
 ```javascript
 import React, { PureComponent } from 'react'
