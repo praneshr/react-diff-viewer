@@ -108,7 +108,7 @@ pre[class*="language-"] {
 body {
   font-family: 'Poppins', sans-serif; }
 
-.react-diff-viewer-example a {
+.react-diff-viewer-example a[href] {
   color: #704DFF;
   text-decoration: none; }
 
