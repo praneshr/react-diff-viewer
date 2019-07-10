@@ -58,6 +58,12 @@ const constructLines = (value: string): string[] => {
   return lines;
 };
 
+/**
+ * Computes word diff information in the line.
+ *
+ * @param oldValue Old word in the line.
+ * @param newValue New word in the line.
+ */
 const computeWordDiff = (oldValue: string, newValue: string): WordDiffInformation => {
   const diffArray = diff
     .diffChars(oldValue, newValue);
@@ -97,12 +103,24 @@ const computeWordDiff = (oldValue: string, newValue: string): WordDiffInformatio
  * line contains information about left and right section. Left side denotes
  * deletion and right side denotes addition.
  *
- * @param diffArray Files diff array from js diff module.
+ * @param oldString Old string to compare.
+ * @param newString New string to compare with old string.
+ * @param disableWordDiff Flag to enable/disable word diff.
  */
 const computeLineInformation = (
-  diffArray: diff.Change[],
+  oldString: string,
+  newString: string,
   disableWordDiff: boolean = false,
 ): ComputedLineInformation => {
+  const diffArray = diff.diffLines(
+    oldString.trimRight(),
+    newString.trimRight(),
+    {
+      newlineIsToken: true,
+      ignoreWhitespace: false,
+      ignoreCase: false,
+    },
+  );
   let rightLineNumber = 0;
   let leftLineNumber = 0;
   let lineInformation: LineInformation[] = [];
@@ -150,6 +168,8 @@ const computeLineInformation = (
             ignoreDiffIndexes.push(diffIndex + 1);
             right.lineNumber = lineNumber;
             right.type = type;
+            // Do word level diff and assign the corresponding values to the
+            // left and right diff information object.
             if (disableWordDiff) {
               right.value = rightValue;
             } else {

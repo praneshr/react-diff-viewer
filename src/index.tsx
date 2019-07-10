@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as diff from 'diff';
 import * as PropTypes from 'prop-types';
 import cn from 'classnames';
 
@@ -16,28 +15,41 @@ export enum LineNumberPrefix {
 }
 
 export interface ReactDiffViewerProps {
+  // Old value to compare.
   oldValue: string;
+  // New value to compare.
   newValue: string;
+  // Enable/Disable split view.
   splitView?: boolean;
+  // Enable/Disable word diff.
   disableWordDiff?: boolean;
+  // Number of unmodified lines surrounding each line diff.
   extraLinesSurroundingDiff?: number;
+  // Show/hide line number.
   hideLineNumbers?: boolean;
+  // Show only diff between the two values.
   showDiffOnly?: boolean;
+  // Render prop to format final string before displaying them in the UI.
   renderContent?: (source: string) => JSX.Element;
+  // Render prop to format code fold message.
   codeFoldMessageRenderer?: (
     totalFoldedLines: number,
     leftStartLineNumber: number,
     rightStartLineNumber: number,
   ) => JSX.Element;
+  // Event handler for line number click.
   onLineNumberClick?: (
     lineId: string,
     event: React.MouseEvent<HTMLTableCellElement>,
   ) => void;
+  // Array of line ids to highlight lines.
   highlightLines?: string[];
+  // Style overrides.
   styles?: ReactDiffViewerStylesOverride;
 }
 
 export interface ReactDiffViewerState {
+  // Array holding the expanded code folding.
   expandedBlocks?: number[];
 }
 
@@ -78,6 +90,10 @@ class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerSt
     };
   }
 
+  /**
+   * Pushes the target expanded code block to the state. During the re-render,
+   * this value is used to expand/fold unmodified code.
+   */
   private onBlockExpand = (id: number): void => {
     const prevState = this.state.expandedBlocks.slice();
     prevState.push(id);
@@ -87,8 +103,22 @@ class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerSt
     });
   };
 
-  private computeStyles: (styles: ReactDiffViewerStylesOverride) => ReactDiffViewerStyles = memoize(computeStyles);
+  /**
+   * Computes final styles for the diff viewer. It combines the default styles with the user
+   * supplied overrides. The computed styles are cached with performance in mind.
+   *
+   * @param styles User supplied style overrides.
+   */
+  private computeStyles: (
+    styles: ReactDiffViewerStylesOverride,
+  ) => ReactDiffViewerStyles = memoize(computeStyles);
 
+  /**
+   * Returns a function with clicked line number in the closure. Returns an no-op function when no
+   * onLineNumberClick handler is supplied.
+   *
+   * @param id Line id of a line.
+   */
   private onLineNumberClickProxy = (id: string): any => {
     if (this.props.onLineNumberClick) {
       return (e: any): void => this.props.onLineNumberClick(id, e);
@@ -96,9 +126,15 @@ class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerSt
     return (): void => { };
   };
 
+  /**
+   * Maps over the word diff and constructs the required React elements to show word diff.
+   *
+   * @param diffArray Word diff information derived from line information.
+   * @param renderer Optional renderer to format diff words. Useful for syntax highlighting.
+   */
   private renderWordDiff = (
     diffArray: DiffInformation[],
-    renderer: (chunk: string) => JSX.Element,
+    renderer?: (chunk: string) => JSX.Element,
   ): JSX.Element[] => {
     return diffArray.map(
       (wordDiff, i): JSX.Element => {
@@ -117,6 +153,19 @@ class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerSt
     );
   };
 
+  /**
+   * Maps over the line diff and constructs the required react elements to show line diff. It calls
+   * renderWordDiff when encountering word diff. This takes care of both inline and split view line
+   * renders.
+   *
+   * @param lineNumber Line number of the current line.
+   * @param type Type of diff of the current line.
+   * @param prefix Unique id to prefix with the line numbers.
+   * @param value Content of the line. It can be a string or a word diff array.
+   * @param additionalLineNumber Additional line number to be shown. Useful for rendering inline
+   *  diff view. Right line number will be passed as additionalLineNumber.
+   * @param additionalPrefix Similar to prefix but for additional line number.
+   */
   private renderLine = (
     lineNumber: number,
     type: DiffType,
@@ -198,6 +247,14 @@ class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerSt
     );
   };
 
+  /**
+   * Generates lines for split view.
+   *
+   * @param obj Line diff information.
+   * @param obj.left Life diff information for the left pane of the split view.
+   * @param obj.right Life diff information for the right pane of the split view.
+   * @param index React key for the lines.
+   */
   private renderSplitView = (
     { left, right }: LineInformation,
     index: number,
@@ -220,6 +277,14 @@ class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerSt
     );
   };
 
+  /**
+   * Generates lines for inline view.
+   *
+   * @param obj Line diff information.
+   * @param obj.left Life diff information for the added section of the inline view.
+   * @param obj.right Life diff information for the removed section of the inline view.
+   * @param index React key for the lines.
+   */
   public renderInlineView = (
     { left, right }: LineInformation,
     index: number,
@@ -281,8 +346,22 @@ class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerSt
     return <tr key={index} className={this.styles.line}>{content}</tr>;
   };
 
+  /**
+   * Returns a function with clicked block number in the closure.
+   *
+   * @param id Cold fold block id.
+   */
   private onBlockClickProxy = (id: number): any => (): void => this.onBlockExpand(id);
 
+  /**
+   * Generates cold fold block. It also uses the custom message renderer when available to show
+   * cold fold messages.
+   *
+   * @param num Number of skipped lines between two blocks.
+   * @param blockNumber Code fold block id.
+   * @param leftBlockLineNumber First left line number after the current code fold block.
+   * @param rightBlockLineNumber First right line number after the current code fold block.
+   */
   private renderSkippedLineIndicator = (
     num: number,
     blockNumber: number,
@@ -315,32 +394,21 @@ class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerSt
     );
   };
 
-  public render = (): JSX.Element => {
+  /**
+   * Generates the entire diff view.
+   */
+  private renderDiff = (): JSX.Element[] => {
     const { oldValue, newValue, splitView } = this.props;
-
-    if (typeof oldValue !== 'string' || typeof newValue !== 'string') {
-      throw Error('"oldValue" and "newValue" should be strings');
-    }
-
-    this.styles = this.computeStyles(this.props.styles);
-
-    const diffArray = diff.diffLines(
-      oldValue.trimRight(),
-      newValue.trimRight(),
-      {
-        newlineIsToken: true,
-        ignoreWhitespace: false,
-        ignoreCase: false,
-      },
-    );
-
     const { lineInformation, diffLines } = computeLines(
-      diffArray,
+      oldValue,
+      newValue,
       this.props.disableWordDiff,
     );
-    const extraLines = this.props.extraLinesSurroundingDiff;
+    const extraLines = this.props.extraLinesSurroundingDiff < 0
+      ? 0
+      : this.props.extraLinesSurroundingDiff;
     let skippedLines: number[] = [];
-    const nodes = lineInformation.map(
+    return lineInformation.map(
       (line: LineInformation, i: number): JSX.Element => {
         const diffBlockStart = diffLines[0];
         const currentPosition = diffBlockStart - i;
@@ -390,6 +458,17 @@ class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerSt
         return diffNodes;
       },
     );
+  }
+
+  public render = (): JSX.Element => {
+    const { oldValue, newValue } = this.props;
+
+    if (typeof oldValue !== 'string' || typeof newValue !== 'string') {
+      throw Error('"oldValue" and "newValue" should be strings');
+    }
+
+    this.styles = this.computeStyles(this.props.styles);
+    const nodes = this.renderDiff();
 
     return (
       <table className={this.styles.diffContainer}>
