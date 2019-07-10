@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import cn from 'classnames';
 
-import computeLines, { LineInformation, DiffInformation, DiffType } from './compute-lines';
+import { computeLineInformation, LineInformation, DiffInformation, DiffType } from './compute-lines';
 import computeStyles, { ReactDiffViewerStylesOverride, ReactDiffViewerStyles } from './styles';
 
 const m = require('memoize-one');
@@ -399,7 +399,7 @@ class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerSt
    */
   private renderDiff = (): JSX.Element[] => {
     const { oldValue, newValue, splitView } = this.props;
-    const { lineInformation, diffLines } = computeLines(
+    const { lineInformation, diffLines } = computeLineInformation(
       oldValue,
       newValue,
       this.props.disableWordDiff,

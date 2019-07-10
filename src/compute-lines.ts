@@ -213,4 +213,4 @@ const computeLineInformation = (
   };
 };
 
-export default computeLineInformation;
+export { computeLineInformation };

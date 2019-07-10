@@ -1,5 +1,5 @@
 import * as expect from 'expect';
-import computeLines from '../src/compute-lines';
+import { computeLineInformation } from '../src/compute-lines';
 
 describe('Testing compute lines utils', (): void => {
   it('Should it avoid trailing spaces', (): void => {
@@ -11,7 +11,7 @@ describe('Testing compute lines utils', (): void => {
 
     `;
 
-    expect(computeLines(oldCode, newCode))
+    expect(computeLineInformation(oldCode, newCode))
       .toMatchObject({
         lineInformation: [
           {
@@ -36,7 +36,7 @@ describe('Testing compute lines utils', (): void => {
     const newCode = `test
     newLine`;
 
-    expect(computeLines(oldCode, newCode))
+    expect(computeLineInformation(oldCode, newCode))
       .toMatchObject({
         lineInformation: [
           {
@@ -69,7 +69,7 @@ describe('Testing compute lines utils', (): void => {
     oldLine`;
     const newCode = 'test';
 
-    expect(computeLines(oldCode, newCode))
+    expect(computeLineInformation(oldCode, newCode))
       .toMatchObject({
         lineInformation: [
           {
@@ -103,7 +103,7 @@ describe('Testing compute lines utils', (): void => {
     const newCode = `test
     newLine`;
 
-    expect(computeLines(oldCode, newCode, true))
+    expect(computeLineInformation(oldCode, newCode, true))
       .toMatchObject({
         lineInformation: [
           {
@@ -141,7 +141,7 @@ describe('Testing compute lines utils', (): void => {
     const newCode = `test
     newLine`;
 
-    expect(computeLines(oldCode, newCode))
+    expect(computeLineInformation(oldCode, newCode))
       .toMatchObject({
         lineInformation: [
           {
