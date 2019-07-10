@@ -2,9 +2,15 @@ import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import cn from 'classnames';
 
-import { computeLineInformation, LineInformation, DiffInformation, DiffType } from './compute-lines';
+import {
+  computeLineInformation,
+  LineInformation,
+  DiffInformation,
+  DiffType,
+} from './compute-lines';
 import computeStyles, { ReactDiffViewerStylesOverride, ReactDiffViewerStyles } from './styles';
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const m = require('memoize-one');
 
 const memoize = m.default || m;
