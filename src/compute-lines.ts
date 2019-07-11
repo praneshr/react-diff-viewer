@@ -157,8 +157,7 @@ const computeLineInformation = (
           const nextDiff = diffArray[diffIndex + 1];
           if (nextDiff && nextDiff.added) {
             const {
-              value:
-              rightValue,
+              value: rightValue,
               lineNumber,
               type,
             } = getLineInformation(nextDiff.value, diffIndex, true)[0].right;
@@ -208,6 +207,7 @@ const computeLineInformation = (
         ...getLineInformation(value, index, added, removed),
       ];
     });
+
   return {
     lineInformation, diffLines,
   };
