@@ -1,6 +1,9 @@
 > This is an alpha version. Not ready for production yet. Please report any bug if discovered.
 
-# React Diff Viewer
+<p align="center">
+  <img src='https://i.ibb.co/k9bYvq0/Full-View.png' width="80%" alt='React Diff Viewer' />
+</p>
+<br/>
 
 [![Build Status](https://travis-ci.com/praneshr/react-diff-viewer.svg?branch=master)](https://travis-ci.com/praneshr/react-diff-viewer)
  [![npm version](https://badge.fury.io/js/react-diff-viewer.svg)](https://badge.fury.io/js/react-diff-viewer)
