@@ -97,6 +97,20 @@ class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerSt
   }
 
   /**
+   * Resets code block expand to the initial stage. Will be exposed to the parent component via
+   * refs.
+   */
+  public resetCodeBlocks = (): boolean => {
+    if (this.state.expandedBlocks.length > 0) {
+      this.setState({
+        expandedBlocks: [],
+      });
+      return true;
+    }
+    return false;
+  }
+
+  /**
    * Pushes the target expanded code block to the state. During the re-render,
    * this value is used to expand/fold unmodified code.
    */
