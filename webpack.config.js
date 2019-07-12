@@ -24,42 +24,39 @@ module.exports = {
     hot: true,
   },
   module: {
-    rules: [
-      {
-        test: /\.tsx?$/,
-        use: [
-          {
-            loader: 'ts-loader',
-            options: {
-              configFile: 'tsconfig.examples.json',
-            },
-          },
-        ],
-        exclude: /node_modules/,
-      },
-      {
-        test: /\.s?css$/,
-        use: [
-          css.loader,
-          'css-loader',
-          'sass-loader',
-        ],
-      },
-      {
-        test: /\.xml|.rjs|.java/,
-        use: 'raw-loader',
-      },
-      {
-        test: /\.svg|.png/,
-        use: 'file-loader',
-      },
+    rules: [{
+      test: /\.tsx?$/,
+      use: [{
+        loader: 'ts-loader',
+        options: {
+          configFile: 'tsconfig.examples.json',
+        },
+      }],
+      exclude: /node_modules/,
+    },
+    {
+      test: /\.s?css$/,
+      use: [
+        css.loader,
+        'css-loader',
+        'sass-loader',
+      ],
+    },
+    {
+      test: /\.xml|.rjs|.java/,
+      use: 'raw-loader',
+    },
+    {
+      test: /\.svg|.png/,
+      use: 'file-loader',
+    },
     ],
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: './examples/src/index.ejs',
     }),
-    new FaviconsWebpackPlugin('./logo-standalone.svg'),
+    new FaviconsWebpackPlugin('./logo-standalone.png'),
     new css({
       filename: 'main.css',
     }),

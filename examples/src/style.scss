@@ -132,22 +132,23 @@ body {
 }
 
 .react-diff-viewer-example {
-  a[href] {
-    color: #704DFF;
+  a {
+    color: #3fcb61;
     text-decoration: none;
   }
 
   .banner {
-    background: linear-gradient(to bottom, rgba(113, 77, 255, 0.04) 0%, white 100%);
-    text-align: center;
     padding: 70px 15px;
+    text-align: center;
 
     .img-container {
       text-align: center;
-      margin-bottom: 50px;
+      margin: 0 auto;
+      margin-bottom: 40px;
+      max-width: 700px;
 
       img {
-        width: 70px;
+        width: 100%;
       }
     }
 
@@ -164,25 +165,21 @@ body {
 
       button {
         margin-right: 30px;
-        font-size: 16px;
-        background: #704DFF;
+        font-size: 14px;
+        background: #3fcb61;
         border: none;
 
         &:focus {
-          background: #704DFF;
+          background: #3fcb61;
         }
       }
     }
 
-    h1 {
-      font-weight: 900;
-      font-size: 62px;
-    }
-
     p {
       max-width: 700px;
-      font-size: 20px;
-      margin: 20px auto 0;
+      font-size: 16px;
+      margin: 0 auto;
+      color: grey;
     }
   }
 
@@ -219,16 +216,11 @@ body {
   }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 1023px) {
   .react-diff-viewer-example {
     .banner {
-      h1 {
-        font-weight: 900;
-        font-size: 36px;
-      }
-
-      p {
-        font-size: 18px;
+      .img-container {
+        max-width: 300px;
       }
     }
   }
