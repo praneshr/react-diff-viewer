@@ -122,12 +122,12 @@ class Example extends React.Component<{}, ExampleState> {
             Featuring split view, unified view, word diff and line highlight.
           </p>
           <div className="cta">
-            <a href="https://github.com/praneshr/react-diff-viewer#install">
+            <a href="https://github.com/praneshr/react-diff-viewer/tree/v2.0#install">
               <button type="button" className="btn btn-primary btn-lg">
-                Documentation
+                Documentation (v2.0)
               </button>
             </a>
-            <a href="https://github.com/praneshr/react-diff-viewer">
+            <a href="https://github.com/praneshr/react-diff-viewer/tree/v2.0">
               <button type="button" className="btn btn-primary btn-lg">
                 Github
               </button>
