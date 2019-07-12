@@ -2,8 +2,9 @@
   "name": "react-diff-viewer",
   "version": "2.0.0-alpha.4",
   "private": false,
-  "description": "The only text diff viewer needed for React",
+  "description": "A simple and beautiful text diff viewer component made with diff and React",
   "keywords": [
+    "review",
     "code-review",
     "diff",
     "diff-viewer",

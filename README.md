@@ -1,26 +1,33 @@
-> This is an alpha version. Not ready for production yet. Please report any bug if discovered.
+> This is an beta version. Not ready for production yet. Please report any bug if discovered.
 
+<br/>
+<br/>
+<br/>
+<br/>
 <p align="center">
   <img src='https://i.ibb.co/k9bYvq0/Full-View.png' width="80%" alt='React Diff Viewer' />
 </p>
+<br/>
+<br/>
+<br/>
 <br/>
 
 [![Build Status](https://travis-ci.com/praneshr/react-diff-viewer.svg?branch=master)](https://travis-ci.com/praneshr/react-diff-viewer)
  [![npm version](https://badge.fury.io/js/react-diff-viewer.svg)](https://badge.fury.io/js/react-diff-viewer)
  [![GitHub license](https://img.shields.io/github/license/praneshr/react-diff-viewer.svg)](https://github.com/praneshr/react-diff-viewer/blob/master/LICENSE)
 
-A simple and beautiful text diff viewer made with [Diff](https://github.com/kpdecker/jsdiff) and [React](https://reactjs.org).
+A simple and beautiful text diff viewer component made with [Diff](https://github.com/kpdecker/jsdiff) and [React](https://reactjs.org).
 
-Inspired from Github's diff viewer, it includes features like split view, unified view, word diff and line highlight. It is highly customizable and it supports almost all languages.  Check out the [demo](https://praneshravi.in/react-diff-viewer/).
+Inspired from Github's diff viewer, it includes features like split view, inline view, word diff, line highlight and more. It is highly customizable and it supports almost all languages.  Check out the [demo](https://praneshravi.in/react-diff-viewer/).
 
 ## Install
 
 ```bash
-yarn add react-diff-viewer@alpha
+yarn add react-diff-viewer@beta
 
 # or
 
-npm i react-diff-viewer@alpha
+npm i react-diff-viewer@beta
 ```
 
 ## Usage
@@ -77,6 +84,10 @@ class Diff extends PureComponent {
 |extraLinesSurroundingDiff|`number`|`3`           |Number of extra unchanged lines surrounding the diff. Works along with `showDiffOnly`.|
 |codeFoldMessageRenderer|`function`|`Expand {number} of lines ...`   |Render Prop API to render code fold message.|
 |styles            |`object`       |`{}`          |To override style variables and styles. Learn more about [overriding styles](#overriding-styles)  |
+
+## Instance Methods
+
+`resetCodeBlocks()` - Resets the expanded code blocks to it's initial state. Return `true` on successful reset and `false` during unsuccessful reset.
 
 ## Syntax Highlighting
 
@@ -148,6 +159,7 @@ Below are the default style variables and style object keys.
 
 const defaultStyles = {
   variables: {
+    diffViewerBackground: '#fff',
     addedBackground: '#e6ffed',
     addedColor: '#24292e',
     removedBackground: '#ffeef0',
@@ -164,19 +176,19 @@ const defaultStyles = {
     codeFoldBackground: '#f1f8ff',
     emptyLineBackground: '#fafbfc',
   },
-  diffContainer?: {}; //style object
-  diffRemoved?: {}; //style object
-  diffAdded?: {}; //style object
-  marker?: {}; //style object
-  highlightedLine?: {}; //style object
-  highlightedGutter?: {}; //style object
-  gutter?: {}; //style object
-  line?: {}; //style object
-  wordDiff?: {}; //style object
-  wordAdded?: {}; //style object
-  wordRemoved?: {}; //style object
-  codeFoldGutter?: {}; //style object
-  emptyLine?: {}; //style object
+  diffContainer?: {}, //style object
+  diffRemoved?: {}, //style object
+  diffAdded?: {}, //style object
+  marker?: {}, //style object
+  highlightedLine?: {}, //style object
+  highlightedGutter?: {}, //style object
+  gutter?: {}, //style object
+  line?: {}, //style object
+  wordDiff?: {}, //style object
+  wordAdded?: {}, //style object
+  wordRemoved?: {}, //style object
+  codeFoldGutter?: {}, //style object
+  emptyLine?: {}, //style object
 }
 ```
 

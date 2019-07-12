@@ -4,7 +4,7 @@ before_script: yarn build
 after_success: "./publish-examples.sh"
 deploy:
   skip_cleanup: true
-  tag: alpha
+  tag: beta
   provider: npm
   email: praneshpranesh@gmail.com
   api_key:
