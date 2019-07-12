@@ -130,7 +130,8 @@ body {
       margin-right: 30px;
       font-size: 14px;
       background: #3fcb61;
-      border: none; }
+      border: none;
+      cursor: pointer; }
       .react-diff-viewer-example .banner .cta button:focus {
         background: #3fcb61; }
   .react-diff-viewer-example .banner p {
