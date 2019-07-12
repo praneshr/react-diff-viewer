@@ -21,6 +21,7 @@ export interface ReactDiffViewerStyles {
 
 export interface ReactDiffViewerStylesOverride {
   variables?: {
+    diffViewerBackground?: string;
     addedBackground?: string;
     addedColor?: string;
     removedBackground?: string;
@@ -60,6 +61,7 @@ export default (styleOverride: ReactDiffViewerStylesOverride): ReactDiffViewerSt
 
   const variables = {
     ...{
+      diffViewerBackground: '#fff',
       addedBackground: '#e6ffed',
       addedColor: '#24292e',
       removedBackground: '#ffeef0',
@@ -81,6 +83,7 @@ export default (styleOverride: ReactDiffViewerStylesOverride): ReactDiffViewerSt
 
   const diffContainer = css({
     width: '100%',
+    background: variables.diffViewerBackground,
     pre: {
       margin: 0,
       whiteSpace: 'pre-wrap',
