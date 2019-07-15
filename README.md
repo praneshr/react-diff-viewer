@@ -18,6 +18,8 @@ A simple and beautiful text diff viewer component made with [Diff](https://githu
 
 Inspired from Github's diff viewer, it includes features like split view, inline view, word diff, line highlight and more. It is highly customizable and it supports almost all languages.  Check out the [demo](https://praneshravi.in/react-diff-viewer/).
 
+Check [here](https://github.com/praneshr/react-diff-viewer/tree/v1.0) for v1.0
+
 ## Install
 
 ```bash
