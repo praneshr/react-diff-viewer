@@ -109,37 +109,36 @@ body {
   font-family: 'Poppins', sans-serif; }
 
 .react-diff-viewer-example a {
-  color: #3fcb61;
+  color: #704DFF;
   text-decoration: none; }
 
 .react-diff-viewer-example .banner {
-  padding: 70px 15px;
-  text-align: center; }
+  background: linear-gradient(to bottom, rgba(113, 77, 255, 0.04) 0%, white 100%);
+  text-align: center;
+  padding: 70px 15px; }
   .react-diff-viewer-example .banner .img-container {
     text-align: center;
-    margin: 0 auto;
-    max-width: 700px; }
+    margin-bottom: 50px; }
     .react-diff-viewer-example .banner .img-container img {
-      width: 100%; }
-      .react-diff-viewer-example .banner .img-container img.mobile {
-        display: none; }
+      width: 70px; }
   .react-diff-viewer-example .banner .cta {
     margin-top: 60px; }
     .react-diff-viewer-example .banner .cta a:last-child button {
       margin-right: 0; }
     .react-diff-viewer-example .banner .cta button {
       margin-right: 30px;
-      font-size: 14px;
-      background: #3fcb61;
-      border: none;
-      cursor: pointer; }
+      font-size: 16px;
+      background: #704DFF;
+      border: none; }
       .react-diff-viewer-example .banner .cta button:focus {
-        background: #3fcb61; }
+        background: #704DFF; }
+  .react-diff-viewer-example .banner h1 {
+    font-weight: 900;
+    font-size: 62px; }
   .react-diff-viewer-example .banner p {
     max-width: 700px;
-    font-size: 18px;
-    margin: 0 auto;
-    color: grey; }
+    font-size: 20px;
+    margin: 20px auto 0; }
 
 .react-diff-viewer-example .controls {
   margin: 50px 15px 15px;
@@ -161,20 +160,15 @@ body {
   overflow-y: hidden;
   white-space: nowrap;
   border: 1px solid #eee; }
-  .react-diff-viewer-example .diff-viewer a {
-    color: inherit; }
 
 .react-diff-viewer-example footer {
   padding: 0 15px 30px;
   text-align: center; }
 
-@media (max-width: 1023px) {
-  .react-diff-viewer-example .banner .img-container img {
-    display: none; }
-    .react-diff-viewer-example .banner .img-container img.mobile {
-      display: block;
-      width: 100px;
-      margin: 0 auto 30px; }
-  .react-diff-viewer-example p {
-    font-size: 16px; } }
+@media (max-width: 767px) {
+  .react-diff-viewer-example .banner h1 {
+    font-weight: 900;
+    font-size: 36px; }
+  .react-diff-viewer-example .banner p {
+    font-size: 18px; } }
 
