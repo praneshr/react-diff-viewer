@@ -118,10 +118,11 @@ body {
   .react-diff-viewer-example .banner .img-container {
     text-align: center;
     margin: 0 auto;
-    margin-bottom: 40px;
     max-width: 700px; }
     .react-diff-viewer-example .banner .img-container img {
       width: 100%; }
+      .react-diff-viewer-example .banner .img-container img.mobile {
+        display: none; }
   .react-diff-viewer-example .banner .cta {
     margin-top: 60px; }
     .react-diff-viewer-example .banner .cta a:last-child button {
@@ -136,7 +137,7 @@ body {
         background: #3fcb61; }
   .react-diff-viewer-example .banner p {
     max-width: 700px;
-    font-size: 16px;
+    font-size: 18px;
     margin: 0 auto;
     color: grey; }
 
@@ -160,12 +161,20 @@ body {
   overflow-y: hidden;
   white-space: nowrap;
   border: 1px solid #eee; }
+  .react-diff-viewer-example .diff-viewer a {
+    color: inherit; }
 
 .react-diff-viewer-example footer {
   padding: 0 15px 30px;
   text-align: center; }
 
 @media (max-width: 1023px) {
-  .react-diff-viewer-example .banner .img-container {
-    max-width: 300px; } }
+  .react-diff-viewer-example .banner .img-container img {
+    display: none; }
+    .react-diff-viewer-example .banner .img-container img.mobile {
+      display: block;
+      width: 100px;
+      margin: 0 auto 30px; }
+  .react-diff-viewer-example p {
+    font-size: 16px; } }
 
