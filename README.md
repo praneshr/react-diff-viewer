@@ -1,5 +1,3 @@
-> This is an beta version. Not ready for production yet. Please report any bug if discovered.
-
 <br/>
 <br/>
 <br/>
@@ -23,11 +21,11 @@ Inspired from Github's diff viewer, it includes features like split view, inline
 ## Install
 
 ```bash
-yarn add react-diff-viewer@beta
+yarn add react-diff-viewer
 
 # or
 
-npm i react-diff-viewer@beta
+npm i react-diff-viewer
 ```
 
 ## Usage
@@ -73,13 +71,13 @@ class Diff extends PureComponent {
 |Prop              |Type           |Default       |Description                                   |
 |------------------|---------------|--------------|----------------------------------------------|
 |oldValue          |`string`       |`''`          |Old value as string.                          |
-|newVlaue          |`string`       |`''`          |New value as string.                          |
+|newValue          |`string`       |`''`          |New value as string.                          |
 |splitView         |`boolean`      |`true`        |Switch between `unified` and `split` view.    |
 |disableWordDiff   |`boolean`      |`false`       |Show and hide word diff in a diff line.       |
 |hideLineNumbers   |`boolean`      |`false`       |Show and hide line numbers.                   |
 |renderContent     |`function`     |`undefined`   |Render Prop API to render code in the diff viewer. Helpful for [syntax highlighting](#syntax-highlighting)   |
 |onLineNumberClick |`function`     |`undefined`   |Event handler for line number click. `(lineId: string) => void`          |
-|hightlightLines   |`array[string]`|`[]`          |List of lines to be highlighted. Works together with `onLineNumberClick`. Line number are prefixed with `L` and `R` for the left and right section of the diff viewer, respectively. For example, `L-20` means 20th line in the left pane. To highlight a range of line numbers, pass the prefixed line number as an array. For example, `[L-2, L-3, L-4, L-5]` will highlight the lines `2-5` in the left pane.   |
+|highlightLines   |`array[string]`|`[]`          |List of lines to be highlighted. Works together with `onLineNumberClick`. Line number are prefixed with `L` and `R` for the left and right section of the diff viewer, respectively. For example, `L-20` means 20th line in the left pane. To highlight a range of line numbers, pass the prefixed line number as an array. For example, `[L-2, L-3, L-4, L-5]` will highlight the lines `2-5` in the left pane.   |
 |showDiffOnly      |`boolean`      |`true`        |Shows only the diffed lines and folds the unchanged lines|
 |extraLinesSurroundingDiff|`number`|`3`           |Number of extra unchanged lines surrounding the diff. Works along with `showDiffOnly`.|
 |codeFoldMessageRenderer|`function`|`Expand {number} of lines ...`   |Render Prop API to render code fold message.|
@@ -222,7 +220,7 @@ if(a === 10) {
 
 class Diff extends PureComponent {
 
-  highlightSyntax = str => <pre
+  highlightSyntax = str => <span
     style={{ display: 'inline' }}
     dangerouslySetInnerHTML={{ __html: Prism.highlight(str, Prism.languages.javascript) }}
   />
