@@ -11,7 +11,8 @@ const newXml = require('./diff/xml/new.xml').default;
 const oldJs = require('./diff/javascript/old.rjs').default;
 const newJs = require('./diff/javascript/new.rjs').default;
 
-const logo = require('../../logo-standalone.png');
+const logo = require('../../logo.png');
+const logoStandalone = require('../../logo-standalone.png');
 
 interface ExampleState {
   splitView?: boolean;
@@ -127,6 +128,7 @@ class Example extends React.Component<{}, ExampleState> {
         <div className="banner">
           <div className="img-container">
             <img src={logo} alt="React Diff Viewer Logo" />
+            <img src={logoStandalone} alt="React Diff Viewer Logo" className="mobile" />
           </div>
           <p>
             A simple and beautiful text diff viewer made with{' '}

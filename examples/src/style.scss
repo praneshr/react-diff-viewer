@@ -144,11 +144,14 @@ body {
     .img-container {
       text-align: center;
       margin: 0 auto;
-      margin-bottom: 40px;
       max-width: 700px;
 
       img {
         width: 100%;
+
+        &.mobile {
+          display: none;
+        }
       }
     }
 
@@ -178,7 +181,7 @@ body {
 
     p {
       max-width: 700px;
-      font-size: 16px;
+      font-size: 18px;
       margin: 0 auto;
       color: grey;
     }
@@ -209,6 +212,10 @@ body {
     overflow-y: hidden;
     white-space: nowrap;
     border: 1px solid #eee;
+
+    a {
+      color: inherit;
+    }
   }
 
   footer {
@@ -221,8 +228,20 @@ body {
   .react-diff-viewer-example {
     .banner {
       .img-container {
-        max-width: 300px;
+        img {
+          display: none;
+
+          &.mobile {
+            display: block;
+            width: 100px;
+            margin: 0 auto 30px;
+          }
+        }
       }
+    }
+
+    p {
+      font-size: 16px;
     }
   }
 }
