@@ -1,135 +1,154 @@
-require('./style.scss')
-import * as React from 'react'
-import * as ReactDOM from 'react-dom'
+require('./style.scss');
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 
-import ReactDiff from '../../lib/index'
+import ReactDiff from '../../lib/index';
 
-const oldJson = require('./diff/json/old.json')
-const newJson = require('./diff/json/new.json')
-const oldXml = require('./diff/xml/old.xml')
-const newXml = require('./diff/xml/new.xml')
-const oldJs = require('./diff/javascript/old.rjs')
-const newJs = require('./diff/javascript/new.rjs')
+const oldJson = require('./diff/json/old.json');
+const newJson = require('./diff/json/new.json');
+const oldXml = require('./diff/xml/old.xml').default;
+const newXml = require('./diff/xml/new.xml').default;
+const oldJs = require('./diff/javascript/old.rjs').default;
+const newJs = require('./diff/javascript/new.rjs').default;
 
-const logo = require('../../logo-standalone.svg')
+const logo = require('../../logo.png');
+const logoStandalone = require('../../logo-standalone.png');
 
-interface IExampleState {
+interface ExampleState {
   splitView?: boolean;
   highlightLine?: string[];
   language?: string;
   enableSyntaxHighlighting?: boolean;
 }
 
-const P = (window as any).Prism
+const P = (window as any).Prism;
 
-class Example extends React.Component<{}, IExampleState> {
-
-  constructor(props: any) {
-    super(props)
+class Example extends React.Component<{}, ExampleState> {
+  public constructor(props: any) {
+    super(props);
     this.state = {
       splitView: true,
       highlightLine: [],
       language: 'javascript',
       enableSyntaxHighlighting: true,
-    }
+    };
   }
 
-  toggleSyntaxHighlighting = () => this.setState({
-    enableSyntaxHighlighting: !this.state.enableSyntaxHighlighting,
-  })
+  private toggleSyntaxHighlighting = (): void =>
+    this.setState({
+      enableSyntaxHighlighting: !this.state.enableSyntaxHighlighting,
+    });
 
-  onChange = () => this.setState({ splitView: !this.state.splitView })
+  private onChange = (): void =>
+    this.setState({ splitView: !this.state.splitView });
 
-  onLanguageChange = (e: any) => this.setState({ language: e.target.value, highlightLine: [] })
+  private onLanguageChange = (e: any): void =>
+    this.setState({ language: e.target.value, highlightLine: [] });
 
-  onLineNumberClick = (id: string, e: React.MouseEvent<HTMLTableCellElement>) => {
-    let highlightLine = [id]
+  private onLineNumberClick = (
+    id: string,
+    e: React.MouseEvent<HTMLTableCellElement>,
+  ): void => {
+    let highlightLine = [id];
     if (e.shiftKey && this.state.highlightLine.length === 1) {
-      const [dir, oldId] = this.state.highlightLine[0].split('-')
-      const [newDir, newId] = id.split('-')
+      const [dir, oldId] = this.state.highlightLine[0].split('-');
+      const [newDir, newId] = id.split('-');
       if (dir === newDir) {
-        highlightLine = []
-        const lowEnd = Math.min(Number(oldId), Number(newId))
-        const highEnd = Math.max(Number(oldId), Number(newId))
-        for (var i = lowEnd; i <= highEnd; i++) {
-          highlightLine.push(`${dir}-${i}`)
+        highlightLine = [];
+        const lowEnd = Math.min(Number(oldId), Number(newId));
+        const highEnd = Math.max(Number(oldId), Number(newId));
+        for (let i = lowEnd; i <= highEnd; i++) {
+          highlightLine.push(`${dir}-${i}`);
         }
       }
     }
     this.setState({
       highlightLine,
-    })
-  }
+    });
+  };
 
-  syntaxHighlight = (str: string) => {
-    let language
+  private syntaxHighlight = (str: string): any => {
+    if (!str) return;
+    let language;
     switch (this.state.language) {
       case 'xml':
-        language = P.highlight(str, P.languages.markup)
-        break
+        language = P.highlight(str, P.languages.markup);
+        break;
       case 'json':
-        language = P.highlight(str, P.languages.json)
-        break
+        language = P.highlight(str, P.languages.json);
+        break;
       case 'javascript':
-        language = P.highlight(str, P.languages.javascript)
-        break
+        language = P.highlight(str, P.languages.javascript);
+        break;
       default:
-        break
+        break;
     }
-    return <pre
-      style={{ display: 'inline' }}
-      dangerouslySetInnerHTML={{ __html: language }}
-    />
-  }
+    return <span dangerouslySetInnerHTML={{ __html: language }} />;
+  };
 
-  render() {
-
-    let oldValue
-    let newValue
+  public render(): JSX.Element {
+    let oldValue;
+    let newValue;
 
     switch (this.state.language) {
       case 'xml':
-        oldValue = oldXml
-        newValue = newXml
-        break
+        oldValue = oldXml;
+        newValue = newXml;
+        break;
       case 'json':
-        oldValue = JSON.stringify(oldJson, null, 4)
-        newValue = JSON.stringify(newJson, null, 4)
-        break
+        oldValue = JSON.stringify(oldJson, null, 4);
+        newValue = JSON.stringify(newJson, null, 4);
+        break;
       case 'javascript':
-        oldValue = oldJs
-        newValue = newJs
-        break
+        oldValue = oldJs;
+        newValue = newJs;
+        break;
       default:
-        break
+        break;
+    }
+
+    switch (this.state.language) {
+      case 'xml':
+        oldValue = oldXml;
+        newValue = newXml;
+        break;
+      case 'json':
+        oldValue = JSON.stringify(oldJson, null, 4);
+        newValue = JSON.stringify(newJson, null, 4);
+        break;
+      case 'javascript':
+        oldValue = oldJs;
+        newValue = newJs;
+        break;
+      default:
+        break;
     }
     return (
       <div className="react-diff-viewer-example">
         <div className="banner">
           <div className="img-container">
-            <img src={logo} alt="React Diff Viewer Logo"/>
+            <img src={logo} alt="React Diff Viewer Logo" />
+            <img src={logoStandalone} alt="React Diff Viewer Logo" className="mobile" />
           </div>
-          <h1>React Diff Viewer</h1>
           <p>
-            A simple and beautiful text diff viewer made
-            with <a href="https://github.com/kpdecker/jsdiff" target="_blank">Diff </a>
-            and <a href="https://reactjs.org" target="_blank">React. </a>
-            Featuring split view, unified view, word diff and line highlight.
+            A simple and beautiful text diff viewer made with{' '}
+            <a href="https://github.com/kpdecker/jsdiff" target="_blank">
+              Diff{' '}
+            </a>
+            and{' '}
+            <a href="https://reactjs.org" target="_blank">
+              React.{' '}
+            </a>
+            Featuring split view, inline view, word diff, line highlight and more.
           </p>
           <div className="cta">
-            <a href="https://github.com/praneshr/react-diff-viewer#install">
-              <button
-                type="button"
-                className="btn btn-primary btn-lg"
-              >
-                Documentation
+            <a href="https://github.com/praneshr/react-diff-viewer/tree/v2.0#install">
+              <button type="button" className="btn btn-primary btn-lg">
+                Documentation (v2.0)
               </button>
             </a>
-            <a href="https://github.com/praneshr/react-diff-viewer">
-              <button
-                type="button"
-                className="btn btn-primary btn-lg"
-              >
+            <a href="https://github.com/praneshr/react-diff-viewer/tree/v2.0">
+              <button type="button" className="btn btn-primary btn-lg">
                 Github
               </button>
             </a>
@@ -153,7 +172,9 @@ class Example extends React.Component<{}, IExampleState> {
                 name="toggle-2"
                 id="toggle-2"
                 onChange={this.toggleSyntaxHighlighting}
-                checked={this.state.enableSyntaxHighlighting} /> Syntax Highlighting
+                checked={this.state.enableSyntaxHighlighting}
+              />{' '}
+              Syntax Highlighting
             </label>
             <label>
               <input
@@ -161,7 +182,9 @@ class Example extends React.Component<{}, IExampleState> {
                 name="toggle-1"
                 id="toggle-1"
                 onChange={this.onChange}
-                checked={this.state.splitView} /> Split View
+                checked={this.state.splitView}
+              />{' '}
+              Split View
             </label>
           </span>
         </div>
@@ -172,19 +195,20 @@ class Example extends React.Component<{}, IExampleState> {
             oldValue={oldValue}
             splitView={this.state.splitView}
             newValue={newValue}
-            renderContent={this.state.enableSyntaxHighlighting && this.syntaxHighlight}
+            renderContent={
+              this.state.enableSyntaxHighlighting && this.syntaxHighlight
+            }
           />
         </div>
         <footer>
-          Made with 💓 by <a href="https://praneshravi.in" target="_blank">Pranesh Ravi</a>
+          Made with 💓 by{' '}
+          <a href="https://praneshravi.in" target="_blank">
+            Pranesh Ravi
+          </a>
         </footer>
       </div>
-    )
+    );
   }
 }
 
-ReactDOM.render(
-  <Example/>,
-  document.getElementById('app'),
-)
-
+ReactDOM.render(<Example />, document.getElementById('app'));

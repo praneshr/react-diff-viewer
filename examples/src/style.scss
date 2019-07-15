@@ -126,28 +126,38 @@ pre[class*="language-"] {}
 }
 
 @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,800');
+
 body {
   font-family: 'Poppins', sans-serif;
 }
 
 .react-diff-viewer-example {
   a {
-    color: #704DFF;
+    color: #3fcb61;
     text-decoration: none;
   }
+
   .banner {
-    background: linear-gradient(to bottom, rgba(113, 77, 255, 0.04) 0%, white 100%);
-    text-align: center;
     padding: 70px 15px;
+    text-align: center;
+
     .img-container {
       text-align: center;
-      margin-bottom: 50px;
+      margin: 0 auto;
+      max-width: 700px;
+
       img {
-        width: 70px;
+        width: 100%;
+
+        &.mobile {
+          display: none;
+        }
       }
     }
+
     .cta {
       margin-top: 60px;
+
       a {
         &:last-child {
           button {
@@ -155,34 +165,38 @@ body {
           }
         }
       }
+
       button {
         margin-right: 30px;
-        font-size: 16px;
-        background: #704DFF;
+        font-size: 14px;
+        background: #3fcb61;
         border: none;
+        cursor: pointer;
+
         &:focus {
-          background: #704DFF;
+          background: #3fcb61;
         }
       }
     }
-    h1 {
-      font-weight: 900;
-      font-size: 62px;
-    }
+
     p {
       max-width: 700px;
-      font-size: 20px;
-      margin: 20px auto 0;
+      font-size: 18px;
+      margin: 0 auto;
+      color: grey;
     }
   }
+
   .controls {
     margin: 50px 15px 15px;
     display: flex;
     align-items: center;
     justify-content: space-between;
+
     label {
       margin-left: 30px;
     }
+
     select {
       background-color: #fff;
       padding: 5px 15px;
@@ -190,6 +204,7 @@ body {
       border: 2px solid #ddd;
     }
   }
+
   .diff-viewer {
     margin: 0 15px 50px;
     border-radius: 8px;
@@ -197,23 +212,36 @@ body {
     overflow-y: hidden;
     white-space: nowrap;
     border: 1px solid #eee;
+
+    a {
+      color: inherit;
+    }
   }
+
   footer {
     padding: 0 15px 30px;
     text-align: center;
   }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 1023px) {
   .react-diff-viewer-example {
     .banner {
-      h1 {
-        font-weight: 900;
-        font-size: 36px;
+      .img-container {
+        img {
+          display: none;
+
+          &.mobile {
+            display: block;
+            width: 100px;
+            margin: 0 auto 30px;
+          }
+        }
       }
-      p {
-        font-size: 18px;
-      }
+    }
+
+    p {
+      font-size: 16px;
     }
   }
 }
