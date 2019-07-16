@@ -15,11 +15,11 @@ Inspired from Github's diff viewer, it includes features like split view, unifie
 ## Install
 
 ```bash
-yarn add react-diff-viewer
+yarn add react-diff-viewer@1.1.0
 
 # or
 
-npm i react-diff-viewer
+npm i react-diff-viewer@1.1.0
 ```
 
 ## Usage
