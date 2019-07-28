@@ -189,6 +189,7 @@ const defaultStyles = {
   wordRemoved?: {}, //style object
   codeFoldGutter?: {}, //style object
   emptyLine?: {}, //style object
+  emptyGutter?: {}, //style object
 }
 ```
 

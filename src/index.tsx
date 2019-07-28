@@ -217,6 +217,7 @@ class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerSt
               lineNumber && this.onLineNumberClickProxy(lineNumberTemplate)
             }
             className={cn(this.styles.gutter, {
+              [this.styles.emptyGutter]: !lineNumber,
               [this.styles.diffAdded]: added,
               [this.styles.diffRemoved]: removed,
               [this.styles.highlightedGutter]: highlightLine,
@@ -232,6 +233,7 @@ class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerSt
               && this.onLineNumberClickProxy(additionalLineNumberTemplate)
             }
             className={cn(this.styles.gutter, {
+              [this.styles.emptyGutter]: !additionalLineNumber,
               [this.styles.diffAdded]: added,
               [this.styles.diffRemoved]: removed,
               [this.styles.highlightedGutter]: highlightLine,

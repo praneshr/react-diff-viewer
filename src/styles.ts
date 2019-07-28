@@ -14,6 +14,7 @@ export interface ReactDiffViewerStyles {
   wordAdded?: string;
   wordRemoved?: string;
   codeFoldGutter?: string;
+  emptyGutter?: string;
   emptyLine?: string;
   codeFold?: string;
   [key: string]: string;
@@ -42,6 +43,7 @@ export interface ReactDiffViewerStylesOverride {
   diffRemoved?: Interpolation;
   diffAdded?: Interpolation;
   marker?: Interpolation;
+  emptyGutter?: Interpolation;
   highlightedLine?: Interpolation;
   highlightedGutter?: Interpolation;
   gutter?: Interpolation;
@@ -110,6 +112,23 @@ export default (styleOverride: ReactDiffViewerStylesOverride): ReactDiffViewerSt
     label: 'diff-added',
   });
 
+  const wordDiff = css({
+    padding: 2,
+    display: 'inline-flex',
+    borderRadius: 1,
+    label: 'word-diff',
+  });
+
+  const wordAdded = css({
+    background: variables.wordAddedBackground,
+    label: 'word-added',
+  });
+
+  const wordRemoved = css({
+    background: variables.wordRemovedBackground,
+    label: 'word-removed',
+  });
+
   const codeFoldGutter = css({
     backgroundColor: variables.codeFoldGutterBackground,
     label: 'code-fold-gutter',
@@ -155,6 +174,9 @@ export default (styleOverride: ReactDiffViewerStylesOverride): ReactDiffViewerSt
   const highlightedLine = css({
     background: variables.highlightBackground,
     label: 'highlighted-line',
+    [`.${wordAdded}, .${wordRemoved}`]: {
+      backgroundColor: 'initial',
+    },
   });
 
   const highlightedGutter = css({
@@ -166,10 +188,10 @@ export default (styleOverride: ReactDiffViewerStylesOverride): ReactDiffViewerSt
     minWidth: 40,
     padding: '0 10px',
     label: 'gutter',
-    cursor: 'pointer',
     textAlign: 'right',
     background: variables.gutterBackground,
     '&:hover': {
+      cursor: 'pointer',
       background: variables.gutterBackgroundDark,
       pre: {
         opacity: 1,
@@ -192,26 +214,17 @@ export default (styleOverride: ReactDiffViewerStylesOverride): ReactDiffViewerSt
     },
   });
 
+  const emptyGutter = css({
+    '&:hover': {
+      background: variables.gutterBackground,
+      cursor: 'initial',
+    },
+    label: 'empty-gutter',
+  });
+
   const line = css({
     verticalAlign: 'baseline',
     label: 'line',
-  });
-
-  const wordDiff = css({
-    padding: 2,
-    display: 'inline-flex',
-    borderRadius: 1,
-    label: 'word-diff',
-  });
-
-  const wordAdded = css({
-    background: variables.wordAddedBackground,
-    label: 'word-added',
-  });
-
-  const wordRemoved = css({
-    background: variables.wordRemovedBackground,
-    label: 'word-removed',
   });
 
   const defaultStyles: any = {
@@ -228,6 +241,7 @@ export default (styleOverride: ReactDiffViewerStylesOverride): ReactDiffViewerSt
     wordRemoved,
     codeFoldGutter,
     codeFold,
+    emptyGutter,
     emptyLine,
   };
 
