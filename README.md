@@ -257,6 +257,15 @@ class Diff extends PureComponent {
 
 ```
 
+## Local Development
+
+```bash
+yarn install
+yarn build # or use yarn build:watch
+yarn start:exmaples
+```
+Check package.json for more build scripts.
+
 ## License
 
 MIT
