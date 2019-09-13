@@ -135,13 +135,11 @@ describe('Testing compute lines utils', (): void => {
       });
   });
 
-  it('Should identify word diff', (): void => {
-    const oldCode = `test
-    oldLine`;
-    const newCode = `test
-    newLine`;
+  it('Should use a char diff', (): void => {
+    const oldCode = `test\noldLine`;
+    const newCode = `test\nnewLine`;
 
-    expect(computeLineInformation(oldCode, newCode))
+    expect(computeLineInformation(oldCode, newCode, false, true))
       .toMatchObject({
         lineInformation: [
           {
@@ -162,10 +160,6 @@ describe('Testing compute lines utils', (): void => {
               type: 1,
               value: [
                 {
-                  type: 0,
-                  value: '    ',
-                },
-                {
                   type: 1,
                   value: 'new',
                 },
@@ -180,10 +174,6 @@ describe('Testing compute lines utils', (): void => {
               type: 2,
               value: [
                 {
-                  type: 0,
-                  value: '    ',
-                },
-                {
                   type: 2,
                   value: 'old',
                 },
@@ -196,6 +186,54 @@ describe('Testing compute lines utils', (): void => {
           },
         ],
         diffLines: [1],
+      });
+  });
+
+  it('Should use a word diff', (): void => {
+    const oldCode = `test\noldLine`;
+    const newCode = `test\nnewLine`;
+
+    expect(computeLineInformation(oldCode, newCode, false, false))
+      .toMatchObject({
+        "diffLines": [
+          1,
+        ],
+        "lineInformation": [
+          {
+            "left": {
+              "lineNumber": 1,
+              "type": 0,
+              "value": "test",
+            },
+            "right": {
+              "lineNumber": 1,
+              "type": 0,
+              "value": "test",
+            },
+          },
+          {
+            "left": {
+              "lineNumber": 2,
+              "type": 2,
+              "value": [
+                {
+                  "type": 2,
+                  "value": "oldLine",
+                },
+              ],
+            },
+            "right": {
+              "lineNumber": 2,
+              "type": 1,
+              "value": [
+                {
+                  "type": 1,
+                  "value": "newLine",
+                },
+              ],
+            },
+          },
+        ],
       });
   });
 });

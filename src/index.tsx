@@ -52,6 +52,8 @@ export interface ReactDiffViewerProps {
   highlightLines?: string[];
   // Style overrides.
   styles?: ReactDiffViewerStylesOverride;
+  // Use char or word diff, true by default.
+  useCharDiff?: boolean;
 }
 
 export interface ReactDiffViewerState {
@@ -72,6 +74,7 @@ class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerSt
     hideLineNumbers: false,
     extraLinesSurroundingDiff: 3,
     showDiffOnly: true,
+    useCharDiff: true,
   };
 
   public static propTypes = {
@@ -425,6 +428,7 @@ class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerSt
       oldValue,
       newValue,
       this.props.disableWordDiff,
+      this.props.useCharDiff,
     );
     const extraLines = this.props.extraLinesSurroundingDiff < 0
       ? 0

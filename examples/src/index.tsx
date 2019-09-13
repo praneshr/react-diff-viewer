@@ -19,6 +19,7 @@ interface ExampleState {
   highlightLine?: string[];
   language?: string;
   enableSyntaxHighlighting?: boolean;
+  useCharDiff?: boolean;
 }
 
 const P = (window as any).Prism;
@@ -31,6 +32,7 @@ class Example extends React.Component<{}, ExampleState> {
       highlightLine: [],
       language: 'javascript',
       enableSyntaxHighlighting: true,
+      useCharDiff: true,
     };
   }
 
@@ -195,6 +197,33 @@ class Example extends React.Component<{}, ExampleState> {
             oldValue={oldValue}
             splitView={this.state.splitView}
             newValue={newValue}
+            renderContent={
+              this.state.enableSyntaxHighlighting && this.syntaxHighlight
+            }
+          />
+        </div>
+        <div className="controls">
+          <span>Char / word diffs:</span>
+          <span>
+            <label>
+              <input
+                type="checkbox"
+                name="toggle-2"
+                id="toggle-2"
+                onChange={(e) => this.setState({ useCharDiff: e.target.checked })}
+                checked={this.state.useCharDiff}
+              />{' '}
+              Use char diff
+            </label>
+          </span>
+        </div>
+        <div className="diff-viewer">
+          <ReactDiff
+            highlightLines={this.state.highlightLine}
+            splitView={true}
+            useCharDiff={this.state.useCharDiff}
+            oldValue="This is a test"
+            newValue="That is a toast"
             renderContent={
               this.state.enableSyntaxHighlighting && this.syntaxHighlight
             }

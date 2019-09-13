@@ -76,6 +76,7 @@ class Diff extends PureComponent {
 |newValue          |`string`       |`''`          |New value as string.                          |
 |splitView         |`boolean`      |`true`        |Switch between `unified` and `split` view.    |
 |disableWordDiff   |`boolean`      |`false`       |Show and hide word diff in a diff line.       |
+|useCharDiff       |`boolean`      |`true`        |Use char-based diff by default.               |
 |hideLineNumbers   |`boolean`      |`false`       |Show and hide line numbers.                   |
 |renderContent     |`function`     |`undefined`   |Render Prop API to render code in the diff viewer. Helpful for [syntax highlighting](#syntax-highlighting)   |
 |onLineNumberClick |`function`     |`undefined`   |Event handler for line number click. `(lineId: string) => void`          |

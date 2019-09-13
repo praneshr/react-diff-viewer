@@ -64,9 +64,9 @@ const constructLines = (value: string): string[] => {
  * @param oldValue Old word in the line.
  * @param newValue New word in the line.
  */
-const computeWordDiff = (oldValue: string, newValue: string): WordDiffInformation => {
+const computeDiff = (oldValue: string, newValue: string, useCharDiff: boolean): WordDiffInformation => {
   const diffArray = diff
-    .diffChars(oldValue, newValue);
+    [useCharDiff ? 'diffChars' : 'diffWords'](oldValue, newValue);
   const wordDiff: WordDiffInformation = {
     left: [],
     right: [],
@@ -106,11 +106,13 @@ const computeWordDiff = (oldValue: string, newValue: string): WordDiffInformatio
  * @param oldString Old string to compare.
  * @param newString New string to compare with old string.
  * @param disableWordDiff Flag to enable/disable word diff.
+ * @param useCharDiff Flag to use.
  */
 const computeLineInformation = (
   oldString: string,
   newString: string,
   disableWordDiff: boolean = false,
+  useCharDiff: boolean = true,
 ): ComputedLineInformation => {
   const diffArray = diff.diffLines(
     oldString.trimRight(),
@@ -172,9 +174,9 @@ const computeLineInformation = (
             if (disableWordDiff) {
               right.value = rightValue;
             } else {
-              const wordDiff = computeWordDiff(line, rightValue as string);
-              right.value = wordDiff.right;
-              left.value = wordDiff.left;
+              const computedDiff = computeDiff(line, rightValue as string, useCharDiff);
+              right.value = computedDiff.right;
+              left.value = computedDiff.left;
             }
           }
         } else {
