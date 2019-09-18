@@ -126,21 +126,21 @@ const computeLineInformation = (
   let lineInformation: LineInformation[] = [];
   let counter = 0;
   const diffLines: number[] = [];
-  const ignoreDiffIndexes: number[] = [];
+  const ignoreDiffIndexes: string[] = [];
   const getLineInformation = (
     value: string,
     diffIndex: number,
     added?: boolean,
     removed?: boolean,
   ): LineInformation[] => {
-    if (ignoreDiffIndexes.includes(diffIndex)) {
-      return [];
-    }
     const lines = constructLines(value);
 
-    return lines.map((line: string): LineInformation => {
+    return lines.map((line: string, lineIndex): LineInformation => {
       const left: DiffInformation = {};
       const right: DiffInformation = {};
+      if (ignoreDiffIndexes.includes(`${diffIndex}-${lineIndex}`)) {
+        return { left: {}, right: {}};
+      }
       if (added || removed) {
         if (!diffLines.includes(counter)) {
           diffLines.push(counter);
@@ -156,25 +156,28 @@ const computeLineInformation = (
           // current line is a modification.
           const nextDiff = diffArray[diffIndex + 1];
           if (nextDiff && nextDiff.added) {
-            const {
-              value: rightValue,
-              lineNumber,
-              type,
-            } = getLineInformation(nextDiff.value, diffIndex, true)[0].right;
-            // When identified as modification, push the next diff to ignore
-            // list as the next value will be added in this line computation as
-            // right and left values.
-            ignoreDiffIndexes.push(diffIndex + 1);
-            right.lineNumber = lineNumber;
-            right.type = type;
-            // Do word level diff and assign the corresponding values to the
-            // left and right diff information object.
-            if (disableWordDiff) {
-              right.value = rightValue;
-            } else {
-              const wordDiff = computeWordDiff(line, rightValue as string);
-              right.value = wordDiff.right;
-              left.value = wordDiff.left;
+            const nextDiffLines = constructLines(nextDiff.value)[lineIndex];
+            if (nextDiffLines) {
+              const {
+                value: rightValue,
+                lineNumber,
+                type,
+              } = getLineInformation(nextDiff.value, diffIndex, true)[lineIndex].right;
+              // When identified as modification, push the next diff to ignore
+              // list as the next value will be added in this line computation as
+              // right and left values.
+              ignoreDiffIndexes.push(`${diffIndex + 1}-${lineIndex}`);
+              right.lineNumber = lineNumber;
+              right.type = type;
+              // Do word level diff and assign the corresponding values to the
+              // left and right diff information object.
+              if (disableWordDiff) {
+                right.value = rightValue;
+              } else {
+                const wordDiff = computeWordDiff(line, rightValue as string);
+                right.value = wordDiff.right;
+                left.value = wordDiff.left;
+              }
             }
           }
         } else {
