@@ -39,7 +39,7 @@ describe('Testing react diff viewer', (): void => {
       newValue={newCode}
     />);
 
-    expect(node.find('table > tbody tr').length).toEqual(6);
+    expect(node.find('table > tbody tr').length).toEqual(7);
   });
 
   it('It should render diff lines in inline view', (): void => {

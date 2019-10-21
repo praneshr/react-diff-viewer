@@ -462,7 +462,7 @@ class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerSt
           ? this.renderSplitView(line, i)
           : this.renderInlineView(line, i);
 
-        if (currentPosition === extraLines && skippedLines.length > 1) {
+        if (currentPosition === extraLines && skippedLines.length > 0) {
           const { length } = skippedLines;
           skippedLines = [];
           return (

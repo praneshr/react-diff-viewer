@@ -132,14 +132,16 @@ const computeLineInformation = (
     diffIndex: number,
     added?: boolean,
     removed?: boolean,
+    evaluateOnlyFirstLine?: boolean,
   ): LineInformation[] => {
     const lines = constructLines(value);
 
     return lines.map((line: string, lineIndex): LineInformation => {
       const left: DiffInformation = {};
       const right: DiffInformation = {};
-      if (ignoreDiffIndexes.includes(`${diffIndex}-${lineIndex}`)) {
-        return { left: {}, right: {}};
+      if (ignoreDiffIndexes.includes(`${diffIndex}-${lineIndex}`)
+        || (evaluateOnlyFirstLine && lineIndex !== 0)) {
+        return undefined;
       }
       if (added || removed) {
         if (!diffLines.includes(counter)) {
@@ -162,7 +164,7 @@ const computeLineInformation = (
                 value: rightValue,
                 lineNumber,
                 type,
-              } = getLineInformation(nextDiff.value, diffIndex, true)[lineIndex].right;
+              } = getLineInformation(nextDiff.value, diffIndex, true, false, true)[0].right;
               // When identified as modification, push the next diff to ignore
               // list as the next value will be added in this line computation as
               // right and left values.
@@ -200,7 +202,7 @@ const computeLineInformation = (
 
       counter += 1;
       return { right, left };
-    });
+    }).filter(Boolean);
   };
 
   diffArray
