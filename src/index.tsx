@@ -403,7 +403,7 @@ class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerSt
       </td>
     );
     return (
-      <tr key={Math.round(100).toString()} className={this.styles.codeFold}>
+      <tr key={`${leftBlockLineNumber}-${rightBlockLineNumber}`} className={this.styles.codeFold}>
         {!this.props.hideLineNumbers && (
           <td className={this.styles.codeFoldGutter} />
         )}
