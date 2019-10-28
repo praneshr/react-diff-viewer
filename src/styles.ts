@@ -92,6 +92,7 @@ export default (styleOverride: ReactDiffViewerStylesOverride): ReactDiffViewerSt
       lineHeight: '25px',
     },
     label: 'diff-container',
+    borderCollapse: 'collapse',
   });
 
   const diffRemoved = css({
