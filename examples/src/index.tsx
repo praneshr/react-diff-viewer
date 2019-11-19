@@ -19,6 +19,7 @@ interface ExampleState {
   highlightLine?: string[];
   language?: string;
   enableSyntaxHighlighting?: boolean;
+  jsDiffCompareMethod?: string;
 }
 
 const P = (window as any).Prism;
@@ -31,6 +32,7 @@ class Example extends React.Component<{}, ExampleState> {
       highlightLine: [],
       language: 'javascript',
       enableSyntaxHighlighting: true,
+      jsDiffCompareMethod: 'diffChars'
     };
   }
 
@@ -44,6 +46,9 @@ class Example extends React.Component<{}, ExampleState> {
 
   private onLanguageChange = (e: any): void =>
     this.setState({ language: e.target.value, highlightLine: [] });
+
+  private onJsDiffCompareMethodChange = (e: any): void =>
+    this.setState({ jsDiffCompareMethod: e.target.value });
 
   private onLineNumberClick = (
     id: string,
@@ -155,16 +160,41 @@ class Example extends React.Component<{}, ExampleState> {
           </div>
         </div>
         <div className="controls">
-          <select
-            name="language"
-            id="language"
-            onChange={this.onLanguageChange}
-            value={this.state.language}
-          >
-            <option value="json">JSON</option>
-            <option value="xml">XML</option>
-            <option value="javascript">Javascript</option>
-          </select>
+          <span>
+            <label htmlFor="js_diff_compare_method">JsDiff Compare Method</label>
+            {' '}
+            (<a href="https://github.com/kpdecker/jsdiff/tree/v4.0.1#api">Learn More</a>)
+            {' '}
+            <select
+              name="js_diff_compare_method"
+              id="js_diff_compare_method"
+              onChange={this.onJsDiffCompareMethodChange}
+              value={this.state.jsDiffCompareMethod}
+            >
+              <option value="disabled">DISABLE</option>
+              <option value="diffChars">diffChars</option>
+              <option value="diffWords">diffWords</option>
+              <option value="diffWordsWithSpace">diffWordsWithSpace</option>
+              <option value="diffLines">diffLines</option>
+              <option value="diffTrimmedLines">diffTrimmedLines</option>
+              <option value="diffCss">diffCss</option>
+              <option value="diffSentences">diffSentences</option>
+            </select>
+          </span>
+          <span>
+            <label htmlFor="language">Language</label>
+            {' '}
+            <select
+              name="language"
+              id="language"
+              onChange={this.onLanguageChange}
+              value={this.state.language}
+            >
+              <option value="json">JSON</option>
+              <option value="xml">XML</option>
+              <option value="javascript">Javascript</option>
+            </select>
+          </span>
           <span>
             <label>
               <input
@@ -190,6 +220,8 @@ class Example extends React.Component<{}, ExampleState> {
         </div>
         <div className="diff-viewer">
           <ReactDiff
+            disableWordDiff={ this.state.jsDiffCompareMethod === 'disabled' }
+            jsDiffCompareMethod={ this.state.jsDiffCompareMethod }
             highlightLines={this.state.highlightLine}
             onLineNumberClick={this.onLineNumberClick}
             oldValue={oldValue}

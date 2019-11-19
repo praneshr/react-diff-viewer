@@ -7,6 +7,7 @@ import {
   LineInformation,
   DiffInformation,
   DiffType,
+  DiffMethod,
 } from './compute-lines';
 import computeStyles, { ReactDiffViewerStylesOverride, ReactDiffViewerStyles } from './styles';
 
@@ -29,6 +30,8 @@ export interface ReactDiffViewerProps {
   splitView?: boolean;
   // Enable/Disable word diff.
   disableWordDiff?: boolean;
+  // JsDiff text diff method from https://github.com/kpdecker/jsdiff/tree/v4.0.1#api
+  jsDiffCompareMethod?: string;
   // Number of unmodified lines surrounding each line diff.
   extraLinesSurroundingDiff?: number;
   // Show/hide line number.
@@ -68,6 +71,7 @@ class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerSt
     splitView: true,
     highlightLines: [],
     disableWordDiff: false,
+    jsDiffCompareMethod: DiffMethod.CHARS,
     styles: {},
     hideLineNumbers: false,
     extraLinesSurroundingDiff: 3,
@@ -79,6 +83,7 @@ class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerSt
     newValue: PropTypes.string.isRequired,
     splitView: PropTypes.bool,
     disableWordDiff: PropTypes.bool,
+    jsDiffCompareMethod: PropTypes.oneOf(Object.values(DiffMethod)),
     renderContent: PropTypes.func,
     onLineNumberClick: PropTypes.func,
     extraLinesSurroundingDiff: PropTypes.number,
@@ -420,11 +425,12 @@ class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerSt
    * Generates the entire diff view.
    */
   private renderDiff = (): JSX.Element[] => {
-    const { oldValue, newValue, splitView } = this.props;
+    const { oldValue, newValue, splitView, disableWordDiff, jsDiffCompareMethod } = this.props;
     const { lineInformation, diffLines } = computeLineInformation(
       oldValue,
       newValue,
-      this.props.disableWordDiff,
+      disableWordDiff,
+      jsDiffCompareMethod,
     );
     const extraLines = this.props.extraLinesSurroundingDiff < 0
       ? 0
@@ -501,4 +507,4 @@ class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerSt
 }
 
 export default DiffViewer;
-export { ReactDiffViewerStylesOverride };
+export { ReactDiffViewerStylesOverride, DiffMethod };
