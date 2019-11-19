@@ -1,5 +1,7 @@
 import * as diff from 'diff';
 
+const jsDiff: { [key: string]: any } = diff;
+
 export enum DiffType {
   DEFAULT = 0,
   ADDED = 1,
@@ -17,6 +19,8 @@ export enum DiffMethod {
 }
 
 export interface DiffInformation {
+  added?: boolean;
+  removed?: boolean;
   value?: string | DiffInformation[];
   lineNumber?: number;
   type?: DiffType;
@@ -77,13 +81,13 @@ const constructLines = (value: string): string[] => {
  * @param jsDiffCompareMethod JsDiff text diff method from https://github.com/kpdecker/jsdiff/tree/v4.0.1#api
  */
 const computeDiff = (oldValue: string, newValue: string, jsDiffCompareMethod: string): ComputedDiffInformation => {
-  const diffArray = diff[jsDiffCompareMethod](oldValue, newValue);
+  const diffArray = jsDiff[jsDiffCompareMethod](oldValue, newValue);
   const computedDiff: ComputedDiffInformation = {
     left: [],
     right: [],
   };
   diffArray
-    .forEach(({ added, removed, value }): DiffInformation => {
+    .forEach(({ added, removed, value }: DiffInformation): DiffInformation => {
       const diffInformation: DiffInformation = {};
       if (added) {
         diffInformation.type = DiffType.ADDED;
