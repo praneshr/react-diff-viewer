@@ -1,13 +1,7 @@
 language: node_js
 node_js: 8
 before_script: yarn build
-after_success:
-  if ([ "$TRAVIS_BRANCH" == "master" ] || [ ! -z "$TRAVIS_TAG" ]) && 
-      [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
-    './publish-examples.sh'
-  else
-    echo "Skipping examples deployment..."
-  fi
+after_success: "./publish-examples.sh"
 deploy:
   skip_cleanup: true
   provider: npm
