@@ -76,7 +76,7 @@ class Diff extends PureComponent {
 |newValue          |`string`       |`''`          |New value as string.                          |
 |splitView         |`boolean`      |`true`        |Switch between `unified` and `split` view.    |
 |disableWordDiff   |`boolean`      |`false`       |Show and hide word diff in a diff line.       |
-|jsDiffCompareMethod   |`string`      |`'diffChars'`       |JsDiff text diff method from https://github.com/kpdecker/jsdiff/tree/v4.0.1#api       |
+|compareMethod   |`string`      |`'diffChars'`       |JsDiff text diff method from https://github.com/kpdecker/jsdiff/tree/v4.0.1#api       |
 |hideLineNumbers   |`boolean`      |`false`       |Show and hide line numbers.                   |
 |renderContent     |`function`     |`undefined`   |Render Prop API to render code in the diff viewer. Helpful for [syntax highlighting](#syntax-highlighting)   |
 |onLineNumberClick |`function`     |`undefined`   |Event handler for line number click. `(lineId: string) => void`          |
@@ -175,7 +175,7 @@ class Diff extends PureComponent {
       <ReactDiffViewer
         oldValue={oldCode}
         newValue={newCode}
-        jsDiffCompareMethod={DiffMethod.WORDS}
+        compareMethod={DiffMethod.WORDS}
         splitView={true}
         renderContent={this.highlightSyntax}
       />

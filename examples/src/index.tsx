@@ -19,7 +19,7 @@ interface ExampleState {
   highlightLine?: string[];
   language?: string;
   enableSyntaxHighlighting?: boolean;
-  jsDiffCompareMethod?: string;
+  compareMethod?: string;
 }
 
 const P = (window as any).Prism;
@@ -32,7 +32,7 @@ class Example extends React.Component<{}, ExampleState> {
       highlightLine: [],
       language: 'javascript',
       enableSyntaxHighlighting: true,
-      jsDiffCompareMethod: 'diffChars'
+      compareMethod: 'diffChars'
     };
   }
 
@@ -47,8 +47,8 @@ class Example extends React.Component<{}, ExampleState> {
   private onLanguageChange = (e: any): void =>
     this.setState({ language: e.target.value, highlightLine: [] });
 
-  private onJsDiffCompareMethodChange = (e: any): void =>
-    this.setState({ jsDiffCompareMethod: e.target.value });
+  private onCompareMethodChange = (e: any): void =>
+    this.setState({ compareMethod: e.target.value });
 
   private onLineNumberClick = (
     id: string,
@@ -168,8 +168,8 @@ class Example extends React.Component<{}, ExampleState> {
             <select
               name="js_diff_compare_method"
               id="js_diff_compare_method"
-              onChange={this.onJsDiffCompareMethodChange}
-              value={this.state.jsDiffCompareMethod}
+              onChange={this.onCompareMethodChange}
+              value={this.state.compareMethod}
             >
               <option value="disabled">DISABLE</option>
               <option value="diffChars">diffChars</option>
@@ -220,8 +220,8 @@ class Example extends React.Component<{}, ExampleState> {
         </div>
         <div className="diff-viewer">
           <ReactDiff
-            disableWordDiff={ this.state.jsDiffCompareMethod === 'disabled' }
-            jsDiffCompareMethod={ this.state.jsDiffCompareMethod }
+            disableWordDiff={ this.state.compareMethod === 'disabled' }
+            compareMethod={ this.state.compareMethod }
             highlightLines={this.state.highlightLine}
             onLineNumberClick={this.onLineNumberClick}
             oldValue={oldValue}

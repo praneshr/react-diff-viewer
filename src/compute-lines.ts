@@ -8,6 +8,7 @@ export enum DiffType {
   REMOVED = 2,
 }
 
+// See https://github.com/kpdecker/jsdiff/tree/v4.0.1#api for more info on the below JsDiff methods
 export enum DiffMethod {
   CHARS = 'diffChars',
   WORDS = 'diffWords',
@@ -19,8 +20,6 @@ export enum DiffMethod {
 }
 
 export interface DiffInformation {
-  added?: boolean;
-  removed?: boolean;
   value?: string | DiffInformation[];
   lineNumber?: number;
   type?: DiffType;
@@ -39,6 +38,13 @@ export interface ComputedLineInformation {
 export interface ComputedDiffInformation {
   left?: DiffInformation[];
   right?: DiffInformation[];
+}
+
+// See https://github.com/kpdecker/jsdiff/tree/v4.0.1#change-objects for more info on JsDiff Change Objects
+export interface JsDiffChangeObject {
+  added?: boolean;
+  removed?: boolean;
+  value?: string;
 }
 
 /**
@@ -78,16 +84,16 @@ const constructLines = (value: string): string[] => {
  *
  * @param oldValue Old word in the line.
  * @param newValue New word in the line.
- * @param jsDiffCompareMethod JsDiff text diff method from https://github.com/kpdecker/jsdiff/tree/v4.0.1#api
+ * @param compareMethod JsDiff text diff method from https://github.com/kpdecker/jsdiff/tree/v4.0.1#api
  */
-const computeDiff = (oldValue: string, newValue: string, jsDiffCompareMethod: string): ComputedDiffInformation => {
-  const diffArray = jsDiff[jsDiffCompareMethod](oldValue, newValue);
+const computeDiff = (oldValue: string, newValue: string, compareMethod: string): ComputedDiffInformation => {
+  const diffArray: Array<JsDiffChangeObject> = jsDiff[compareMethod](oldValue, newValue);
   const computedDiff: ComputedDiffInformation = {
     left: [],
     right: [],
   };
   diffArray
-    .forEach(({ added, removed, value }: DiffInformation): DiffInformation => {
+    .forEach(({ added, removed, value }): DiffInformation => {
       const diffInformation: DiffInformation = {};
       if (added) {
         diffInformation.type = DiffType.ADDED;
@@ -121,13 +127,13 @@ const computeDiff = (oldValue: string, newValue: string, jsDiffCompareMethod: st
  * @param oldString Old string to compare.
  * @param newString New string to compare with old string.
  * @param disableWordDiff Flag to enable/disable word diff.
- * @param jsDiffCompareMethod JsDiff text diff method from https://github.com/kpdecker/jsdiff/tree/v4.0.1#api
+ * @param compareMethod JsDiff text diff method from https://github.com/kpdecker/jsdiff/tree/v4.0.1#api
  */
 const computeLineInformation = (
   oldString: string,
   newString: string,
   disableWordDiff: boolean = false,
-  jsDiffCompareMethod: string = DiffMethod.CHARS,
+  compareMethod: string = DiffMethod.CHARS,
 ): ComputedLineInformation => {
   const diffArray = diff.diffLines(
     oldString.trimRight(),
@@ -190,10 +196,10 @@ const computeLineInformation = (
               right.type = type;
               // Do word level diff and assign the corresponding values to the
               // left and right diff information object.
-              if (disableWordDiff || !(<any>Object).values(DiffMethod).includes(jsDiffCompareMethod)) {
+              if (disableWordDiff || !(<any>Object).values(DiffMethod).includes(compareMethod)) {
                 right.value = rightValue;
               } else {
-                const computedDiff = computeDiff(line, rightValue as string, jsDiffCompareMethod);
+                const computedDiff = computeDiff(line, rightValue as string, compareMethod);
                 right.value = computedDiff.right;
                 left.value = computedDiff.left;
               }

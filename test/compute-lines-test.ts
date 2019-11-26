@@ -199,7 +199,7 @@ describe('Testing compute lines utils', (): void => {
       });
   });
 
-  it('Should call "diffChars" jsDiff method when jsDiffCompareMethod is not provided', (): void => {
+  it('Should call "diffChars" jsDiff method when compareMethod is not provided', (): void => {
     const oldCode = `Hello World`;
     const newCode = `My Updated Name
 Also this info`;
@@ -277,7 +277,7 @@ Also this info`;
       });
   });
 
-  it('Should call "diffWords" jsDiff method when a jsDiffCompareMethod IS provided', (): void => {
+  it('Should call "diffWords" jsDiff method when a compareMethod IS provided', (): void => {
     const oldCode = `Hello World`;
     const newCode = `My Updated Name
 Also this info`;

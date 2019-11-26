@@ -31,7 +31,7 @@ export interface ReactDiffViewerProps {
   // Enable/Disable word diff.
   disableWordDiff?: boolean;
   // JsDiff text diff method from https://github.com/kpdecker/jsdiff/tree/v4.0.1#api
-  jsDiffCompareMethod?: string;
+  compareMethod?: string;
   // Number of unmodified lines surrounding each line diff.
   extraLinesSurroundingDiff?: number;
   // Show/hide line number.
@@ -71,7 +71,7 @@ class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerSt
     splitView: true,
     highlightLines: [],
     disableWordDiff: false,
-    jsDiffCompareMethod: DiffMethod.CHARS,
+    compareMethod: DiffMethod.CHARS,
     styles: {},
     hideLineNumbers: false,
     extraLinesSurroundingDiff: 3,
@@ -83,7 +83,7 @@ class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerSt
     newValue: PropTypes.string.isRequired,
     splitView: PropTypes.bool,
     disableWordDiff: PropTypes.bool,
-    jsDiffCompareMethod: PropTypes.oneOf(Object.values(DiffMethod)),
+    compareMethod: PropTypes.oneOf(Object.values(DiffMethod)),
     renderContent: PropTypes.func,
     onLineNumberClick: PropTypes.func,
     extraLinesSurroundingDiff: PropTypes.number,
@@ -425,12 +425,12 @@ class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerSt
    * Generates the entire diff view.
    */
   private renderDiff = (): JSX.Element[] => {
-    const { oldValue, newValue, splitView, disableWordDiff, jsDiffCompareMethod } = this.props;
+    const { oldValue, newValue, splitView, disableWordDiff, compareMethod } = this.props;
     const { lineInformation, diffLines } = computeLineInformation(
       oldValue,
       newValue,
       disableWordDiff,
-      jsDiffCompareMethod,
+      compareMethod,
     );
     const extraLines = this.props.extraLinesSurroundingDiff < 0
       ? 0
