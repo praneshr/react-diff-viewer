@@ -17,7 +17,7 @@ export interface ReactDiffViewerStyles {
   emptyGutter?: string;
   emptyLine?: string;
   codeFold?: string;
-  [key: string]: string;
+  [key: string]: string | undefined;
 }
 
 export interface ReactDiffViewerStylesOverride {
