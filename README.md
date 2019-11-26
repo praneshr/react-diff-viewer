@@ -260,6 +260,7 @@ class Diff extends PureComponent {
 ## Local Development
 
 ```bash
+nvm use # use node version pinned in .nvmrc (https://github.com/nvm-sh/nvm)
 yarn install
 yarn build # or use yarn build:watch
 yarn start:exmaples
