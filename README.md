@@ -76,6 +76,7 @@ class Diff extends PureComponent {
 |newValue          |`string`       |`''`          |New value as string.                          |
 |splitView         |`boolean`      |`true`        |Switch between `unified` and `split` view.    |
 |disableWordDiff   |`boolean`      |`false`       |Show and hide word diff in a diff line.       |
+|compareMethod   |`string`      |`'diffChars'`       |JsDiff text diff method from https://github.com/kpdecker/jsdiff/tree/v4.0.1#api       |
 |hideLineNumbers   |`boolean`      |`false`       |Show and hide line numbers.                   |
 |renderContent     |`function`     |`undefined`   |Render Prop API to render code in the diff viewer. Helpful for [syntax highlighting](#syntax-highlighting)   |
 |onLineNumberClick |`function`     |`undefined`   |Event handler for line number click. `(lineId: string) => void`          |
@@ -138,6 +139,43 @@ class Diff extends PureComponent {
       <ReactDiffViewer
         oldValue={oldCode}
         newValue={newCode}
+        splitView={true}
+        renderContent={this.highlightSyntax}
+      />
+    )
+  }
+}
+```
+
+## Text block diff comparison
+
+Different styles of text block diffing are possible by using the enums corresponding to various v4.0.1 JsDiff text block method names ([learn more](https://github.com/kpdecker/jsdiff/tree/v4.0.1#api)).
+
+```javascript
+import React, { PureComponent } from 'react'
+import ReactDiffViewer, { DiffMethod } from 'react-diff-viewer'
+
+const oldCode = `
+{
+  "name": "Original name",
+  "description": null
+}
+`
+const newCode = `
+{
+  "name": "My updated name",
+  "description": "Brand new description",
+  "status": "running"
+}
+`
+
+class Diff extends PureComponent {
+  render = () => {
+    return (
+      <ReactDiffViewer
+        oldValue={oldCode}
+        newValue={newCode}
+        compareMethod={DiffMethod.WORDS}
         splitView={true}
         renderContent={this.highlightSyntax}
       />
