@@ -133,7 +133,7 @@ const computeLineInformation = (
   oldString: string,
   newString: string,
   disableWordDiff: boolean = false,
-  compareMethod: string = DiffMethod.CHARS,
+  compareMethod: string,
 ): ComputedLineInformation => {
   const diffArray = diff.diffLines(
     oldString.trimRight(),
@@ -196,7 +196,7 @@ const computeLineInformation = (
               right.type = type;
               // Do word level diff and assign the corresponding values to the
               // left and right diff information object.
-              if (disableWordDiff || !(<any>Object).values(DiffMethod).includes(compareMethod)) {
+              if (disableWordDiff) {
                 right.value = rightValue;
               } else {
                 const computedDiff = computeDiff(line, rightValue as string, compareMethod);

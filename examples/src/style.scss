@@ -79,7 +79,7 @@ pre[class*="language-"] {}
 
 .token.punctuation,
 .token.operator {
-  color: #393A34;
+  color: #3bf5d4;
   /* no highlight */
 }
 
@@ -106,13 +106,13 @@ pre[class*="language-"] {}
 .token.function,
 .token.deleted,
 .language-autohotkey .token.tag {
-  color: #9a050f;
+  color: #069071;
 }
 
 .token.tag,
 .token.selector,
 .language-autohotkey .token.keyword {
-  color: #00009f;
+  color: #ff9292;
 }
 
 .token.important,

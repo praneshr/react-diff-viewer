@@ -31,7 +31,7 @@ export interface ReactDiffViewerProps {
   // Enable/Disable word diff.
   disableWordDiff?: boolean;
   // JsDiff text diff method from https://github.com/kpdecker/jsdiff/tree/v4.0.1#api
-  compareMethod?: string;
+  compareMethod?: DiffMethod;
   // Number of unmodified lines surrounding each line diff.
   extraLinesSurroundingDiff?: number;
   // Show/hide line number.
@@ -55,6 +55,12 @@ export interface ReactDiffViewerProps {
   highlightLines?: string[];
   // Style overrides.
   styles?: ReactDiffViewerStylesOverride;
+  // Use dark theme.
+  useDarkTheme?: boolean;
+  // Title for left column
+  leftTitle?: string | JSX.Element;
+  // Title for left column
+  rightTitle?: string | JSX.Element;
 }
 
 export interface ReactDiffViewerState {
@@ -76,6 +82,7 @@ class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerSt
     hideLineNumbers: false,
     extraLinesSurroundingDiff: 3,
     showDiffOnly: true,
+    useDarkTheme: false,
   };
 
   public static propTypes = {
@@ -91,6 +98,14 @@ class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerSt
     hideLineNumbers: PropTypes.bool,
     showDiffOnly: PropTypes.bool,
     highlightLines: PropTypes.arrayOf(PropTypes.string),
+    leftTitle: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.element,
+    ]),
+    rightTitle: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.element,
+    ]),
   };
 
   public constructor(props: ReactDiffViewerProps) {
@@ -136,6 +151,7 @@ class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerSt
    */
   private computeStyles: (
     styles: ReactDiffViewerStylesOverride,
+    useDarkTheme: boolean,
   ) => ReactDiffViewerStyles = memoize(computeStyles);
 
   /**
@@ -228,7 +244,7 @@ class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerSt
               [this.styles.highlightedGutter]: highlightLine,
             })}
           >
-            <pre>{lineNumber}</pre>
+            <pre className={this.styles.lineNumber}>{lineNumber}</pre>
           </td>
         )}
         {!this.props.splitView && !this.props.hideLineNumbers && (
@@ -244,7 +260,7 @@ class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerSt
               [this.styles.highlightedGutter]: highlightLine,
             })}
           >
-            <pre>{additionalLineNumber}</pre>
+            <pre className={this.styles.lineNumber}>{additionalLineNumber}</pre>
           </td>
         )}
         <td
@@ -261,14 +277,14 @@ class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerSt
           </pre>
         </td>
         <td
-          className={cn({
+          className={cn(this.styles.content, {
             [this.styles.emptyLine]: !content,
             [this.styles.diffAdded]: added,
             [this.styles.diffRemoved]: removed,
             [this.styles.highlightedLine]: highlightLine,
           })}
         >
-          <pre>{content}</pre>
+          <pre className={this.styles.contentText}>{content}</pre>
         </td>
       </React.Fragment>
     );
@@ -399,7 +415,7 @@ class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerSt
     const message = this.props.codeFoldMessageRenderer
       ? this.props
         .codeFoldMessageRenderer(num, leftBlockLineNumber, rightBlockLineNumber)
-      : <pre>Expand {num} lines ...</pre>;
+      : <pre className={this.styles.codeFoldContent}>Expand {num} lines ...</pre>;
     const content = (
       <td>
         <a onClick={this.onBlockClickProxy(blockNumber)} tabIndex={0}>
@@ -489,18 +505,36 @@ class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerSt
   }
 
   public render = (): JSX.Element => {
-    const { oldValue, newValue } = this.props;
+    const {
+      oldValue,
+      newValue,
+      useDarkTheme,
+      leftTitle,
+      rightTitle,
+      splitView,
+    } = this.props;
 
     if (typeof oldValue !== 'string' || typeof newValue !== 'string') {
       throw Error('"oldValue" and "newValue" should be strings');
     }
 
-    this.styles = this.computeStyles(this.props.styles);
+    this.styles = this.computeStyles(this.props.styles, useDarkTheme);
     const nodes = this.renderDiff();
+
+    const title = (leftTitle || rightTitle)
+      && <tr>
+        <td colSpan={splitView ? 3 : 5} className={this.styles.titleBlock}>{leftTitle}</td>
+        {splitView
+          && <td colSpan={3} className={this.styles.titleBlock}>{rightTitle}</td>
+        }
+      </tr>;
 
     return (
       <table className={this.styles.diffContainer}>
-        <tbody>{nodes}</tbody>
+        <tbody>
+          {title}
+          {nodes}
+        </tbody>
       </table>
     );
   };

@@ -2,7 +2,7 @@ require('./style.scss');
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
-import ReactDiff from '../../lib/index';
+import ReactDiff, { DiffMethod } from '../../lib/index';
 
 const oldJson = require('./diff/json/old.json');
 const newJson = require('./diff/json/new.json');
@@ -19,7 +19,7 @@ interface ExampleState {
   highlightLine?: string[];
   language?: string;
   enableSyntaxHighlighting?: boolean;
-  compareMethod?: string;
+  compareMethod?: DiffMethod;
 }
 
 const P = (window as any).Prism;
@@ -32,7 +32,7 @@ class Example extends React.Component<{}, ExampleState> {
       highlightLine: [],
       language: 'javascript',
       enableSyntaxHighlighting: true,
-      compareMethod: 'diffChars'
+      compareMethod: DiffMethod.CHARS,
     };
   }
 
@@ -169,16 +169,14 @@ class Example extends React.Component<{}, ExampleState> {
               name="js_diff_compare_method"
               id="js_diff_compare_method"
               onChange={this.onCompareMethodChange}
-              value={this.state.compareMethod}
-            >
-              <option value="disabled">DISABLE</option>
-              <option value="diffChars">diffChars</option>
-              <option value="diffWords">diffWords</option>
-              <option value="diffWordsWithSpace">diffWordsWithSpace</option>
-              <option value="diffLines">diffLines</option>
-              <option value="diffTrimmedLines">diffTrimmedLines</option>
-              <option value="diffCss">diffCss</option>
-              <option value="diffSentences">diffSentences</option>
+              value={this.state.compareMethod}>
+              <option value={DiffMethod.CHARS}>Diff Chars</option>
+              <option value={DiffMethod.WORDS}>Diff Words</option>
+              <option value={DiffMethod.WORDS_WITH_SPACE}>DiffWordsWithSpace</option>
+              <option value={DiffMethod.LINES}>diffLines</option>
+              <option value={DiffMethod.TRIMMED_LINES}>diffTrimmedLines</option>
+              <option value={DiffMethod.SENTENCES}>diffCss</option>
+              <option value={DiffMethod.CSS}>diffSentences</option>
             </select>
           </span>
           <span>
@@ -220,8 +218,7 @@ class Example extends React.Component<{}, ExampleState> {
         </div>
         <div className="diff-viewer">
           <ReactDiff
-            disableWordDiff={ this.state.compareMethod === 'disabled' }
-            compareMethod={ this.state.compareMethod }
+            compareMethod={this.state.compareMethod}
             highlightLines={this.state.highlightLine}
             onLineNumberClick={this.onLineNumberClick}
             oldValue={oldValue}
@@ -230,6 +227,9 @@ class Example extends React.Component<{}, ExampleState> {
             renderContent={
               this.state.enableSyntaxHighlighting && this.syntaxHighlight
             }
+            useDarkTheme
+            leftTitle="asdfsdf"
+            rightTitle="asdfsdsldjfgbdkfjbgkjf"
           />
         </div>
         <footer>
