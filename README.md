@@ -1,3 +1,5 @@
+> Hello! v3.0 is on the way. I'm expecting to release it sometime next week.
+
 <br/>
 <br/>
 <br/>
