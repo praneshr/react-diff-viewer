@@ -4,15 +4,10 @@ import * as ReactDOM from 'react-dom';
 
 import ReactDiff, { DiffMethod } from '../../lib/index';
 
-const oldJson = require('./diff/json/old.json');
-const newJson = require('./diff/json/new.json');
-const oldXml = require('./diff/xml/old.xml').default;
-const newXml = require('./diff/xml/new.xml').default;
 const oldJs = require('./diff/javascript/old.rjs').default;
 const newJs = require('./diff/javascript/new.rjs').default;
 
 const logo = require('../../logo.png');
-const logoStandalone = require('../../logo-standalone.png');
 
 interface ExampleState {
   splitView?: boolean;
@@ -28,27 +23,10 @@ class Example extends React.Component<{}, ExampleState> {
   public constructor(props: any) {
     super(props);
     this.state = {
-      splitView: true,
       highlightLine: [],
-      language: 'javascript',
       enableSyntaxHighlighting: true,
-      compareMethod: DiffMethod.CHARS,
     };
   }
-
-  private toggleSyntaxHighlighting = (): void =>
-    this.setState({
-      enableSyntaxHighlighting: !this.state.enableSyntaxHighlighting,
-    });
-
-  private onChange = (): void =>
-    this.setState({ splitView: !this.state.splitView });
-
-  private onLanguageChange = (e: any): void =>
-    this.setState({ language: e.target.value, highlightLine: [] });
-
-  private onCompareMethodChange = (e: any): void =>
-    this.setState({ compareMethod: e.target.value });
 
   private onLineNumberClick = (
     id: string,
@@ -74,66 +52,18 @@ class Example extends React.Component<{}, ExampleState> {
 
   private syntaxHighlight = (str: string): any => {
     if (!str) return;
-    let language;
-    switch (this.state.language) {
-      case 'xml':
-        language = P.highlight(str, P.languages.markup);
-        break;
-      case 'json':
-        language = P.highlight(str, P.languages.json);
-        break;
-      case 'javascript':
-        language = P.highlight(str, P.languages.javascript);
-        break;
-      default:
-        break;
-    }
+    const language = P.highlight(str, P.languages.javascript);
     return <span dangerouslySetInnerHTML={{ __html: language }} />;
   };
 
   public render(): JSX.Element {
-    let oldValue;
-    let newValue;
 
-    switch (this.state.language) {
-      case 'xml':
-        oldValue = oldXml;
-        newValue = newXml;
-        break;
-      case 'json':
-        oldValue = JSON.stringify(oldJson, null, 4);
-        newValue = JSON.stringify(newJson, null, 4);
-        break;
-      case 'javascript':
-        oldValue = oldJs;
-        newValue = newJs;
-        break;
-      default:
-        break;
-    }
-
-    switch (this.state.language) {
-      case 'xml':
-        oldValue = oldXml;
-        newValue = newXml;
-        break;
-      case 'json':
-        oldValue = JSON.stringify(oldJson, null, 4);
-        newValue = JSON.stringify(newJson, null, 4);
-        break;
-      case 'javascript':
-        oldValue = oldJs;
-        newValue = newJs;
-        break;
-      default:
-        break;
-    }
     return (
       <div className="react-diff-viewer-example">
+        <div className="radial"></div>
         <div className="banner">
           <div className="img-container">
             <img src={logo} alt="React Diff Viewer Logo" />
-            <img src={logoStandalone} alt="React Diff Viewer Logo" className="mobile" />
           </div>
           <p>
             A simple and beautiful text diff viewer made with{' '}
@@ -152,84 +82,19 @@ class Example extends React.Component<{}, ExampleState> {
                 Documentation
               </button>
             </a>
-            <a href="https://github.com/praneshr/react-diff-viewer">
-              <button type="button" className="btn btn-primary btn-lg">
-                Github
-              </button>
-            </a>
           </div>
-        </div>
-        <div className="controls">
-          <span>
-            <label htmlFor="js_diff_compare_method">JsDiff Compare Method</label>
-            {' '}
-            (<a href="https://github.com/kpdecker/jsdiff/tree/v4.0.1#api">Learn More</a>)
-            {' '}
-            <select
-              name="js_diff_compare_method"
-              id="js_diff_compare_method"
-              onChange={this.onCompareMethodChange}
-              value={this.state.compareMethod}>
-              <option value={DiffMethod.CHARS}>Diff Chars</option>
-              <option value={DiffMethod.WORDS}>Diff Words</option>
-              <option value={DiffMethod.WORDS_WITH_SPACE}>DiffWordsWithSpace</option>
-              <option value={DiffMethod.LINES}>diffLines</option>
-              <option value={DiffMethod.TRIMMED_LINES}>diffTrimmedLines</option>
-              <option value={DiffMethod.SENTENCES}>diffCss</option>
-              <option value={DiffMethod.CSS}>diffSentences</option>
-            </select>
-          </span>
-          <span>
-            <label htmlFor="language">Language</label>
-            {' '}
-            <select
-              name="language"
-              id="language"
-              onChange={this.onLanguageChange}
-              value={this.state.language}
-            >
-              <option value="json">JSON</option>
-              <option value="xml">XML</option>
-              <option value="javascript">Javascript</option>
-            </select>
-          </span>
-          <span>
-            <label>
-              <input
-                type="checkbox"
-                name="toggle-2"
-                id="toggle-2"
-                onChange={this.toggleSyntaxHighlighting}
-                checked={this.state.enableSyntaxHighlighting}
-              />{' '}
-              Syntax Highlighting
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                name="toggle-1"
-                id="toggle-1"
-                onChange={this.onChange}
-                checked={this.state.splitView}
-              />{' '}
-              Split View
-            </label>
-          </span>
         </div>
         <div className="diff-viewer">
           <ReactDiff
-            compareMethod={this.state.compareMethod}
             highlightLines={this.state.highlightLine}
             onLineNumberClick={this.onLineNumberClick}
-            oldValue={oldValue}
-            splitView={this.state.splitView}
-            newValue={newValue}
-            renderContent={
-              this.state.enableSyntaxHighlighting && this.syntaxHighlight
-            }
+            oldValue={oldJs}
+            splitView
+            newValue={newJs}
+            renderContent={this.syntaxHighlight}
             useDarkTheme
-            leftTitle="asdfsdf"
-            rightTitle="asdfsdsldjfgbdkfjbgkjf"
+            leftTitle="webpack.config.js master@2178133 - pushed 2 hours ago."
+            rightTitle="webpack.config.js master@64207ee - pushed 13 hours ago."
           />
         </div>
         <footer>
