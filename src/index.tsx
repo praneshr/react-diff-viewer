@@ -523,14 +523,20 @@ class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerSt
 
     const title = (leftTitle || rightTitle)
       && <tr>
-        <td colSpan={splitView ? 3 : 5} className={this.styles.titleBlock}>{leftTitle}</td>
+        <td colSpan={splitView ? 3 : 5} className={this.styles.titleBlock}>
+          <pre className={this.styles.contentText}>
+            {leftTitle}
+          </pre>
+        </td>
         {splitView
-          && <td colSpan={3} className={this.styles.titleBlock}>{rightTitle}</td>
+          && <td colSpan={3} className={this.styles.titleBlock}>
+            <pre className={this.styles.contentText}>{rightTitle}</pre>
+          </td>
         }
       </tr>;
 
     return (
-      <table className={this.styles.diffContainer}>
+      <table className={cn(this.styles.diffContainer, { [this.styles.splitView]: splitView })}>
         <tbody>
           {title}
           {nodes}

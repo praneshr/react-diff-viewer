@@ -21,6 +21,7 @@ export interface ReactDiffViewerStyles {
   codeFold?: string;
   titleBlock?: string;
   content?: string;
+  splitView?: string;
   [key: string]: string | undefined;
 }
 
@@ -74,6 +75,7 @@ export interface ReactDiffViewerStylesOverride {
   emptyLine?: Interpolation;
   content?: Interpolation;
   titleBlock?: Interpolation;
+  splitView?: Interpolation;
 }
 
 export default (
@@ -148,6 +150,18 @@ export default (
 
   const variables = useDarkTheme ? themeVariables.dark : themeVariables.light;
 
+  const content = css({
+    width: '100%',
+    label: 'content',
+  });
+
+  const splitView = css({
+    [`.${content}`]: {
+      width: '50%',
+    },
+    label: 'split-view',
+  });
+
   const diffContainer = css({
     width: '100%',
     background: variables.diffViewerBackground,
@@ -158,6 +172,7 @@ export default (
     },
     label: 'diff-container',
     borderCollapse: 'collapse',
+
   });
 
   const codeFoldContent = css({
@@ -165,8 +180,12 @@ export default (
     label: 'code-fold-content',
   });
 
+  const contentText = css({
+    color: variables.diffViewerColor,
+    label: 'content-text',
+  });
+
   const titleBlock = css({
-    color: variables.diffViewerTitleColor,
     background: variables.diffViewerTitleBackground,
     padding: 10,
     borderBottom: `1px solid ${variables.diffViewerTitleBorderColor}`,
@@ -174,16 +193,9 @@ export default (
     ':last-child': {
       borderLeft: `1px solid ${variables.diffViewerTitleBorderColor}`,
     },
-  });
-
-  const content = css({
-    width: '50%',
-    label: 'content',
-  });
-
-  const contentText = css({
-    color: variables.diffViewerColor,
-    label: 'content-text',
+    [`.${contentText}`]: {
+      color: variables.diffViewerTitleColor,
+    },
   });
 
   const lineNumber = css({
@@ -260,6 +272,7 @@ export default (
   const marker = css({
     width: 25,
     paddingLeft: 10,
+    paddingRight: 10,
     userSelect: 'none',
     label: 'marker',
     [`&.${diffAdded}`]: {
@@ -334,6 +347,7 @@ export default (
     diffContainer,
     diffRemoved,
     diffAdded,
+    splitView,
     marker,
     highlightedGutter,
     highlightedLine,
