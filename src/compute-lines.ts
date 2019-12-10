@@ -86,8 +86,12 @@ const constructLines = (value: string): string[] => {
  * @param newValue New word in the line.
  * @param compareMethod JsDiff text diff method from https://github.com/kpdecker/jsdiff/tree/v4.0.1#api
  */
-const computeDiff = (oldValue: string, newValue: string, compareMethod: string): ComputedDiffInformation => {
-  const diffArray: Array<JsDiffChangeObject> = jsDiff[compareMethod](oldValue, newValue);
+const computeDiff = (
+  oldValue: string,
+  newValue: string,
+  compareMethod: string = DiffMethod.CHARS,
+): ComputedDiffInformation => {
+  const diffArray: JsDiffChangeObject[] = jsDiff[compareMethod](oldValue, newValue);
   const computedDiff: ComputedDiffInformation = {
     left: [],
     right: [],
@@ -133,7 +137,7 @@ const computeLineInformation = (
   oldString: string,
   newString: string,
   disableWordDiff: boolean = false,
-  compareMethod: string,
+  compareMethod: string = DiffMethod.CHARS,
 ): ComputedLineInformation => {
   const diffArray = diff.diffLines(
     oldString.trimRight(),
