@@ -64,7 +64,7 @@ class Diff extends PureComponent {
 | newValue                  | `string`        | `''`                           | New value as string.                                                                                                                                                                                                                                                                                                                                                                                             |
 | splitView                 | `boolean`       | `true`                         | Switch between `unified` and `split` view.                                                                                                                                                                                                                                                                                                                                                                       |
 | disableWordDiff           | `boolean`       | `false`                        | Show and hide word diff in a diff line.                                                                                                                                                                                                                                                                                                                                                                          |
-| compareMethod             | `DiffMethod`    | `DiffMethod.CHARS`             | JsDiff text diff method used for diffing strings. Check out the [guide](https://github.com/praneshr/react-diff-viewer/tree/v3.0.0#compare-methods) to use different methods.                                                                                                                                                                                                                                     |
+| compareMethod             | `DiffMethod`    | `DiffMethod.CHARS`             | JsDiff text diff method used for diffing strings. Check out the [guide](https://github.com/praneshr/react-diff-viewer/tree/v3.0.0#text-block-diff-comparison) to use different methods.                                                                                                                                                                                                                                     |
 | hideLineNumbers           | `boolean`       | `false`                        | Show and hide line numbers.                                                                                                                                                                                                                                                                                                                                                                                      |
 | renderContent             | `function`      | `undefined`                    | Render Prop API to render code in the diff viewer. Helpful for [syntax highlighting](#syntax-highlighting)                                                                                                                                                                                                                                                                                                       |
 | onLineNumberClick         | `function`      | `undefined`                    | Event handler for line number click. `(lineId: string) => void`                                                                                                                                                                                                                                                                                                                                                  |
@@ -76,42 +76,6 @@ class Diff extends PureComponent {
 | useDarkTheme              | `boolean`       | `true`                         | To enable/disable dark theme.                                                                                                                                                                                                                                                                                                                                                                                    |
 | leftTitle                 | `string`        | `undefined`                    | Column title for left section of the diff in split view. This will be used as the only title in inline view.                                                                                                                                                                                                                                                                                                     |
 | rightTitle                | `string`        | `undefined`                    | Column title for right section of the diff in split view. This will be ignored in inline view.                                                                                                                                                                                                                                                                                                                   |
-
-## Compare Methods
-
-React diff viewer supports 7 types of jsDiff methods. By default, `DiffMethod.CHARS` is used. Other available options are the following.
-
-```javascript
-enum DiffMethod {
-  CHARS = 'diffChars',
-  WORDS = 'diffWords',
-  WORDS_WITH_SPACE = 'diffWordsWithSpace',
-  LINES = 'diffLines',
-  TRIMMED_LINES = 'diffTrimmedLines',
-  SENTENCES = 'diffSentences',
-  CSS = 'diffCss',
-}
-```
-
-To change the diff methods, import the `DiffMethod` enum and use the available options.
-
-```javascript
-import React, { PureComponent } from 'react';
-import ReactDiffViewer from 'react-diff-viewer';
-
-class Diff extends PureComponent {
-	render = () => {
-		return (
-			<ReactDiffViewer
-				oldValue={oldCode}
-				newValue={newCode}
-				splitView={true}
-				compareMethod={DiffMethod.WORDS}
-			/>
-		);
-	};
-}
-```
 
 ## Instance Methods
 
@@ -182,7 +146,19 @@ class Diff extends PureComponent {
 
 ## Text block diff comparison
 
-Different styles of text block diffing are possible by using the enums corresponding to various v4.0.1 JsDiff text block method names ([learn more](https://github.com/kpdecker/jsdiff/tree/v4.0.1#api)).
+Different styles of text block diffing are possible by using the enums corresponding to variou JsDiff methods ([learn more](https://github.com/kpdecker/jsdiff/tree/v4.0.1#api)). The supported methods are as follows.
+
+```javascript
+enum DiffMethod {
+  CHARS = 'diffChars',
+  WORDS = 'diffWords',
+  WORDS_WITH_SPACE = 'diffWordsWithSpace',
+  LINES = 'diffLines',
+  TRIMMED_LINES = 'diffTrimmedLines',
+  SENTENCES = 'diffSentences',
+  CSS = 'diffCss',
+}
+```
 
 ```javascript
 import React, { PureComponent } from 'react';
@@ -210,7 +186,6 @@ class Diff extends PureComponent {
 				newValue={newCode}
 				compareMethod={DiffMethod.WORDS}
 				splitView={true}
-				renderContent={this.highlightSyntax}
 			/>
 		);
 	};
