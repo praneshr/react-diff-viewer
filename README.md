@@ -1,4 +1,4 @@
-> Hello! v3.0 is on the way. I'm expecting to release it sometime next week.
+> Hello! [v3.0.0 beta](https://github.com/praneshr/react-diff-viewer/tree/v3.0.0) is now available. This release includes native dark mode, configurable comparator, diff titles etc.
 
 <br/>
 <br/>
