@@ -1,13 +1,6 @@
-<br/>
-<br/>
-<br/>
-<br/>
 <p align="center">
   <img src='https://i.ibb.co/DKrGhVQ/Frame-1-1.png' width="100%" alt='React Diff Viewer' />
 </p>
-<br/>
-<br/>
-<br/>
 <br/>
 
 [![Build Status](https://travis-ci.com/praneshr/react-diff-viewer.svg?branch=master)](https://travis-ci.com/praneshr/react-diff-viewer)
