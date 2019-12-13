@@ -200,7 +200,7 @@ describe('Testing compute lines utils', (): void => {
   });
 
   it('Should call "diffChars" jsDiff method when compareMethod is not provided', (): void => {
-    const oldCode = `Hello World`;
+    const oldCode = 'Hello World';
     const newCode = `My Updated Name
 Also this info`;
 
@@ -208,67 +208,67 @@ Also this info`;
       .toMatchObject({
         lineInformation: [
           {
-            "right": {
-              "lineNumber": 1,
-              "type": 1,
-              "value": [
+            right: {
+              lineNumber: 1,
+              type: 1,
+              value: [
                 {
-                  "type": 1,
-                  "value": "My Updat"
+                  type: 1,
+                  value: 'My Updat',
                 },
                 {
-                  "type": 0,
-                  "value": "e"
+                  type: 0,
+                  value: 'e',
                 },
                 {
-                  "type": 1,
-                  "value": "d"
+                  type: 1,
+                  value: 'd',
                 },
                 {
-                  "type": 0,
-                  "value": " "
+                  type: 0,
+                  value: ' ',
                 },
                 {
-                  "type": 1,
-                  "value": "Name"
-                }
-              ]
+                  type: 1,
+                  value: 'Name',
+                },
+              ],
             },
-            "left": {
-              "lineNumber": 1,
-              "type": 2,
-              "value": [
+            left: {
+              lineNumber: 1,
+              type: 2,
+              value: [
                 {
-                  "type": 2,
-                  "value": "H"
+                  type: 2,
+                  value: 'H',
                 },
                 {
-                  "type": 0,
-                  "value": "e"
+                  type: 0,
+                  value: 'e',
                 },
                 {
-                  "type": 2,
-                  "value": "llo"
+                  type: 2,
+                  value: 'llo',
                 },
                 {
-                  "type": 0,
-                  "value": " "
+                  type: 0,
+                  value: ' ',
                 },
                 {
-                  "type": 2,
-                  "value": "World"
-                }
-              ]
-            }
+                  type: 2,
+                  value: 'World',
+                },
+              ],
+            },
           },
           {
-            "right": {
-              "lineNumber": 2,
-              "type": 1,
-              "value": "Also this info"
+            right: {
+              lineNumber: 2,
+              type: 1,
+              value: 'Also this info',
             },
-            "left": {}
-          }
+            left: {},
+          },
         ],
         diffLines: [
           0,
@@ -278,7 +278,7 @@ Also this info`;
   });
 
   it('Should call "diffWords" jsDiff method when a compareMethod IS provided', (): void => {
-    const oldCode = `Hello World`;
+    const oldCode = 'Hello World';
     const newCode = `My Updated Name
 Also this info`;
 
@@ -286,97 +286,61 @@ Also this info`;
       .toMatchObject({
         lineInformation: [
           {
-            "right": {
-              "lineNumber": 1,
-              "type": 1,
-              "value": [
+            right: {
+              lineNumber: 1,
+              type: 1,
+              value: [
                 {
-                  "type": 1,
-                  "value": "My"
+                  type: 1,
+                  value: 'My',
                 },
                 {
-                  "type": 0,
-                  "value": " "
+                  type: 0,
+                  value: ' ',
                 },
                 {
-                  "type": 1,
-                  "value": "Updated Name"
-                }
-              ]
+                  type: 1,
+                  value: 'Updated Name',
+                },
+              ],
             },
-            "left": {
-              "lineNumber": 1,
-              "type": 2,
-              "value": [
+            left: {
+              lineNumber: 1,
+              type: 2,
+              value: [
                 {
-                  "type": 2,
-                  "value": "Hello"
+                  type: 2,
+                  value: 'Hello',
                 },
                 {
-                  "type": 0,
-                  "value": " "
+                  type: 0,
+                  value: ' ',
                 },
                 {
-                  "type": 2,
-                  "value": "World"
-                }
-              ]
-            }
+                  type: 2,
+                  value: 'World',
+                },
+              ],
+            },
           },
           {
-            "right": {
-              "lineNumber": 2,
-              "type": 1,
-              "value": "Also this info"
+            right: {
+              lineNumber: 2,
+              type: 1,
+              value: 'Also this info',
             },
-            "left": {}
-          }
+            left: {},
+          },
         ],
         diffLines: [
           0,
-          2
-        ],
-      });
-  });
-
-  it('Should not call jsDiff method and not diff text when unknown JsDiffMethod is passed', (): void => {
-    const oldCode = `Hello World`;
-    const newCode = `My Updated Name
-Also this info`;
-
-    expect(computeLineInformation(oldCode, newCode, false, 'unknownMethod'))
-      .toMatchObject({
-        lineInformation: [
-          {
-            "right": {
-              "lineNumber": 1,
-              "type": 1,
-              "value": "My Updated Name"
-            },
-            "left": {
-              "lineNumber": 1,
-              "type": 2,
-              "value": "Hello World"
-            }
-          },
-          {
-            "right": {
-              "lineNumber": 2,
-              "type": 1,
-              "value": "Also this info"
-            },
-            "left": {}
-          }
-        ],
-        diffLines: [
-          0,
-          2
+          2,
         ],
       });
   });
 
   it('Should not call jsDiff method and not diff text when disableWordDiff is true', (): void => {
-    const oldCode = `Hello World`;
+    const oldCode = 'Hello World';
     const newCode = `My Updated Name
 Also this info`;
 
@@ -384,29 +348,29 @@ Also this info`;
       .toMatchObject({
         lineInformation: [
           {
-            "right": {
-              "lineNumber": 1,
-              "type": 1,
-              "value": "My Updated Name"
+            right: {
+              lineNumber: 1,
+              type: 1,
+              value: 'My Updated Name',
             },
-            "left": {
-              "lineNumber": 1,
-              "type": 2,
-              "value": "Hello World"
-            }
+            left: {
+              lineNumber: 1,
+              type: 2,
+              value: 'Hello World',
+            },
           },
           {
-            "right": {
-              "lineNumber": 2,
-              "type": 1,
-              "value": "Also this info"
+            right: {
+              lineNumber: 2,
+              type: 1,
+              value: 'Also this info',
             },
-            "left": {}
-          }
+            left: {},
+          },
         ],
         diffLines: [
           0,
-          2
+          2,
         ],
       });
   });
