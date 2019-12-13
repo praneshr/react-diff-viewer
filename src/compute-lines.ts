@@ -40,7 +40,8 @@ export interface ComputedDiffInformation {
   right?: DiffInformation[];
 }
 
-// See https://github.com/kpdecker/jsdiff/tree/v4.0.1#change-objects for more info on JsDiff Change Objects
+// See https://github.com/kpdecker/jsdiff/tree/v4.0.1#change-objects for more info on JsDiff
+// Change Objects
 export interface JsDiffChangeObject {
   added?: boolean;
   removed?: boolean;
