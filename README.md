@@ -11,14 +11,16 @@ A simple and beautiful text diff viewer component made with [Diff](https://githu
 
 Inspired from Github diff viewer, it includes features like split view, inline view, word diff, line highlight and more. It is highly customizable and it supports almost all languages.
 
+Check [here](https://github.com/praneshr/react-diff-viewer/tree/v2.0) for v2.0
+
 ## Install
 
 ```bash
-yarn add react-diff-viewer@beta
+yarn add react-diff-viewer
 
 # or
 
-npm i react-diff-viewer@beta
+npm i react-diff-viewer
 ```
 
 ## Usage
@@ -64,7 +66,7 @@ class Diff extends PureComponent {
 | newValue                  | `string`        | `''`                           | New value as string.                                                                                                                                                                                                                                                                                                                                                                                             |
 | splitView                 | `boolean`       | `true`                         | Switch between `unified` and `split` view.                                                                                                                                                                                                                                                                                                                                                                       |
 | disableWordDiff           | `boolean`       | `false`                        | Show and hide word diff in a diff line.                                                                                                                                                                                                                                                                                                                                                                          |
-| compareMethod             | `DiffMethod`    | `DiffMethod.CHARS`             | JsDiff text diff method used for diffing strings. Check out the [guide](https://github.com/praneshr/react-diff-viewer/tree/v3.0.0#text-block-diff-comparison) to use different methods.                                                                                                                                                                                                                                     |
+| compareMethod             | `DiffMethod`    | `DiffMethod.CHARS`             | JsDiff text diff method used for diffing strings. Check out the [guide](https://github.com/praneshr/react-diff-viewer/tree/v3.0.0#text-block-diff-comparison) to use different methods.                                                                                                                                                                                                                          |
 | hideLineNumbers           | `boolean`       | `false`                        | Show and hide line numbers.                                                                                                                                                                                                                                                                                                                                                                                      |
 | renderContent             | `function`      | `undefined`                    | Render Prop API to render code in the diff viewer. Helpful for [syntax highlighting](#syntax-highlighting)                                                                                                                                                                                                                                                                                                       |
 | onLineNumberClick         | `function`      | `undefined`                    | Event handler for line number click. `(lineId: string) => void`                                                                                                                                                                                                                                                                                                                                                  |
@@ -76,7 +78,6 @@ class Diff extends PureComponent {
 | useDarkTheme              | `boolean`       | `true`                         | To enable/disable dark theme.                                                                                                                                                                                                                                                                                                                                                                                    |
 | leftTitle                 | `string`        | `undefined`                    | Column title for left section of the diff in split view. This will be used as the only title in inline view.                                                                                                                                                                                                                                                                                                     |
 | rightTitle                | `string`        | `undefined`                    | Column title for right section of the diff in split view. This will be ignored in inline view.                                                                                                                                                                                                                                                                                                                   |
-
 
 ## Instance Methods
 
