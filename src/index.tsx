@@ -423,15 +423,16 @@ class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerSt
         </a>
       </td>
     );
+    const isUnifiedViewWithoutLineNumbers = !splitView && !hideLineNumbers;
     return (
       <tr key={`${leftBlockLineNumber}-${rightBlockLineNumber}`} className={this.styles.codeFold}>
         {!hideLineNumbers && (
           <td className={this.styles.codeFoldGutter} />
         )}
-        <td className={cn({ [this.styles.codeFoldGutter]: !splitView })} />
+        <td className={cn({ [this.styles.codeFoldGutter]: isUnifiedViewWithoutLineNumbers })} />
 
         {/* Swap columns only for unified view without line numbers */}
-        {(!splitView && !hideLineNumbers) ? (
+        {isUnifiedViewWithoutLineNumbers ? (
           <React.Fragment>
             <td />
             {content}
