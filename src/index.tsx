@@ -411,7 +411,7 @@ class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerSt
     leftBlockLineNumber: number,
     rightBlockLineNumber: number,
   ): JSX.Element => {
-    const { splitView } = this.props;
+    const { hideLineNumbers, splitView } = this.props;
     const message = this.props.codeFoldMessageRenderer
       ? this.props
         .codeFoldMessageRenderer(num, leftBlockLineNumber, rightBlockLineNumber)
@@ -425,12 +425,24 @@ class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerSt
     );
     return (
       <tr key={`${leftBlockLineNumber}-${rightBlockLineNumber}`} className={this.styles.codeFold}>
-        {!this.props.hideLineNumbers && (
+        {!hideLineNumbers && (
           <td className={this.styles.codeFoldGutter} />
         )}
         <td className={cn({ [this.styles.codeFoldGutter]: !splitView })} />
-        {splitView ? content : <td />}
-        {!splitView ? content : <td />}
+
+        {/* Swap columns only for unified view without line numbers */}
+        {(!splitView && !hideLineNumbers) ? (
+          <React.Fragment>
+            <td />
+            {content}
+          </React.Fragment>
+        ) : (
+          <React.Fragment>
+            {content}
+            <td />
+          </React.Fragment>
+        )}
+
         <td />
         <td />
       </tr>
