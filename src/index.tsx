@@ -28,6 +28,8 @@ export interface ReactDiffViewerProps {
   newValue: string;
   // Enable/Disable split view.
   splitView?: boolean;
+  // Set line Offset
+  linesOffset?: number;
   // Enable/Disable word diff.
   disableWordDiff?: boolean;
   // JsDiff text diff method from https://github.com/kpdecker/jsdiff/tree/v4.0.1#api
@@ -83,6 +85,7 @@ class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerSt
     extraLinesSurroundingDiff: 3,
     showDiffOnly: true,
     useDarkTheme: false,
+    linesOffset: 0
   };
 
   public static propTypes = {
@@ -106,6 +109,7 @@ class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerSt
       PropTypes.string,
       PropTypes.element,
     ]),
+    linesOffset: PropTypes.number
   };
 
   public constructor(props: ReactDiffViewerProps) {
@@ -441,12 +445,13 @@ class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerSt
    * Generates the entire diff view.
    */
   private renderDiff = (): JSX.Element[] => {
-    const { oldValue, newValue, splitView, disableWordDiff, compareMethod } = this.props;
+    const { oldValue, newValue, splitView, disableWordDiff, compareMethod, linesOffset } = this.props;
     const { lineInformation, diffLines } = computeLineInformation(
       oldValue,
       newValue,
       disableWordDiff,
       compareMethod,
+      linesOffset
     );
     const extraLines = this.props.extraLinesSurroundingDiff < 0
       ? 0
