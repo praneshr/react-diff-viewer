@@ -85,7 +85,7 @@ class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerSt
     extraLinesSurroundingDiff: 3,
     showDiffOnly: true,
     useDarkTheme: false,
-    linesOffset: 0
+    linesOffset: 0,
   };
 
   public static propTypes = {
@@ -109,7 +109,7 @@ class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerSt
       PropTypes.string,
       PropTypes.element,
     ]),
-    linesOffset: PropTypes.number
+    linesOffset: PropTypes.number,
   };
 
   public constructor(props: ReactDiffViewerProps) {
@@ -451,7 +451,7 @@ class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerSt
       newValue,
       disableWordDiff,
       compareMethod,
-      linesOffset
+      linesOffset,
     );
     const extraLines = this.props.extraLinesSurroundingDiff < 0
       ? 0

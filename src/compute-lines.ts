@@ -140,7 +140,7 @@ const computeLineInformation = (
   newString: string,
   disableWordDiff: boolean = false,
   compareMethod: string = DiffMethod.CHARS,
-  linesOffset: number
+  linesOffset: number = 0,
 ): ComputedLineInformation => {
   const diffArray = diff.diffLines(
     oldString.trimRight(),
