@@ -133,12 +133,14 @@ const computeDiff = (
  * @param newString New string to compare with old string.
  * @param disableWordDiff Flag to enable/disable word diff.
  * @param compareMethod JsDiff text diff method from https://github.com/kpdecker/jsdiff/tree/v4.0.1#api
+ * @param linesOffset line number to start counting from
  */
 const computeLineInformation = (
   oldString: string,
   newString: string,
   disableWordDiff: boolean = false,
   compareMethod: string = DiffMethod.CHARS,
+  linesOffset: number = 0,
 ): ComputedLineInformation => {
   const diffArray = diff.diffLines(
     oldString.trimRight(),
@@ -149,8 +151,8 @@ const computeLineInformation = (
       ignoreCase: false,
     },
   );
-  let rightLineNumber = 0;
-  let leftLineNumber = 0;
+  let rightLineNumber = linesOffset;
+  let leftLineNumber = linesOffset;
   let lineInformation: LineInformation[] = [];
   let counter = 0;
   const diffLines: number[] = [];

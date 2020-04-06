@@ -374,4 +374,40 @@ Also this info`;
         ],
       });
   });
+
+  it('Should start line counting from offset', (): void => {
+    const oldCode = 'Hello World';
+    const newCode = `My Updated Name
+Also this info`;
+
+    expect(computeLineInformation(oldCode, newCode, true, DiffMethod.WORDS, 5))
+      .toMatchObject({
+        lineInformation: [
+          {
+            right: {
+              lineNumber: 6,
+              type: 1,
+              value: 'My Updated Name',
+            },
+            left: {
+              lineNumber: 6,
+              type: 2,
+              value: 'Hello World',
+            },
+          },
+          {
+            right: {
+              lineNumber: 7,
+              type: 1,
+              value: 'Also this info',
+            },
+            left: {},
+          },
+        ],
+        diffLines: [
+          0,
+          2,
+        ],
+      });
+  });
 });
