@@ -39,7 +39,7 @@ export interface ReactDiffViewerProps {
   // Show only diff between the two values.
   showDiffOnly?: boolean;
   // Render prop to format final string before displaying them in the UI.
-  renderContent?: (source: string) => JSX.Element;
+  renderContent?: (source: string, lineNumber: number) => JSX.Element;
   // Render prop to format code fold message.
   codeFoldMessageRenderer?: (
     totalFoldedLines: number,
@@ -175,7 +175,8 @@ class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerSt
    */
   private renderWordDiff = (
     diffArray: DiffInformation[],
-    renderer?: (chunk: string) => JSX.Element,
+    lineNumber: number,
+    renderer?: (chunk: string, lineNumber: number) => JSX.Element,
   ): JSX.Element[] => {
     return diffArray.map(
       (wordDiff, i): JSX.Element => {
@@ -187,7 +188,7 @@ class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerSt
               [this.styles.wordRemoved]: wordDiff.type === DiffType.REMOVED,
             })}
           >
-            {renderer ? renderer(wordDiff.value as string) : wordDiff.value}
+            {renderer ? renderer(wordDiff.value as string, lineNumber) : wordDiff.value}
           </span>
         );
       },
@@ -223,9 +224,9 @@ class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerSt
     const removed = type === DiffType.REMOVED;
     let content;
     if (Array.isArray(value)) {
-      content = this.renderWordDiff(value, this.props.renderContent);
+      content = this.renderWordDiff(value, lineNumber, this.props.renderContent);
     } else if (this.props.renderContent) {
-      content = this.props.renderContent(value);
+      content = this.props.renderContent(value, lineNumber);
     } else {
       content = value;
     }
