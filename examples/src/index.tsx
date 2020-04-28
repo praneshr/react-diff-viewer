@@ -28,6 +28,21 @@ class Example extends React.Component<{}, ExampleState> {
     };
   }
 
+  componentDidMount() {
+    this.scrollToLine();
+  }
+
+  componentWillUnMount() {
+    this.scrollToLine();
+  }
+
+  private scrollToLine() {
+    if (location.hash) {
+      const row: HTMLElement | null = document.querySelector(location.hash);
+      row && row.scrollIntoView();
+    }
+  }
+
   private onLineNumberClick = (
     id: string,
     rowId: string,
