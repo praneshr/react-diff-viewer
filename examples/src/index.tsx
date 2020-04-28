@@ -24,13 +24,14 @@ class Example extends React.Component<{}, ExampleState> {
     super(props);
     this.state = {
       highlightLine: [],
-      enableSyntaxHighlighting: true,
+      enableSyntaxHighlighting: true
     };
   }
 
   private onLineNumberClick = (
     id: string,
-    e: React.MouseEvent<HTMLTableCellElement>,
+    rowId: string,
+    e: React.MouseEvent<HTMLTableCellElement>
   ): void => {
     let highlightLine = [id];
     if (e.shiftKey && this.state.highlightLine.length === 1) {
@@ -46,7 +47,7 @@ class Example extends React.Component<{}, ExampleState> {
       }
     }
     this.setState({
-      highlightLine,
+      highlightLine
     });
   };
 
@@ -57,34 +58,34 @@ class Example extends React.Component<{}, ExampleState> {
   };
 
   public render(): JSX.Element {
-
     return (
-      <div className="react-diff-viewer-example">
-        <div className="radial"></div>
-        <div className="banner">
-          <div className="img-container">
-            <img src={logo} alt="React Diff Viewer Logo" />
+      <div className='react-diff-viewer-example'>
+        <div className='radial'></div>
+        <div className='banner'>
+          <div className='img-container'>
+            <img src={logo} alt='React Diff Viewer Logo' />
           </div>
           <p>
             A simple and beautiful text diff viewer made with{' '}
-            <a href="https://github.com/kpdecker/jsdiff" target="_blank">
+            <a href='https://github.com/kpdecker/jsdiff' target='_blank'>
               Diff{' '}
             </a>
             and{' '}
-            <a href="https://reactjs.org" target="_blank">
+            <a href='https://reactjs.org' target='_blank'>
               React.{' '}
             </a>
-            Featuring split view, inline view, word diff, line highlight and more.
+            Featuring split view, inline view, word diff, line highlight and
+            more.
           </p>
-          <div className="cta">
-            <a href="https://github.com/praneshr/react-diff-viewer#install">
-              <button type="button" className="btn btn-primary btn-lg">
+          <div className='cta'>
+            <a href='https://github.com/praneshr/react-diff-viewer#install'>
+              <button type='button' className='btn btn-primary btn-lg'>
                 Documentation
               </button>
             </a>
           </div>
         </div>
-        <div className="diff-viewer">
+        <div className='diff-viewer'>
           <ReactDiff
             highlightLines={this.state.highlightLine}
             onLineNumberClick={this.onLineNumberClick}
@@ -93,13 +94,14 @@ class Example extends React.Component<{}, ExampleState> {
             newValue={newJs}
             renderContent={this.syntaxHighlight}
             useDarkTheme
-            leftTitle="webpack.config.js master@2178133 - pushed 2 hours ago."
-            rightTitle="webpack.config.js master@64207ee - pushed 13 hours ago."
+            leftTitle='webpack.config.js master@2178133 - pushed 2 hours ago.'
+            rightTitle='webpack.config.js master@64207ee - pushed 13 hours ago.'
+            specifier='test'
           />
         </div>
         <footer>
           Made with 💓 by{' '}
-          <a href="https://praneshravi.in" target="_blank">
+          <a href='https://praneshravi.in' target='_blank'>
             Pranesh Ravi
           </a>
         </footer>
