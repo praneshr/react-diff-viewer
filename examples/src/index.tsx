@@ -61,10 +61,24 @@ class Example extends React.Component<{}, ExampleState> {
         }
       }
     }
+    this.copyLinkToClipboard(rowId);
     this.setState({
       highlightLine
     });
   };
+
+  private copyLinkToClipboard(rowId: string) {
+    const link = `${location.origin}#${rowId}`;
+    var el = document.createElement('textarea');
+    el.value = link;
+    el.setAttribute('readonly', '');
+    el.style.position = 'absolute';
+    el.style.left = '-9999px';
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+  }
 
   private syntaxHighlight = (str: string): any => {
     if (!str) return;
