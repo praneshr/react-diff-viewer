@@ -41,7 +41,12 @@ export interface ReactDiffViewerProps {
   // Show only diff between the two values.
   showDiffOnly?: boolean;
   // Render prop to format final string before displaying them in the UI.
-  renderContent?: (source: string) => JSX.Element;
+  renderContent?: (
+    source: string,
+    lineNumber: number,
+    type: DiffType,
+    prefix: LineNumberPrefix
+  ) => JSX.Element;
   // Render prop to format code fold message.
   codeFoldMessageRenderer?: (
     totalFoldedLines: number,
@@ -176,10 +181,19 @@ class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerSt
    *
    * @param diffArray Word diff information derived from line information.
    * @param renderer Optional renderer to format diff words. Useful for syntax highlighting.
+   * @param prefix LineNumberPrefix L|R
+   * @param lineNumber the line number displayed in the gutter.
    */
   private renderWordDiff = (
     diffArray: DiffInformation[],
-    renderer?: (chunk: string) => JSX.Element,
+    prefix: LineNumberPrefix,
+    lineNumber: number,
+    renderer?: (
+      chunk: string,
+      lineNumber: number,
+      type: DiffType,
+      prefix: LineNumberPrefix
+    ) => JSX.Element,
   ): JSX.Element[] => {
     return diffArray.map(
       (wordDiff, i): JSX.Element => {
@@ -191,7 +205,12 @@ class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerSt
               [this.styles.wordRemoved]: wordDiff.type === DiffType.REMOVED,
             })}
           >
-            {renderer ? renderer(wordDiff.value as string) : wordDiff.value}
+            {renderer ? renderer(
+              wordDiff.value as string,
+              lineNumber,
+              wordDiff.type,
+              prefix,
+            ) : wordDiff.value}
           </span>
         );
       },
@@ -226,10 +245,13 @@ class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerSt
     const added = type === DiffType.ADDED;
     const removed = type === DiffType.REMOVED;
     let content;
+
+    const passedLineNumber = lineNumber !== null ? lineNumber : additionalLineNumber;
+
     if (Array.isArray(value)) {
-      content = this.renderWordDiff(value, this.props.renderContent);
+      content = this.renderWordDiff(value, prefix, passedLineNumber, this.props.renderContent);
     } else if (this.props.renderContent) {
-      content = this.props.renderContent(value);
+      content = this.props.renderContent(value, passedLineNumber, type, prefix);
     } else {
       content = value;
     }
