@@ -53,6 +53,10 @@ export interface ReactDiffViewerProps {
     lineId: string,
     event: React.MouseEvent<HTMLTableCellElement>,
   ) => void;
+  onLineContentClick?: (params: {
+    direction: 'leftCode' | 'rightCode';
+    words: string;
+  }) => void;
   // Array of line ids to highlight lines.
   highlightLines?: string[];
   // Style overrides.
@@ -171,6 +175,25 @@ class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerSt
     return (): void => { };
   };
 
+  private onLineContentClickProxy: (params: { direction: number; value: string | Array<any>; }) => any = ({ direction, value }) => {
+    let words: string | Array<any>
+    let _direction: 'leftCode' | 'rightCode'
+    if (!this.props.onLineContentClick) return () => { }
+    if (this.props.onLineContentClick) return (event: React.MouseEvent<HTMLTableCellElement>): void => {
+        event.stopPropagation()
+        event.preventDefault()
+        words = (value as string)
+        _direction = 1===direction? 'rightCode': 'leftCode'
+        if ('[object String]'!==Object.prototype.toString.call(value)) {
+            words = (value as Array<any>).map((item: { value: string }): string => item.value).join('')
+        }
+        this.props.onLineContentClick({
+            direction: _direction,
+            words
+        })
+    }
+  } 
+
   /**
    * Maps over the word diff and constructs the required React elements to show word diff.
    *
@@ -281,6 +304,7 @@ class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerSt
           </pre>
         </td>
         <td
+          onClick={ this.onLineContentClickProxy({ direction: type, value }) }
           className={cn(this.styles.content, {
             [this.styles.emptyLine]: !content,
             [this.styles.diffAdded]: added,
