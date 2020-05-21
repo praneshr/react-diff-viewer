@@ -22,6 +22,7 @@ export interface ReactDiffViewerStyles {
   titleBlock?: string;
   content?: string;
   splitView?: string;
+  plus?: string;
   [key: string]: string | undefined;
 }
 
@@ -74,18 +75,16 @@ export interface ReactDiffViewerStylesOverride {
   codeFoldGutter?: Interpolation;
   emptyLine?: Interpolation;
   content?: Interpolation;
+  plus?: Interpolation;
   titleBlock?: Interpolation;
   splitView?: Interpolation;
 }
 
 export default (
   styleOverride: ReactDiffViewerStylesOverride,
-  useDarkTheme = false,
+  useDarkTheme = false
 ): ReactDiffViewerStyles => {
-  const {
-    variables: overrideVariables = {},
-    ...styles
-  } = styleOverride;
+  const { variables: overrideVariables = {}, ...styles } = styleOverride;
 
   const themeVariables = {
     light: {
@@ -113,9 +112,9 @@ export default (
         codeFoldContentColor: '#212529',
         diffViewerTitleBackground: '#fafbfc',
         diffViewerTitleColor: '#212529',
-        diffViewerTitleBorderColor: '#eee',
+        diffViewerTitleBorderColor: '#eee'
       },
-      ...(overrideVariables.light || {}),
+      ...(overrideVariables.light || {})
     },
     dark: {
       ...{
@@ -142,10 +141,10 @@ export default (
         codeFoldContentColor: '#555a7b',
         diffViewerTitleBackground: '#2f323e',
         diffViewerTitleColor: '#555a7b',
-        diffViewerTitleBorderColor: '#353846',
+        diffViewerTitleBorderColor: '#353846'
       },
-      ...(overrideVariables.dark || {}),
-    },
+      ...(overrideVariables.dark || {})
+    }
   };
 
   const variables = useDarkTheme ? themeVariables.dark : themeVariables.light;
@@ -153,13 +152,14 @@ export default (
   const content = css({
     width: '100%',
     label: 'content',
+    position: 'relative'
   });
 
   const splitView = css({
     [`.${content}`]: {
-      width: '50%',
+      width: '50%'
     },
-    label: 'split-view',
+    label: 'split-view'
   });
 
   const diffContainer = css({
@@ -168,21 +168,21 @@ export default (
     pre: {
       margin: 0,
       whiteSpace: 'pre-wrap',
-      lineHeight: '25px',
+      lineHeight: '25px'
     },
     label: 'diff-container',
-    borderCollapse: 'collapse',
-
+    borderCollapse: 'collapse'
   });
 
   const codeFoldContent = css({
     color: variables.codeFoldContentColor,
-    label: 'code-fold-content',
+    label: 'code-fold-content'
   });
 
   const contentText = css({
     color: variables.diffViewerColor,
     label: 'content-text',
+    overflow: 'visible'
   });
 
   const titleBlock = css({
@@ -191,62 +191,62 @@ export default (
     borderBottom: `1px solid ${variables.diffViewerTitleBorderColor}`,
     label: 'title-block',
     ':last-child': {
-      borderLeft: `1px solid ${variables.diffViewerTitleBorderColor}`,
+      borderLeft: `1px solid ${variables.diffViewerTitleBorderColor}`
     },
     [`.${contentText}`]: {
-      color: variables.diffViewerTitleColor,
-    },
+      color: variables.diffViewerTitleColor
+    }
   });
 
   const lineNumber = css({
     color: variables.gutterColor,
-    label: 'line-number',
+    label: 'line-number'
   });
 
   const diffRemoved = css({
     background: variables.removedBackground,
     color: variables.removedColor,
     pre: {
-      color: variables.removedColor,
+      color: variables.removedColor
     },
     [`.${lineNumber}`]: {
-      color: variables.removedGutterColor,
+      color: variables.removedGutterColor
     },
-    label: 'diff-removed',
+    label: 'diff-removed'
   });
 
   const diffAdded = css({
     background: variables.addedBackground,
     color: variables.addedColor,
     pre: {
-      color: variables.addedColor,
+      color: variables.addedColor
     },
     [`.${lineNumber}`]: {
-      color: variables.addedGutterColor,
+      color: variables.addedGutterColor
     },
-    label: 'diff-added',
+    label: 'diff-added'
   });
 
   const wordDiff = css({
     padding: 2,
     display: 'inline-flex',
     borderRadius: 1,
-    label: 'word-diff',
+    label: 'word-diff'
   });
 
   const wordAdded = css({
     background: variables.wordAddedBackground,
-    label: 'word-added',
+    label: 'word-added'
   });
 
   const wordRemoved = css({
     background: variables.wordRemovedBackground,
-    label: 'word-removed',
+    label: 'word-removed'
   });
 
   const codeFoldGutter = css({
     backgroundColor: variables.codeFoldGutterBackground,
-    label: 'code-fold-gutter',
+    label: 'code-fold-gutter'
   });
 
   const codeFold = css({
@@ -259,14 +259,14 @@ export default (
       textDecoration: 'underline !important',
       cursor: 'pointer',
       pre: {
-        display: 'inline',
-      },
-    },
+        display: 'inline'
+      }
+    }
   });
 
   const emptyLine = css({
     backgroundColor: variables.emptyLineBackground,
-    label: 'empty-line',
+    label: 'empty-line'
   });
 
   const marker = css({
@@ -277,26 +277,26 @@ export default (
     label: 'marker',
     [`&.${diffAdded}`]: {
       pre: {
-        color: variables.addedColor,
-      },
+        color: variables.addedColor
+      }
     },
     [`&.${diffRemoved}`]: {
       pre: {
-        color: variables.removedColor,
-      },
-    },
+        color: variables.removedColor
+      }
+    }
   });
 
   const highlightedLine = css({
     background: variables.highlightBackground,
     label: 'highlighted-line',
     [`.${wordAdded}, .${wordRemoved}`]: {
-      backgroundColor: 'initial',
-    },
+      backgroundColor: 'initial'
+    }
   });
 
   const highlightedGutter = css({
-    label: 'highlighted-gutter',
+    label: 'highlighted-gutter'
   });
 
   const gutter = css({
@@ -310,37 +310,54 @@ export default (
       cursor: 'pointer',
       background: variables.gutterBackgroundDark,
       pre: {
-        opacity: 1,
-      },
+        opacity: 1
+      }
     },
     pre: {
-      opacity: 0.5,
+      opacity: 0.5
     },
     [`&.${diffAdded}`]: {
-      background: variables.addedGutterBackground,
+      background: variables.addedGutterBackground
     },
     [`&.${diffRemoved}`]: {
-      background: variables.removedGutterBackground,
+      background: variables.removedGutterBackground
     },
     [`&.${highlightedGutter}`]: {
       background: variables.highlightGutterBackground,
       '&:hover': {
-        background: variables.highlightGutterBackground,
-      },
-    },
+        background: variables.highlightGutterBackground
+      }
+    }
   });
 
   const emptyGutter = css({
     '&:hover': {
       background: variables.gutterBackground,
-      cursor: 'initial',
+      cursor: 'initial'
     },
-    label: 'empty-gutter',
+    label: 'empty-gutter'
   });
 
   const line = css({
     verticalAlign: 'baseline',
-    label: 'line',
+    label: 'line'
+  });
+
+  const plusBtn = css({
+    position: 'absolute',
+    top: '1.5px',
+    left: '-35px',
+    width: '24px',
+    height: '24px',
+    background: '#0C74EF',
+    border: 'none',
+    borderRadius: '4px',
+    color: 'white',
+    transition: 'transform .1s ease-in-out',
+    cursor: 'pointer',
+    '&:hover': {
+      transform: 'scale(1.2)'
+    }
   });
 
   const defaultStyles: any = {
@@ -363,25 +380,32 @@ export default (
     lineNumber,
     contentText,
     content,
+    plusBtn,
     codeFoldContent,
-    titleBlock,
+    titleBlock
   };
 
-  const computerOverrideStyles: ReactDiffViewerStyles = Object.keys(styles)
-    .reduce((acc, key): ReactDiffViewerStyles => ({
+  const computerOverrideStyles: ReactDiffViewerStyles = Object.keys(
+    styles
+  ).reduce(
+    (acc, key): ReactDiffViewerStyles => ({
       ...acc,
       ...{
-        [key]: css((styles as any)[key]),
-      },
-    }), {});
+        [key]: css((styles as any)[key])
+      }
+    }),
+    {}
+  );
 
-  return Object.keys(defaultStyles)
-    .reduce((acc, key): ReactDiffViewerStyles => ({
+  return Object.keys(defaultStyles).reduce(
+    (acc, key): ReactDiffViewerStyles => ({
       ...acc,
       ...{
         [key]: computerOverrideStyles[key]
           ? cx(defaultStyles[key], computerOverrideStyles[key])
-          : defaultStyles[key],
-      },
-    }), {});
+          : defaultStyles[key]
+      }
+    }),
+    {}
+  );
 };
