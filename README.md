@@ -51,11 +51,11 @@ if(a === 10) {
 `;
 
 class Diff extends PureComponent {
-	render = () => {
-		return (
-			<ReactDiffViewer oldValue={oldCode} newValue={newCode} splitView={true} />
-		);
-	};
+  render = () => {
+    return (
+      <ReactDiffViewer oldValue={oldCode} newValue={newCode} splitView={true} />
+    );
+  };
 }
 ```
 
@@ -94,7 +94,7 @@ An example using [Prism JS](https://prismjs.com)
 ```html
 // Load Prism CSS
 <link
-	href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/prism.min.css"
+  href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/prism.min.css"
 />
 
 // Load Prism JS
@@ -126,25 +126,25 @@ if(a === 10) {
 `;
 
 class Diff extends PureComponent {
-	highlightSyntax = str => (
-		<pre
-			style={{ display: 'inline' }}
-			dangerouslySetInnerHTML={{
-				__html: Prism.highlight(str, Prism.languages.javascript),
-			}}
-		/>
-	);
+  highlightSyntax = str => (
+    <pre
+      style={{ display: 'inline' }}
+      dangerouslySetInnerHTML={{
+        __html: Prism.highlight(str, Prism.languages.javascript),
+      }}
+    />
+  );
 
-	render = () => {
-		return (
-			<ReactDiffViewer
-				oldValue={oldCode}
-				newValue={newCode}
-				splitView={true}
-				renderContent={this.highlightSyntax}
-			/>
-		);
-	};
+  render = () => {
+    return (
+      <ReactDiffViewer
+        oldValue={oldCode}
+        newValue={newCode}
+        splitView={true}
+        renderContent={this.highlightSyntax}
+      />
+    );
+  };
 }
 ```
 
@@ -183,16 +183,16 @@ const newCode = `
 `;
 
 class Diff extends PureComponent {
-	render = () => {
-		return (
-			<ReactDiffViewer
-				oldValue={oldCode}
-				newValue={newCode}
-				compareMethod={DiffMethod.WORDS}
-				splitView={true}
-			/>
-		);
-	};
+  render = () => {
+    return (
+      <ReactDiffViewer
+        oldValue={oldCode}
+        newValue={newCode}
+        compareMethod={DiffMethod.WORDS}
+        splitView={true}
+      />
+    );
+  };
 }
 ```
 
@@ -312,41 +312,41 @@ if(a === 10) {
 `;
 
 class Diff extends PureComponent {
-	highlightSyntax = str => (
-		<span
-			style={{ display: 'inline' }}
-			dangerouslySetInnerHTML={{
-				__html: Prism.highlight(str, Prism.languages.javascript),
-			}}
-		/>
-	);
+  highlightSyntax = str => (
+    <span
+      style={{ display: 'inline' }}
+      dangerouslySetInnerHTML={{
+        __html: Prism.highlight(str, Prism.languages.javascript),
+      }}
+    />
+  );
 
-	render = () => {
-		const newStyles = {
-			variables: {
-				dark: {
-					highlightBackground: '#fefed5',
-					highlightGutterBackground: '#ffcd3c',
-				},
-			},
-			line: {
-				padding: '10px 2px',
-				'&:hover': {
-					background: '#a26ea1',
-				},
-			},
-		};
+  render = () => {
+    const newStyles = {
+      variables: {
+        dark: {
+          highlightBackground: '#fefed5',
+          highlightGutterBackground: '#ffcd3c',
+        },
+      },
+      line: {
+        padding: '10px 2px',
+        '&:hover': {
+          background: '#a26ea1',
+        },
+      },
+    };
 
-		return (
-			<ReactDiffViewer
-				styles={newStyles}
-				oldValue={oldCode}
-				newValue={newCode}
-				splitView={true}
-				renderContent={this.highlightSyntax}
-			/>
-		);
-	};
+    return (
+      <ReactDiffViewer
+        styles={newStyles}
+        oldValue={oldCode}
+        newValue={newCode}
+        splitView={true}
+        renderContent={this.highlightSyntax}
+      />
+    );
+  };
 }
 ```
 
