@@ -93,7 +93,7 @@ const computeDiff = (
   oldValue: string,
   newValue: string,
   compareMethod: string = DiffMethod.CHARS,
-  options?: object
+  options: object
 ): ComputedDiffInformation => {
   const diffArray: JsDiffChangeObject[] = jsDiff[compareMethod](
     oldValue,
