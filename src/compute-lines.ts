@@ -228,7 +228,8 @@ const computeLineInformation = (
                     const computedDiff = computeDiff(
                       line,
                       rightValue as string,
-                      compareMethod
+                      compareMethod,
+                      options
                     );
                     right.value = computedDiff.right;
                     left.value = computedDiff.left;
