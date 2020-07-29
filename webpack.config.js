@@ -5,58 +5,56 @@ const FavIconsWebpackPlugin = require('favicons-webpack-plugin');
 
 module.exports = {
   entry: {
-    main: './examples/src/index.tsx',
+    main: './examples/src/index.tsx'
   },
-  mode: process.env.NODE_ENV === 'production' ?
-    'production' : 'development',
+  mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
   resolve: {
-    extensions: ['.jsx', '.tsx', '.ts', '.scss', '.css', '.js'],
+    extensions: ['.jsx', '.tsx', '.ts', '.scss', '.css', '.js']
   },
   output: {
     path: path.resolve(__dirname, 'examples/dist'),
-    filename: '[name].js',
+    filename: '[name].js'
   },
   devServer: {
     contentBase: path.resolve(__dirname, 'examples/dist'),
     port: 8000,
-    hot: true,
+    hot: true
   },
   module: {
-    rules: [{
+    rules: [
+      {
         test: /\.tsx?$/,
-        use: [{
-          loader: 'ts-loader',
-          options: {
-            configFile: 'tsconfig.examples.json',
-          },
-        }],
-        exclude: /node_modules/,
+        use: [
+          {
+            loader: 'ts-loader',
+            options: {
+              configFile: 'tsconfig.examples.json'
+            }
+          }
+        ],
+        exclude: /node_modules/
       },
       {
         test: /\.s?css$/,
-        use: [
-          Css.loader,
-          'css-loader',
-          'sass-loader',
-        ],
+        use: [Css.loader, 'css-loader', 'sass-loader']
       },
       {
         test: /\.xml|.rjs|.java/,
-        use: 'raw-loader',
+        use: 'raw-loader'
       },
       {
         test: /\.svg|.png/,
-        use: 'file-loader',
-      },
-    ],
+        use: 'file-loader'
+      }
+    ]
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './examples/src/index.ejs',
+      template: './examples/src/index.ejs'
     }),
     new FavIconsWebpackPlugin('./logo-standalone.png'),
     new Css({
-      filename: 'main.css',
-    }),
-  ],
+      filename: 'main.css'
+    })
+  ]
 };

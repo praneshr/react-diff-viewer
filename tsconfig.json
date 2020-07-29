@@ -9,11 +9,8 @@
     "declaration": true,
     "downlevelIteration": true,
     "lib": ["es2017", "dom"],
-    "types": [
-      "mocha",
-      "node"
-    ]
+    "types": ["mocha", "node"]
   },
   "include": ["./src/*", "enzyme.js"],
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules"]
 }
