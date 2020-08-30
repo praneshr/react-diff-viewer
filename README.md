@@ -210,7 +210,7 @@ const defaultStyles = {
   variables: {
     light: {
       diffViewerBackground: '#fff',
-      diffViewerColor: '212529',
+      diffViewerColor: '#212529',
       addedBackground: '#e6ffed',
       addedColor: '#24292e',
       removedBackground: '#ffeef0',
