@@ -50,7 +50,7 @@ export interface ReactDiffViewerProps {
 		totalFoldedLines: number,
 		leftStartLineNumber: number,
 		rightStartLineNumber: number,
-	) => JSX.Element;
+	) => [];
 	// Event handler for line number click.
 	onLineNumberClick?: (
 		lineId: string,
@@ -417,7 +417,7 @@ class DiffViewer extends React.Component<
 		rightBlockLineNumber: number,
 	): JSX.Element => {
 		const { hideLineNumbers, splitView } = this.props;
-		const message = this.props.codeFoldMessageRenderer ? (
+		const [message, content] = this.props.codeFoldMessageRenderer ? (
 			this.props.codeFoldMessageRenderer(
 				num,
 				leftBlockLineNumber,
@@ -426,9 +426,9 @@ class DiffViewer extends React.Component<
 		) : (
 			<pre className={this.styles.codeFoldContent}>Expand {num} lines ...</pre>
 		);
-		const content = (
+		const icon = (
 			<td>
-				<a onClick={this.onBlockClickProxy(blockNumber)} tabIndex={0}>
+				<a tabIndex={0}>
 					{message}
 				</a>
 			</td>
@@ -438,28 +438,30 @@ class DiffViewer extends React.Component<
 			<tr
 				key={`${leftBlockLineNumber}-${rightBlockLineNumber}`}
 				className={this.styles.codeFold}>
-				{!hideLineNumbers && <td className={this.styles.codeFoldGutter} />}
-				<td
-					className={cn({
-						[this.styles.codeFoldGutter]: isUnifiedViewWithoutLineNumbers,
-					})}
-				/>
-
-				{/* Swap columns only for unified view without line numbers */}
+                <td
+                    onClick={this.onBlockClickProxy(blockNumber)}
+                    className={this.styles.codeFoldGutter}
+                />
 				{isUnifiedViewWithoutLineNumbers ? (
-					<React.Fragment>
-						<td />
-						{content}
-					</React.Fragment>
+					<div
+						className={this.styles.codeFoldGutter}
+                        style={{ height: '25px' }}
+                        onClick={this.onBlockClickProxy(blockNumber)}
+                    >
+						{icon}
+					</div>
 				) : (
 					<React.Fragment>
-						{content}
+						{icon}
 						<td />
 					</React.Fragment>
 				)}
-
 				<td />
-				<td />
+				<td
+                    className={this.styles.contentText}
+                >
+                    {blockNumber ? content : ''}
+                </td>
 			</tr>
 		);
 	};

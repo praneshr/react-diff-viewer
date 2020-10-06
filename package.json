@@ -13,7 +13,7 @@
 		"react-component",
 		"ui"
 	],
-	"repository": "git@github.com:praneshr/react-diff-viewer.git",
+	"repository": "git@github.com:bridgecrewio/react-diff-viewer.git",
 	"license": "MIT",
 	"author": "Pranesh Ravi<praneshpranesh@gmail.com>",
 	"main": "lib/index",
