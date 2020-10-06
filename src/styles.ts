@@ -7,6 +7,7 @@ export interface ReactDiffViewerStyles {
 	diffAdded?: string;
 	line?: string;
 	highlightedGutter?: string;
+	extraHighlightLine?: string;
 	contentText?: string;
 	gutter?: string;
 	highlightedLine?: string;
@@ -65,6 +66,7 @@ export interface ReactDiffViewerStylesOverride {
 	highlightedLine?: Interpolation;
 	lineNumber?: Interpolation;
 	highlightedGutter?: Interpolation;
+	extraHighlightLine?: Interpolation;
 	contentText?: Interpolation;
 	gutter?: Interpolation;
 	line?: Interpolation;
@@ -295,6 +297,10 @@ export default (
 		label: 'highlighted-gutter',
 	});
 
+	const extraHighlightLine = css({
+		label: 'highlighted-extra',
+	});
+
 	const gutter = css({
 		userSelect: 'none',
 		minWidth: 50,
@@ -346,6 +352,7 @@ export default (
 		splitView,
 		marker,
 		highlightedGutter,
+		extraHighlightLine,
 		highlightedLine,
 		gutter,
 		line,

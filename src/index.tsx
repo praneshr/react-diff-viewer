@@ -58,6 +58,8 @@ export interface ReactDiffViewerProps {
 	) => void;
 	// Array of line ids to highlight lines.
 	highlightLines?: string[];
+	// Array of messages to highlight lines
+    highlightMessage?: string;
 	// Style overrides.
 	styles?: ReactDiffViewerStylesOverride;
 	// Use dark theme.
@@ -84,6 +86,7 @@ class DiffViewer extends React.Component<
 		newValue: '',
 		splitView: true,
 		highlightLines: [],
+        highlightMessage: '',
 		disableWordDiff: false,
 		compareMethod: DiffMethod.CHARS,
 		styles: {},
@@ -107,6 +110,7 @@ class DiffViewer extends React.Component<
 		hideLineNumbers: PropTypes.bool,
 		showDiffOnly: PropTypes.bool,
 		highlightLines: PropTypes.arrayOf(PropTypes.string),
+        highlightMessage: PropTypes.string,
 		leftTitle: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
 		rightTitle: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
 		linesOffset: PropTypes.number,
@@ -223,6 +227,7 @@ class DiffViewer extends React.Component<
 		const highlightLine =
 			this.props.highlightLines.includes(lineNumberTemplate) ||
 			this.props.highlightLines.includes(additionalLineNumberTemplate);
+
 		const added = type === DiffType.ADDED;
 		const removed = type === DiffType.REMOVED;
 		let content;
@@ -236,6 +241,21 @@ class DiffViewer extends React.Component<
 
 		return (
 			<React.Fragment>
+                {highlightLine ? (
+                <React.Fragment>
+                    <td
+                        colSpan={2}
+                        className={cn(this.styles.gutter, {
+                            [this.styles.emptyGutter]: !lineNumber,
+                            [this.styles.diffAdded]: added,
+                            [this.styles.diffRemoved]: removed,
+                            [this.styles.highlightedGutter]: highlightLine,
+                        })}
+                    >
+                        <pre className={this.styles.highlightedGutter}>{this.props.highlightMessage}</pre>
+                    </td>
+                </React.Fragment>
+            ) : (<React.Fragment>
 				{!this.props.hideLineNumbers && (
 					<td
 						onClick={
@@ -247,7 +267,7 @@ class DiffViewer extends React.Component<
 							[this.styles.diffRemoved]: removed,
 							[this.styles.highlightedGutter]: highlightLine,
 						})}>
-						<pre className={this.styles.lineNumber}>{lineNumber}</pre>
+						<pre className={this.styles.lineNumber}>{highlightLine ? '' : lineNumber}</pre>
 					</td>
 				)}
 				{!this.props.splitView && !this.props.hideLineNumbers && (
@@ -262,9 +282,10 @@ class DiffViewer extends React.Component<
 							[this.styles.diffRemoved]: removed,
 							[this.styles.highlightedGutter]: highlightLine,
 						})}>
-						<pre className={this.styles.lineNumber}>{additionalLineNumber}</pre>
+						<pre className={this.styles.lineNumber}>{highlightLine ? '' : additionalLineNumber}</pre>
 					</td>
 				)}
+                </React.Fragment>)}
 				<td
 					className={cn(this.styles.marker, {
 						[this.styles.emptyLine]: !content,
@@ -333,6 +354,10 @@ class DiffViewer extends React.Component<
 		index: number,
 	): JSX.Element => {
 		let content;
+		const lineNumberTemplate = `${LineNumberPrefix.LEFT}-${left.lineNumber}`;
+		const additionalLineNumberTemplate = `${LineNumberPrefix.RIGHT}-${right.lineNumber}`;
+		const highlightLine = this.props.highlightLines.includes(lineNumberTemplate) || this.props.highlightLines.includes(additionalLineNumberTemplate);
+
 		if (left.type === DiffType.REMOVED && right.type === DiffType.ADDED) {
 			return (
 				<React.Fragment key={index}>
@@ -387,7 +412,7 @@ class DiffViewer extends React.Component<
 		}
 
 		return (
-			<tr key={index} className={this.styles.line}>
+			<tr key={index} className={`${this.styles.line} ${highlightLine ? this.styles.extraHighlightLine : '' }`}>
 				{content}
 			</tr>
 		);
@@ -426,30 +451,21 @@ class DiffViewer extends React.Component<
 		) : (
 			<pre className={this.styles.codeFoldContent}>Expand {num} lines ...</pre>
 		);
-		const icon = (
-			<td>
-				<a tabIndex={0}>
-					{message}
-				</a>
-			</td>
-		);
+		const icon = message;
 		const isUnifiedViewWithoutLineNumbers = !splitView && !hideLineNumbers;
 		return (
 			<tr
 				key={`${leftBlockLineNumber}-${rightBlockLineNumber}`}
 				className={this.styles.codeFold}>
-                <td
-                    onClick={this.onBlockClickProxy(blockNumber)}
-                    className={this.styles.codeFoldGutter}
-                />
 				{isUnifiedViewWithoutLineNumbers ? (
-					<div
+					<td
+                        colSpan={2}
 						className={this.styles.codeFoldGutter}
                         style={{ height: '25px' }}
                         onClick={this.onBlockClickProxy(blockNumber)}
                     >
 						{icon}
-					</div>
+					</td>
 				) : (
 					<React.Fragment>
 						{icon}
