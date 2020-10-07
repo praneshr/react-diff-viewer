@@ -45,6 +45,8 @@ export interface ReactDiffViewerProps {
 	showDiffOnly?: boolean;
 	// Render prop to format final string before displaying them in the UI.
 	renderContent?: (source: string) => JSX.Element;
+	// Render prop to format final string of highlighted extra content.
+	renderHighlightContent?: () => JSX.Element;
 	// Render prop to format code fold message.
 	codeFoldMessageRenderer?: (
 		totalFoldedLines: number,
@@ -104,6 +106,7 @@ class DiffViewer extends React.Component<
 		disableWordDiff: PropTypes.bool,
 		compareMethod: PropTypes.oneOf(Object.values(DiffMethod)),
 		renderContent: PropTypes.func,
+		renderHighlightContent: PropTypes.func,
 		onLineNumberClick: PropTypes.func,
 		extraLinesSurroundingDiff: PropTypes.number,
 		styles: PropTypes.object,
@@ -245,12 +248,7 @@ class DiffViewer extends React.Component<
                 <React.Fragment>
                     <td
                         colSpan={2}
-                        className={cn(this.styles.gutter, {
-                            [this.styles.emptyGutter]: !lineNumber,
-                            [this.styles.diffAdded]: added,
-                            [this.styles.diffRemoved]: removed,
-                            [this.styles.highlightedGutter]: highlightLine,
-                        })}
+                        className={this.styles.highlightedGutter}
                     >
                         <pre className={this.styles.highlightedGutter}>{this.props.highlightMessage}</pre>
                     </td>
@@ -401,6 +399,19 @@ class DiffViewer extends React.Component<
 				LineNumberPrefix.RIGHT,
 			);
 		}
+		if (left.type === DiffType.DEFAULT && highlightLine) {
+			console.log('highlightLine', highlightLine, left, right)
+			content = this.renderLine(left.lineNumber, left.type, LineNumberPrefix.LEFT, left.value, right.lineNumber, LineNumberPrefix.RIGHT,);
+			const extraContent = this.props.renderHighlightContent();
+			return (
+				<React.Fragment key={index}>
+					<tr className={this.styles.line}>
+						{content}
+					</tr>
+					{extraContent}
+				</React.Fragment>
+			);
+		}
 		if (right.type === DiffType.ADDED) {
 			content = this.renderLine(
 				null,
@@ -412,7 +423,7 @@ class DiffViewer extends React.Component<
 		}
 
 		return (
-			<tr key={index} className={`${this.styles.line} ${highlightLine ? this.styles.extraHighlightLine : '' }`}>
+			<tr key={index} className={this.styles.line}>
 				{content}
 			</tr>
 		);
@@ -442,7 +453,7 @@ class DiffViewer extends React.Component<
 		rightBlockLineNumber: number,
 	): JSX.Element => {
 		const { hideLineNumbers, splitView } = this.props;
-		const [message, content] = this.props.codeFoldMessageRenderer ? (
+		const [upper, lower, content] = this.props.codeFoldMessageRenderer ? (
 			this.props.codeFoldMessageRenderer(
 				num,
 				leftBlockLineNumber,
@@ -451,7 +462,7 @@ class DiffViewer extends React.Component<
 		) : (
 			<pre className={this.styles.codeFoldContent}>Expand {num} lines ...</pre>
 		);
-		const icon = message;
+		const icon = blockNumber ? upper: lower;
 		const isUnifiedViewWithoutLineNumbers = !splitView && !hideLineNumbers;
 		return (
 			<tr
