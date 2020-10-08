@@ -401,7 +401,6 @@ class DiffViewer extends React.Component<
 			);
 		}
 		if (left.type === DiffType.DEFAULT && highlightLine) {
-			console.log('highlightLine', highlightLine, left, right)
 			content = this.renderLine(left.lineNumber, left.type, LineNumberPrefix.LEFT, left.value, right.lineNumber, LineNumberPrefix.RIGHT,);
 			const extraContent = this.props.renderHighlightContent();
 			return (
