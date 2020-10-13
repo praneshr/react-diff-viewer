@@ -1,6 +1,6 @@
 {
-	"name": "react-diff-viewer",
-	"version": "3.1.1",
+	"name": "bc-react-diff-viewer",
+	"version": "3.1.2",
 	"private": false,
 	"description": "A simple and beautiful text diff viewer component made with diff and React",
 	"keywords": [
@@ -13,7 +13,7 @@
 		"react-component",
 		"ui"
 	],
-	"repository": "git@github.com:praneshr/react-diff-viewer.git",
+	"repository": "git@github.com:bridgecrewio/react-diff-viewer.git",
 	"license": "MIT",
 	"author": "Pranesh Ravi<praneshpranesh@gmail.com>",
 	"main": "lib/index",
