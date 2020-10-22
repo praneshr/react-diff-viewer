@@ -45,8 +45,6 @@ export interface ReactDiffViewerProps {
 	showDiffOnly?: boolean;
 	// Render prop to format final string before displaying them in the UI.
 	renderContent?: (source: string) => JSX.Element;
-	// Render prop to format final string of highlighted extra content.
-	renderHighlightContent?: () => JSX.Element;
 	// Render prop to format code fold message.
 	codeFoldMessageRenderer?: (
 		totalFoldedLines: number,
@@ -60,8 +58,6 @@ export interface ReactDiffViewerProps {
 	) => void;
 	// Array of line ids to highlight lines.
 	highlightLines?: string[];
-	// Array of messages to highlight lines
-    highlightMessage?: string;
 	// Style overrides.
 	styles?: ReactDiffViewerStylesOverride;
 	// Use dark theme.
@@ -88,7 +84,6 @@ class DiffViewer extends React.Component<
 		newValue: '',
 		splitView: true,
 		highlightLines: [],
-        highlightMessage: '',
 		disableWordDiff: false,
 		compareMethod: DiffMethod.CHARS,
 		styles: {},
@@ -106,14 +101,12 @@ class DiffViewer extends React.Component<
 		disableWordDiff: PropTypes.bool,
 		compareMethod: PropTypes.oneOf(Object.values(DiffMethod)),
 		renderContent: PropTypes.func,
-		renderHighlightContent: PropTypes.func,
 		onLineNumberClick: PropTypes.func,
 		extraLinesSurroundingDiff: PropTypes.number,
 		styles: PropTypes.object,
 		hideLineNumbers: PropTypes.bool,
 		showDiffOnly: PropTypes.bool,
 		highlightLines: PropTypes.arrayOf(PropTypes.string),
-        highlightMessage: PropTypes.string,
 		leftTitle: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
 		rightTitle: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
 		linesOffset: PropTypes.number,
@@ -230,7 +223,6 @@ class DiffViewer extends React.Component<
 		const highlightLine =
 			this.props.highlightLines.includes(lineNumberTemplate) ||
 			this.props.highlightLines.includes(additionalLineNumberTemplate);
-
 		const added = type === DiffType.ADDED;
 		const removed = type === DiffType.REMOVED;
 		let content;
@@ -244,16 +236,6 @@ class DiffViewer extends React.Component<
 
 		return (
 			<React.Fragment>
-                {highlightLine ? (
-                <React.Fragment>
-                    <td
-                        colSpan={2}
-                        className={this.styles.highlightedGutter}
-                    >
-                        <pre className={this.styles.highlightedGutter}>{this.props.highlightMessage}</pre>
-                    </td>
-                </React.Fragment>
-            ) : (<React.Fragment>
 				{!this.props.hideLineNumbers && (
 					<td
 						onClick={
@@ -266,7 +248,7 @@ class DiffViewer extends React.Component<
 							[this.styles.diffRemoved]: removed,
 							[this.styles.highlightedGutter]: highlightLine,
 						})}>
-						<pre className={this.styles.lineNumber}>{highlightLine ? '' : lineNumber}</pre>
+						<pre className={this.styles.lineNumber}>{lineNumber}</pre>
 					</td>
 				)}
 				{!this.props.splitView && !this.props.hideLineNumbers && (
@@ -281,10 +263,9 @@ class DiffViewer extends React.Component<
 							[this.styles.diffRemoved]: removed,
 							[this.styles.highlightedGutter]: highlightLine,
 						})}>
-						<pre className={this.styles.lineNumber}>{highlightLine ? '' : additionalLineNumber}</pre>
+						<pre className={this.styles.lineNumber}>{additionalLineNumber}</pre>
 					</td>
 				)}
-                </React.Fragment>)}
 				<td
 					className={cn(this.styles.marker, {
 						[this.styles.emptyLine]: !content,
@@ -353,10 +334,6 @@ class DiffViewer extends React.Component<
 		index: number,
 	): JSX.Element => {
 		let content;
-		const lineNumberTemplate = `${LineNumberPrefix.LEFT}-${left.lineNumber}`;
-		const additionalLineNumberTemplate = `${LineNumberPrefix.RIGHT}-${right.lineNumber}`;
-		const highlightLine = this.props.highlightLines.includes(lineNumberTemplate) || this.props.highlightLines.includes(additionalLineNumberTemplate);
-
 		if (left.type === DiffType.REMOVED && right.type === DiffType.ADDED) {
 			return (
 				<React.Fragment key={index}>
@@ -398,18 +375,6 @@ class DiffViewer extends React.Component<
 				left.value,
 				right.lineNumber,
 				LineNumberPrefix.RIGHT,
-			);
-		}
-		if (left.type === DiffType.DEFAULT && highlightLine) {
-			content = this.renderLine(left.lineNumber, left.type, LineNumberPrefix.LEFT, left.value, right.lineNumber, LineNumberPrefix.RIGHT,);
-			const extraContent = this.props.renderHighlightContent();
-			return (
-				<React.Fragment key={index}>
-					<tr className={this.styles.line}>
-						{content}
-					</tr>
-					{extraContent}
-				</React.Fragment>
 			);
 		}
 		if (right.type === DiffType.ADDED) {
