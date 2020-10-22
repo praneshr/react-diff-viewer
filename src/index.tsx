@@ -465,32 +465,38 @@ class DiffViewer extends React.Component<
 		const icon = blockNumber ? upper: lower;
 		const isUnifiedViewWithoutLineNumbers = !splitView && !hideLineNumbers;
 		return (
-			<tr
-				key={`${leftBlockLineNumber}-${rightBlockLineNumber}`}
-				className={this.styles.codeFold}>
-				{isUnifiedViewWithoutLineNumbers ? (
-					<td
-                        colSpan={2}
-						className={this.styles.codeFoldGutter}
-                        style={{ height: '25px' }}
-                        onClick={this.onBlockClickProxy(blockNumber)}
-                    >
-						{icon}
-					</td>
-				) : (
-					<React.Fragment>
-						{icon}
-						<td />
-					</React.Fragment>
-				)}
-				<td />
-				<td
-                    className={this.styles.contentText}
-                >
-                    {blockNumber ? content : ''}
-                </td>
-			</tr>
-		);
+      <tr key={`${leftBlockLineNumber}-${rightBlockLineNumber}`} className={this.styles.codeFold}>
+        {isUnifiedViewWithoutLineNumbers ? (
+          <>
+            <td
+              colSpan={2}
+              className={this.styles.codeFoldGutter}
+              style={{ height: '25px' }}
+              onClick={this.onBlockClickProxy(blockNumber)}
+            >
+              {icon}
+            </td>
+            <td />
+            <td className={this.styles.contentText}>{blockNumber ? content : ''}</td>
+          </>
+        ) : (
+          <>
+            <td
+              className={this.styles.codeFoldGutter}
+              style={{ height: '25px' }}
+              onClick={this.onBlockClickProxy(blockNumber)}
+            >
+              {icon}
+            </td>
+            <td />
+            <td className={this.styles.contentText}>{blockNumber ? content : ''}</td>
+            <td />
+            <td />
+            <td />
+          </>
+        )}
+      </tr>
+    );
 	};
 
 	/**
