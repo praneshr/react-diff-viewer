@@ -33,6 +33,8 @@ export interface ReactDiffViewerProps {
 	splitView?: boolean;
 	// Set line Offset
 	linesOffset?: number;
+	// inline policy anchor
+	policyAnchor?: string;
 	// Enable/Disable word diff.
 	disableWordDiff?: boolean;
 	// JsDiff text diff method from https://github.com/kpdecker/jsdiff/tree/v4.0.1#api
@@ -45,6 +47,8 @@ export interface ReactDiffViewerProps {
 	showDiffOnly?: boolean;
 	// Render prop to format final string before displaying them in the UI.
 	renderContent?: (source: string) => JSX.Element;
+	// Render prop to format final string before displaying them in the UI.
+	renderInlinePolicy?: (source: string | DiffInformation[]) => JSX.Element;
 	// Render prop to format code fold message.
 	codeFoldMessageRenderer?: (
 		totalFoldedLines: number,
@@ -92,6 +96,7 @@ class DiffViewer extends React.Component<
 		showDiffOnly: true,
 		useDarkTheme: false,
 		linesOffset: 0,
+		policyAnchor: undefined
 	};
 
 	public static propTypes = {
@@ -101,6 +106,7 @@ class DiffViewer extends React.Component<
 		disableWordDiff: PropTypes.bool,
 		compareMethod: PropTypes.oneOf(Object.values(DiffMethod)),
 		renderContent: PropTypes.func,
+		renderInlinePolicy: PropTypes.func,
 		onLineNumberClick: PropTypes.func,
 		extraLinesSurroundingDiff: PropTypes.number,
 		styles: PropTypes.object,
@@ -110,6 +116,7 @@ class DiffViewer extends React.Component<
 		leftTitle: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
 		rightTitle: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
 		linesOffset: PropTypes.number,
+		policyAnchor: PropTypes.string
 	};
 
 	public constructor(props: ReactDiffViewerProps) {
@@ -232,6 +239,9 @@ class DiffViewer extends React.Component<
 			content = this.props.renderContent(value);
 		} else {
 			content = value;
+		}
+		if (additionalLineNumber === -1) {
+			return this.props.renderInlinePolicy(value);
 		}
 
 		return (
@@ -386,6 +396,15 @@ class DiffViewer extends React.Component<
 				right.lineNumber,
 			);
 		}
+		if (right.type === DiffType.DEFAULT && right.lineNumber === -1) {
+			return this.renderLine(
+				null,
+				right.type,
+				LineNumberPrefix.RIGHT,
+				right.value,
+				right.lineNumber,
+			);
+		}
 
 		return (
 			<tr key={index} className={this.styles.line}>
@@ -475,6 +494,7 @@ class DiffViewer extends React.Component<
 			disableWordDiff,
 			compareMethod,
 			linesOffset,
+			policyAnchor
 		} = this.props;
 		const { lineInformation, diffLines } = computeLineInformation(
 			oldValue,
@@ -482,6 +502,7 @@ class DiffViewer extends React.Component<
 			disableWordDiff,
 			compareMethod,
 			linesOffset,
+			policyAnchor
 		);
 		const extraLines =
 			this.props.extraLinesSurroundingDiff < 0
