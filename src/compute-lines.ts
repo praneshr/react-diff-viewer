@@ -145,6 +145,7 @@ const computeLineInformation = (
 	disableWordDiff: boolean = false,
 	compareMethod: string = DiffMethod.CHARS,
 	linesOffset: number = 0,
+	policyAnchor: string,
 ): ComputedLineInformation => {
 	const diffArray = diff.diffLines(
 		oldString.trimRight(),
@@ -180,6 +181,16 @@ const computeLineInformation = (
 						(evaluateOnlyFirstLine && lineIndex !== 0)
 					) {
 						return undefined;
+					}
+					if (line.startsWith(policyAnchor)) {
+						return {
+							left: {},
+							right: {
+								value: line,
+								type: DiffType.DEFAULT,
+								lineNumber: -1
+							}
+						};
 					}
 					if (added || removed) {
 						if (!diffLines.includes(counter)) {
