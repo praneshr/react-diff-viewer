@@ -302,13 +302,6 @@ export default (
 		label: 'gutter',
 		textAlign: 'right',
 		background: variables.gutterBackground,
-		'&:hover': {
-			cursor: 'pointer',
-			background: variables.gutterBackgroundDark,
-			pre: {
-				opacity: 1,
-			},
-		},
 		pre: {
 			opacity: 0.5,
 		},
