@@ -45,6 +45,8 @@ export interface ReactDiffViewerProps {
 	hideLineNumbers?: boolean;
 	// Show only diff between the two values.
 	showDiffOnly?: boolean;
+	// Show extra lines only before diff
+    showExtraBeforeOnly?: boolean;
 	// Render prop to format final string before displaying them in the UI.
 	renderContent?: (source: string) => JSX.Element;
 	// Render prop to format final string before displaying them in the UI.
@@ -94,6 +96,7 @@ class DiffViewer extends React.Component<
 		hideLineNumbers: false,
 		extraLinesSurroundingDiff: 3,
 		showDiffOnly: true,
+        showExtraBeforeOnly: false,
 		useDarkTheme: false,
 		linesOffset: 0,
 		policyAnchor: undefined
@@ -112,6 +115,7 @@ class DiffViewer extends React.Component<
 		styles: PropTypes.object,
 		hideLineNumbers: PropTypes.bool,
 		showDiffOnly: PropTypes.bool,
+        showExtraBeforeOnly: PropTypes.bool,
 		highlightLines: PropTypes.arrayOf(PropTypes.string),
 		leftTitle: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
 		rightTitle: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
@@ -514,11 +518,16 @@ class DiffViewer extends React.Component<
 				const diffBlockStart = diffLines[0];
 				const currentPosition = diffBlockStart - i;
 				if (this.props.showDiffOnly) {
-					if (currentPosition === -extraLines) {
-						skippedLines = [];
-						diffLines.shift();
-					}
-					if (
+                    if (this.props.showExtraBeforeOnly) {
+                        if (currentPosition === -(extraLines - (extraLines - 1))) {
+                            skippedLines = [];
+                            diffLines.shift();
+                        }
+                    } else if (currentPosition === -extraLines) {
+                            skippedLines = [];
+                            diffLines.shift();
+                        }
+                    if (
 						line.left.type === DiffType.DEFAULT &&
 						(currentPosition > extraLines ||
 							typeof diffBlockStart === 'undefined') &&
