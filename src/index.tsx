@@ -43,6 +43,8 @@ export interface ReactDiffViewerProps {
 	extraLinesSurroundingDiff?: number;
 	// Show/hide line number.
 	hideLineNumbers?: boolean;
+	// Show/hide right line number.
+	hideRightLineNumbers?: boolean;
 	// Show only diff between the two values.
 	showDiffOnly?: boolean;
 	// Show extra lines only before diff
@@ -94,6 +96,7 @@ class DiffViewer extends React.Component<
 		compareMethod: DiffMethod.CHARS,
 		styles: {},
 		hideLineNumbers: false,
+		hideRightLineNumbers: false,
 		extraLinesSurroundingDiff: 3,
 		showDiffOnly: true,
         showExtraBeforeOnly: false,
@@ -114,6 +117,7 @@ class DiffViewer extends React.Component<
 		extraLinesSurroundingDiff: PropTypes.number,
 		styles: PropTypes.object,
 		hideLineNumbers: PropTypes.bool,
+		hideRightLineNumbers: PropTypes.bool,
 		showDiffOnly: PropTypes.bool,
         showExtraBeforeOnly: PropTypes.bool,
 		highlightLines: PropTypes.arrayOf(PropTypes.string),
@@ -252,10 +256,11 @@ class DiffViewer extends React.Component<
 			<React.Fragment>
 				{!this.props.hideLineNumbers && (
 					<td
+						colSpan={this.props.hideRightLineNumbers ? 2 : 1}
 						onClick={
 							lineNumber && this.onLineNumberClickProxy(lineNumberTemplate)
 						}
-						style={{ borderRight: '1px solid #e8eaef' }}
+						style={{ borderRight: this.props.hideRightLineNumbers ? '' : '1px solid #e8eaef' }}
 						className={cn(this.styles.gutter, {
 							[this.styles.emptyGutter]: !lineNumber,
 							[this.styles.diffAdded]: added,
@@ -265,7 +270,7 @@ class DiffViewer extends React.Component<
 						<pre className={this.styles.lineNumber}>{lineNumber}</pre>
 					</td>
 				)}
-				{!this.props.splitView && !this.props.hideLineNumbers && (
+				{!this.props.splitView && !this.props.hideLineNumbers && !this.props.hideRightLineNumbers && (
 					<td
 						onClick={
 							additionalLineNumber &&
