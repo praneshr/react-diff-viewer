@@ -19,6 +19,7 @@ export interface ReactDiffViewerStyles {
 	emptyGutter?: string;
 	emptyLine?: string;
 	codeFold?: string;
+	codeFoldContent?: string;
 	titleBlock?: string;
 	content?: string;
 	splitView?: string;
@@ -71,6 +72,8 @@ export interface ReactDiffViewerStylesOverride {
 	wordDiff?: Interpolation;
 	wordAdded?: Interpolation;
 	wordRemoved?: Interpolation;
+	codeFold?: Interpolation;
+	codeFoldContent?: Interpolation;
 	codeFoldGutter?: Interpolation;
 	emptyLine?: Interpolation;
 	content?: Interpolation;

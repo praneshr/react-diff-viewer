@@ -275,6 +275,7 @@ const defaultStyles = {
   wordDiff?: {}, // style object
   wordAdded?: {}, // style object
   wordRemoved?: {}, // style object
+  codeFoldContent?: {}, // style object
   codeFoldGutter?: {}, // style object
   codeFold?: {}, // style object
   emptyLine?: {}, // style object
