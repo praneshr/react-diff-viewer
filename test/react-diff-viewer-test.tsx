@@ -51,4 +51,34 @@ describe('Testing react diff viewer', (): void => {
 
     expect(node.find('table > tbody tr').length).toEqual(9);
   });
+
+  it('It should allow overriding styles', (): void => {
+    shallow(<DiffViewer
+      oldValue={oldCode}
+      newValue={newCode}
+      styles={{
+        diffContainer: { background: "red" },
+        diffRemoved: { background: "red" },
+        diffAdded: { background: "red" },
+        splitView: { background: "red" },
+        marker: { background: "red" },
+        highlightedGutter: { background: "red" },
+        highlightedLine: { background: "red" },
+        gutter: { background: "red" },
+        line: { background: "red" },
+        wordDiff: { background: "red" },
+        wordAdded: { background: "red" },
+        wordRemoved: { background: "red" },
+        codeFoldGutter: { background: "red" },
+        codeFold: { background: "red" },
+        emptyGutter: { background: "red" },
+        emptyLine: { background: "red" },
+        lineNumber: { background: "red" },
+        contentText: { background: "red" },
+        content: { background: "red" },
+        codeFoldContent: { background: "red" },
+        titleBlock: { background: "red" },
+      }}
+    />);
+  })
 });
