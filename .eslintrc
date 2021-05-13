@@ -1,12 +1,49 @@
 {
-  "extends": ["airbnb-base", "plugin:@typescript-eslint/recommended"],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": ["./tsconfig.json"]
+  },
+  "extends": [
+    "./node_modules/gts/",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "prettier"
+  ],
+  "plugins": [
+    "@typescript-eslint",
+    "prettier",
+    "jest",
+    "eslint-plugin-node"
+  ],
   "rules": {
+    "prettier/prettier": ["error"],
+    "no-underscore-dangle": "off",
+    "@typescript-eslint/restrict-template-expressions": "off",
+    "object-curly-spacing": ["error", "always"],
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": ["error"],
+    "semi-style": ["error", "last"],
     "no-tabs": "off",
     "@typescript-eslint/indent": ["error", 2],
-    "max-len": ["error", {
-      "code": 100
-    }],
+    "max-len": [
+      "error",
+      {
+        "code": 100
+      }
+    ],
     "arrow-body-style": "off",
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "mjs": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
+      }
+    ]
   },
   "settings": {
     "import/resolver": {
@@ -18,6 +55,6 @@
   "env": {
     "mocha": true,
     "node": true,
-    "browser": true,
-  },
+    "browser": true
+  }
 }
