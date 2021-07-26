@@ -260,7 +260,6 @@ class DiffViewer extends React.Component<
 						onClick={
 							lineNumber && this.onLineNumberClickProxy(lineNumberTemplate)
 						}
-						style={{ borderRight: this.props.hideRightLineNumbers ? '' : '1px solid #e8eaef' }}
 						className={cn(this.styles.gutter, {
 							[this.styles.emptyGutter]: !lineNumber,
 							[this.styles.diffAdded]: added,
