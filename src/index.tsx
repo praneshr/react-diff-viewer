@@ -302,7 +302,7 @@ class DiffViewer extends React.Component<
 						[this.styles.emptyLine]: !content,
 						[this.styles.diffAdded]: added,
 						[this.styles.diffRemoved]: removed,
-						[this.styles.highlightedLine]: highlightLine,
+						[this.styles.highlightedLine]: highlightLine
 					})}>
 					<pre className={this.styles.contentText}>{content}</pre>
 				</td>
@@ -448,7 +448,7 @@ class DiffViewer extends React.Component<
 		isSkippedCode: boolean
 	): JSX.Element => {
 		const { hideLineNumbers, splitView } = this.props;
-		const [upper, lower, neutral, content] = this.props.codeFoldMessageRenderer ? (
+		const [upper, lower, content, neutral] = this.props.codeFoldMessageRenderer ? (
 			this.props.codeFoldMessageRenderer(
 				num,
 				leftBlockLineNumber,
