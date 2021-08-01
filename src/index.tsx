@@ -260,7 +260,6 @@ class DiffViewer extends React.Component<
 						onClick={
 							lineNumber && this.onLineNumberClickProxy(lineNumberTemplate)
 						}
-						style={{ borderRight: this.props.hideRightLineNumbers ? '' : '1px solid #e8eaef' }}
 						className={cn(this.styles.gutter, {
 							[this.styles.emptyGutter]: !lineNumber,
 							[this.styles.diffAdded]: added,
@@ -287,7 +286,7 @@ class DiffViewer extends React.Component<
 				)}
 				<td
 					className={cn(this.styles.marker, {
-						[this.styles.emptyLine]: !content,
+						[this.styles.emptyLine]: !content && !lineNumber,
 						[this.styles.diffAdded]: added,
 						[this.styles.diffRemoved]: removed,
 						[this.styles.highlightedLine]: highlightLine,
@@ -299,10 +298,10 @@ class DiffViewer extends React.Component<
 				</td>
 				<td
 					className={cn(this.styles.content, {
-						[this.styles.emptyLine]: !content,
+						[this.styles.emptyLine]: !content && !lineNumber,
 						[this.styles.diffAdded]: added,
 						[this.styles.diffRemoved]: removed,
-						[this.styles.highlightedLine]: highlightLine,
+						[this.styles.highlightedLine]: highlightLine
 					})}>
 					<pre className={this.styles.contentText}>{content}</pre>
 				</td>
@@ -438,24 +437,32 @@ class DiffViewer extends React.Component<
 	 * @param blockNumber Code fold block id.
 	 * @param leftBlockLineNumber First left line number after the current code fold block.
 	 * @param rightBlockLineNumber First right line number after the current code fold block.
+	 * @param isSkippedCode
 	 */
 	private renderSkippedLineIndicator = (
 		num: number,
 		blockNumber: number,
 		leftBlockLineNumber: number,
 		rightBlockLineNumber: number,
+		isSkippedCode: boolean
 	): JSX.Element => {
 		const { hideLineNumbers, splitView } = this.props;
-		const [upper, lower, content] = this.props.codeFoldMessageRenderer ? (
+		const [upper, lower, content, neutral] = this.props.codeFoldMessageRenderer ? (
 			this.props.codeFoldMessageRenderer(
 				num,
 				leftBlockLineNumber,
-				rightBlockLineNumber,
+				rightBlockLineNumber
 			)
 		) : (
 			<pre className={this.styles.codeFoldContent}>Expand {num} lines ...</pre>
 		);
-		const icon = blockNumber ? upper: lower;
+		let icon;
+		if (blockNumber) {
+			icon = isSkippedCode ? neutral : upper;
+		} else {
+			icon = lower;
+		}
+
 		const isUnifiedViewWithoutLineNumbers = !splitView && !hideLineNumbers;
 		return (
       <tr key={`${leftBlockLineNumber}-${rightBlockLineNumber}`} className={this.styles.codeFold}>
@@ -517,7 +524,9 @@ class DiffViewer extends React.Component<
 			this.props.extraLinesSurroundingDiff < 0
 				? 0
 				: this.props.extraLinesSurroundingDiff;
+
 		let skippedLines: number[] = [];
+		let isSkippedCode = false;
 		return lineInformation.map(
 			(line: LineInformation, i: number): JSX.Element => {
 				const diffBlockStart = diffLines[0];
@@ -539,13 +548,17 @@ class DiffViewer extends React.Component<
 						!this.state.expandedBlocks.includes(diffBlockStart)
 					) {
 						skippedLines.push(i + 1);
+
 						if (i === lineInformation.length - 1 && skippedLines.length > 1) {
-							return this.renderSkippedLineIndicator(
+							const skippedLinesIndicator = this.renderSkippedLineIndicator(
 								skippedLines.length,
 								diffBlockStart,
 								line.left.lineNumber,
 								line.right.lineNumber,
+								isSkippedCode
 							);
+							isSkippedCode = true;
+							return skippedLinesIndicator;
 						}
 						return null;
 					}
@@ -558,14 +571,17 @@ class DiffViewer extends React.Component<
 				if (currentPosition === extraLines && skippedLines.length > 0) {
 					const { length } = skippedLines;
 					skippedLines = [];
+					const skippedLinesIndicator = this.renderSkippedLineIndicator(
+						length,
+						diffBlockStart,
+						line.left.lineNumber,
+						line.right.lineNumber,
+						isSkippedCode
+					);
+					isSkippedCode = true;
 					return (
 						<React.Fragment key={i}>
-							{this.renderSkippedLineIndicator(
-								length,
-								diffBlockStart,
-								line.left.lineNumber,
-								line.right.lineNumber,
-							)}
+							{skippedLinesIndicator}
 							{diffNodes}
 						</React.Fragment>
 					);
