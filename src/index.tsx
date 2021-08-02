@@ -491,8 +491,8 @@ class DiffViewer extends React.Component<
             <td />
             <td className={this.styles.contentText}>{blockNumber ? content : ''}</td>
             <td />
-            <td />
-            <td />
+            <td className={this.styles.codeFoldGutterExtras} />
+            <td className={this.styles.codeFoldGutterExtras} />
           </>
         )}
       </tr>

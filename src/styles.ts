@@ -22,6 +22,7 @@ export interface ReactDiffViewerStyles {
 	titleBlock?: string;
 	content?: string;
 	splitView?: string;
+	codeFoldGutterExtras?: string;
 	[key: string]: string | undefined;
 }
 
@@ -50,6 +51,7 @@ export interface ReactDiffViewerStylesVariables {
 	addedGutterColor?: string;
 	removedGutterColor?: string;
 	codeFoldContentColor?: string;
+	emptyGutterBackground?: string;
 }
 
 export interface ReactDiffViewerStylesOverride {
@@ -111,6 +113,8 @@ export default (
 				diffViewerTitleBackground: '#fafbfc',
 				diffViewerTitleColor: '#212529',
 				diffViewerTitleBorderColor: '#eee',
+				emptyGutterBackground: '#F6F7F9',
+				codeFoldGutterExtrasBackground: '#FFFFFF'
 			},
 			...(overrideVariables.light || {}),
 		},
@@ -140,6 +144,8 @@ export default (
 				diffViewerTitleBackground: '#2f323e',
 				diffViewerTitleColor: '#555a7b',
 				diffViewerTitleBorderColor: '#353846',
+				emptyGutterBackground: '#F6F7F9',
+				codeFoldGutterExtrasBackground: '#FFFFFF'
 			},
 			...(overrideVariables.dark || {}),
 		},
@@ -325,11 +331,18 @@ export default (
 			cursor: 'initial',
 		},
 		label: 'empty-gutter',
+		[`&:not(${diffAdded}):not(${diffRemoved})`]: {
+			background: variables.emptyGutterBackground
+		}
 	});
 
 	const line = css({
 		verticalAlign: 'baseline',
 		label: 'line',
+	});
+
+	const codeFoldGutterExtras = css({
+		background: variables.codeFoldGutterExtrasBackground
 	});
 
 	const defaultStyles: any = {
@@ -354,6 +367,7 @@ export default (
 		content,
 		codeFoldContent,
 		titleBlock,
+		codeFoldGutterExtras
 	};
 
 	const computerOverrideStyles: ReactDiffViewerStyles = Object.keys(
