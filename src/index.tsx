@@ -67,8 +67,27 @@ export interface ReactDiffViewerProps {
     isNewSelection: boolean,
     event: React.MouseEvent<HTMLTableCellElement>,
   ) => void;
+  // Comments for the left and right panels
+  comments?: {
+    L: Record<string, any>[];
+    R: Record<string, any>[];
+  };
+  // Event handler for comment click.
+  onCommentClick?: (
+    comment: Record<string, any>,
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => void;
   // Array of line ids to highlight lines.
   highlightLines?: string[];
+  /** Event handler for when the clear button is clicked.
+   * Expected to trigger a wipe for `highlightLines`.
+   */
+  onClearHighlights?: () => void;
+  /** Event handler triggered when lines are highlighted in a batch,
+   * such as when a comment that references a set of lines is clicked.
+   * @param highlightedLines
+   */
+  onHighlightLines?: (highlightedLines: string[]) => void;
   // Style overrides.
   styles?: ReactDiffViewerStylesOverride;
   // Use dark theme.
@@ -84,6 +103,13 @@ export interface ReactDiffViewerState {
   expandedBlocks?: number[];
   // Object holding additional data for each rendered line.
   lineData?: Record<string, LineData>;
+  // Object holding additional data for each rendered line.
+  sortedHighlightLines?: {
+    L: string[];
+    R: string[];
+  };
+  // Object holding additional data for each rendered line.
+  canAddNewComment?: boolean;
 }
 
 class DiffViewer extends React.Component<
@@ -104,6 +130,10 @@ ReactDiffViewerState
     canSelectLines: {
       L: true,
       R: true,
+    },
+    comments: {
+      L: [],
+      R: [],
     },
     extraLinesSurroundingDiff: 3,
     showDiffOnly: true,
@@ -136,7 +166,36 @@ ReactDiffViewerState
     this.state = {
       expandedBlocks: [],
       lineData: {},
+      sortedHighlightLines: {
+        L: [],
+        R: [],
+      },
+      canAddNewComment: true,
     };
+  }
+
+  public componentDidMount() {
+    this.setState({
+      sortedHighlightLines: {
+        L: this.props.highlightLines.filter((lineId): boolean => lineId.startsWith('L')).sort(),
+        R: this.props.highlightLines.filter((lineId): boolean => lineId.startsWith('R')).sort(),
+      },
+    });
+  }
+
+  public componentDidUpdate(
+    prevProps: Readonly<ReactDiffViewerProps>,
+    prevState: Readonly<ReactDiffViewerState>,
+    snapshot?: any,
+  ) {
+    if (prevProps.highlightLines.length !== this.props.highlightLines.length) {
+      this.setState({
+        sortedHighlightLines: {
+          L: this.props.highlightLines.filter((lineId): boolean => lineId.startsWith('L')).sort(),
+          R: this.props.highlightLines.filter((lineId): boolean => lineId.startsWith('R')).sort(),
+        },
+      });
+    }
   }
 
   /**
@@ -178,24 +237,56 @@ ReactDiffViewerState
   ) => ReactDiffViewerStyles = memoize(computeStyles);
 
   /**
+	 * Returns a function with clicked comment data in the closure.
+     * Returns an no-op function when no onCommentClick handler is supplied.
+	 *
+	 * @param comment the comment data object bound to the clicked button.
+	 */
+  private onCommentClickProxy = (comment: Record<string, any>): any => {
+    if (this.props.onCommentClick) {
+      return (e: React.MouseEvent<HTMLButtonElement>): void => {
+        const {
+          onCommentClick,
+          splitView,
+        } = this.props;
+
+        this.setState({
+          canAddNewComment: false,
+        });
+
+        if (splitView) {
+          onCommentClick(comment, e);
+        }
+      };
+    }
+    return (): void => {};
+  };
+
+  /**
 	 * Returns a function with clicked line number in the closure. Returns an no-op function when no
 	 * onLineNumberClick handler is supplied.
 	 *
 	 * @param id Line id of a line.
 	 */
   private onLineNumberClickProxy = (id: string): any => {
-    const {
-      onLineNumberClick,
-      highlightLines,
-      canSelectLines,
-    } = this.props;
-
-    const linePrefix = id[0] as keyof typeof canSelectLines;
-
-    if (onLineNumberClick && canSelectLines[linePrefix]) {
+    if (this.props.onLineNumberClick) {
       return (e: any): void => {
-        const isNewSelection = !highlightLines.includes(id);
-        this.props.onLineNumberClick(id, isNewSelection, e);
+        const {
+          highlightLines,
+          canSelectLines,
+          onLineNumberClick,
+        } = this.props;
+
+        const linePrefix = id[0] as keyof typeof canSelectLines;
+
+        if (canSelectLines[linePrefix]) {
+          this.setState({
+            canAddNewComment: true,
+          });
+
+          const isNewSelection = !highlightLines.includes(id);
+          onLineNumberClick(id, isNewSelection, e);
+        }
       };
     }
     return (): void => {};
@@ -203,6 +294,7 @@ ReactDiffViewerState
 
   /**
 	 * Updates the state with the lineData of the hovered lineNumber's line.
+     * Returns an no-op function when no onCommentClick handler is supplied.
 	 *
 	 * @param lineId id of the line.
 	 * @param lineNumber number id of the line.
@@ -230,7 +322,10 @@ ReactDiffViewerState
           const isLineHighlighted = highlightLines.includes(lineId);
 
           lineNumberText = (
-            <span className={cn('')}>
+            <span className={cn(this.styles.lineSelectButton, {
+              _add: !isLineHighlighted,
+              _remove: isLineHighlighted,
+            })}>
               { isLineHighlighted ? '-' : '+'}
             </span>
           );
@@ -302,13 +397,43 @@ ReactDiffViewerState
     additionalLineNumber?: number,
     additionalPrefix?: LineNumberPrefix,
   ): JSX.Element => {
+    const {
+      highlightLines,
+      splitView,
+      canSelectLines,
+      onClearHighlights,
+      comments,
+    } = this.props;
+
+    const {
+      sortedHighlightLines,
+      lineData,
+      canAddNewComment,
+    } = this.state;
+
     const lineNumberTemplate = `${prefix}-${lineNumber}`;
     const additionalLineNumberTemplate = `${additionalPrefix}-${additionalLineNumber}`;
-    const highlightLine = this.props.highlightLines.includes(lineNumberTemplate)
-      || this.props.highlightLines.includes(additionalLineNumberTemplate);
+    const highlightLine = highlightLines.includes(lineNumberTemplate)
+      || highlightLines.includes(additionalLineNumberTemplate);
     const added = type === DiffType.ADDED;
     const removed = type === DiffType.REMOVED;
-    let content;
+
+    let isLastHighlightLine: boolean;
+    let lineComments: Record<string, any>[];
+
+    if (splitView) {
+      isLastHighlightLine = lineNumber
+        && sortedHighlightLines[prefix]
+        && (sortedHighlightLines[prefix][sortedHighlightLines[prefix]
+          .length - 1] === lineNumberTemplate);
+
+      lineComments = comments[prefix].filter((comment) => (
+        comment.commentLines[0] === lineNumberTemplate
+      ));
+    }
+
+    let content: React.ReactNode | string;
+
     if (Array.isArray(value)) {
       content = this.renderWordDiff(value, this.props.renderContent);
     } else if (this.props.renderContent) {
@@ -316,9 +441,6 @@ ReactDiffViewerState
     } else {
       content = value;
     }
-
-    const { lineData } = this.state;
-    const { canSelectLines } = this.props;
 
     const renderedLineNumber = lineData[lineNumberTemplate]
       && lineData[lineNumberTemplate].lineNumberText
@@ -367,10 +489,13 @@ ReactDiffViewerState
             </pre>
           </td>
         )}
+
         {!this.props.splitView && !this.props.hideLineNumbers && (
           <td
             onClick={additionalLineNumber && canSelectLines[prefix]
-              ? this.onLineNumberClickProxy(additionalLineNumberTemplate)
+              ? this.onLineNumberClickProxy(
+                additionalLineNumberTemplate,
+              )
               : (): void => {}
             }
             onMouseEnter={additionalLineNumber && canSelectLines[prefix]
@@ -402,6 +527,7 @@ ReactDiffViewerState
             </pre>
           </td>
         )}
+
         <td
           className={cn(this.styles.marker, {
             [this.styles.emptyLine]: !content,
@@ -422,6 +548,40 @@ ReactDiffViewerState
             [this.styles.highlightedLine]: highlightLine,
           })}>
           <pre className={this.styles.contentText}>{content}</pre>
+
+          { canSelectLines && isLastHighlightLine && (
+            <div className={cn(this.styles.highlightActionButtons)}>
+              { canAddNewComment && (
+                <button className={cn(this.styles.addCommentButton)}>
+                  + Add comment
+                </button>
+              )}
+
+              <button
+                className={cn(this.styles.clearHighlightButton)}
+                onClick={onClearHighlights}
+              >
+                Clear
+              </button>
+            </div>
+          )}
+
+          { !!lineComments.length && (
+            <div className={cn(this.styles.commentActionButtons, {
+              _stacked: lineComments.length > 1,
+            })}>
+              { lineComments.map((comment, id): React.ReactNode => (
+                <button
+                  key={id}
+                  className={cn(this.styles.viewCommentButton)}
+                  data-hidden-comments-count={`+${lineComments.length - 1}`}
+                  onClick={this.onCommentClickProxy(comment)}
+                >
+                  { comment.commentLabel }
+                </button>
+              ))}
+            </div>
+          )}
         </td>
       </React.Fragment>
     );
@@ -480,6 +640,7 @@ ReactDiffViewerState
               LineNumberPrefix.LEFT,
               left.value,
               null,
+              LineNumberPrefix.RIGHT,
             )}
           </tr>
           <tr className={this.styles.line}>
@@ -489,6 +650,7 @@ ReactDiffViewerState
               LineNumberPrefix.RIGHT,
               right.value,
               right.lineNumber,
+              LineNumberPrefix.RIGHT,
             )}
           </tr>
         </React.Fragment>
@@ -501,6 +663,7 @@ ReactDiffViewerState
         LineNumberPrefix.LEFT,
         left.value,
         null,
+        LineNumberPrefix.RIGHT,
       );
     }
     if (left.type === DiffType.DEFAULT) {
@@ -520,6 +683,7 @@ ReactDiffViewerState
         LineNumberPrefix.RIGHT,
         right.value,
         right.lineNumber,
+        LineNumberPrefix.RIGHT,
       );
     }
 

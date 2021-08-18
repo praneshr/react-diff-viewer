@@ -22,6 +22,12 @@ export interface ReactDiffViewerStyles {
   titleBlock?: string;
   content?: string;
   splitView?: string;
+  lineSelectButton?: string;
+  highlightActionButtons?: string;
+  addCommentButton?: string;
+  clearHighlightButton?: string;
+  commentActionButtons?: string;
+  viewCommentButton?: string;
   [key: string]: string | undefined;
 }
 
@@ -76,6 +82,12 @@ export interface ReactDiffViewerStylesOverride {
   content?: Interpolation;
   titleBlock?: Interpolation;
   splitView?: Interpolation;
+  lineSelectButton?: Interpolation;
+  highlightActionButtons?: Interpolation;
+  addCommentButton?: Interpolation;
+  clearHighlightButton?: Interpolation;
+  commentActionButtons?: Interpolation;
+  viewCommentButton?: Interpolation;
 }
 
 export default (
@@ -148,6 +160,7 @@ export default (
   const variables = useDarkTheme ? themeVariables.dark : themeVariables.light;
 
   const content = css({
+    position: 'relative',
     width: '100%',
     label: 'content',
   });
@@ -339,7 +352,193 @@ export default (
     label: 'line',
   });
 
-  const defaultStyles: any = {
+  const lineSelectButton = css({
+    label: 'line-select-button',
+    position: 'relative',
+    left: '3px',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    color: '#fff',
+    width: '15px',
+    height: '15px',
+    lineHeight: '5px',
+    borderRadius: '5px',
+    marginLeft: 'auto',
+    '&._add': {
+      background: '#5840bf',
+    },
+    '&._remove': {
+      background: '#de3838',
+    },
+  });
+
+  const highlightActionButtons = css({
+    label: 'highlight-action-buttons',
+    zIndex: 9,
+    position: 'absolute',
+    top: 'calc(100% + 3px)',
+    right: '3px',
+    display: 'flex',
+    flexWrap: 'nowrap',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  });
+
+  const addCommentButton = css({
+    label: 'add-comment-button',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '20px',
+    lineHeight: '10px',
+    fontFamily: 'Monospace, sans-serif',
+    color: '#fff',
+    fontSize: '10px',
+    background: '#5840bf',
+    border: 'none',
+    borderRadius: '5px',
+    padding: '0 7px 3px 7px',
+    marginLeft: '5px',
+    cursor: 'pointer',
+    transition: '0.1s',
+    '&:hover': {
+      background: 'purple',
+    },
+    '&:focus': {
+      outline: 0,
+    },
+  });
+
+  const clearHighlightButton = css`
+    ${addCommentButton};
+    label: clear-highlight-button;
+    background: #de3838;
+    &:hover {
+      background: #bf0f0f;
+    }
+  ,
+  `;
+
+  const viewCommentButton = css`
+    label: view-comment-button;
+    z-index: 8;
+    position: relative;
+    top: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: min(100%, 25px);
+    width: 30px;
+    font-family: Monospace, sans-serif;
+    font-size: 10px;
+    color: #fff;
+    border: none;
+    background: #00a4db;
+    opacity: 0.7;
+    border-radius: 5px;
+    cursor: pointer;
+    transform: translateX(0);
+    transition: 0.2s;
+
+    &:last-of-type {
+      z-index: 9;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    &:not(:first-of-type) {
+      margin-left: 3px;
+    }
+
+    &:not(:last-of-type) {
+      //display: none;
+      position: absolute;
+      opacity: 0;
+      transform: translateX(-10px);
+      pointer-events: none;
+    }
+
+    &:hover {
+      opacity: 1 !important;
+    }
+    
+    &:focus {
+      outline: 0;
+    }
+  `;
+
+  const commentActionButtons = css`
+    label: view-comment-button;
+    z-index: 8;
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: 100%;
+    padding-right: 0;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    will-change: padding-right;
+    transition: 0.2s;
+    
+    &._stacked {
+      .${viewCommentButton} {
+        &:last-of-type {
+          //border-top-right-radius: 5px;
+          //border-bottom-right-radius: 5px;
+          //box-shadow: -2px -2px 0 rgba(17, 65, 82, 0.7), -4px -4px 0 rgba(17, 65, 82, 0.7);
+          &::after {
+            position: absolute;
+            right: 0;
+            bottom: -7px;
+            content: attr(data-hidden-comments-count);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-width: 10px;
+            height: 10px;
+            opacity: 1;
+            color: #00a4db;
+            font-size: 8px;
+            font-weight: 800;
+            border: 1px solid #00a4db;
+            border-radius: 2px;
+            background-color: #fff;
+            padding: 0 2px;
+            transform: translateX(0);
+            transition: 0.2s;
+          }
+        }
+      }
+    }
+
+    &:hover {
+      .${viewCommentButton} {
+        //display: flex;
+        position: relative;
+        opacity: 0.7;
+        pointer-events: all;
+        transform: translateX(0);
+
+        &:last-of-type {
+          //border-top-right-radius: 5px;
+          //border-bottom-right-radius: 5px;
+          //box-shadow: 0 0 0 rgba(0,0,0,0.3), 0 0 0 rgba(0,0,0,0.3);
+          
+          &::after {
+            opacity: 0;
+            transform: translateX(5px);
+          }
+        }
+      }
+    }
+  `;
+
+  const defaultStyles: ReactDiffViewerStyles = {
     diffContainer,
     diffRemoved,
     diffAdded,
@@ -361,6 +560,12 @@ export default (
     content,
     codeFoldContent,
     titleBlock,
+    lineSelectButton,
+    highlightActionButtons,
+    addCommentButton,
+    clearHighlightButton,
+    commentActionButtons,
+    viewCommentButton,
   };
 
   const computerOverrideStyles: ReactDiffViewerStyles = Object.keys(
@@ -368,9 +573,7 @@ export default (
   ).reduce(
     (acc, key): ReactDiffViewerStyles => ({
       ...acc,
-      ...{
-        [key]: css((styles as any)[key]),
-      },
+      [key]: css((styles as Record<string, Interpolation>)[key]),
     }),
     {},
   );
@@ -378,11 +581,9 @@ export default (
   return Object.keys(defaultStyles).reduce(
     (acc, key): ReactDiffViewerStyles => ({
       ...acc,
-      ...{
-        [key]: computerOverrideStyles[key]
-          ? cx(defaultStyles[key], computerOverrideStyles[key])
-          : defaultStyles[key],
-      },
+      [key]: computerOverrideStyles[key]
+        ? cx(defaultStyles[key], computerOverrideStyles[key])
+        : defaultStyles[key],
     }),
     {},
   );
