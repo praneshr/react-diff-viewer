@@ -166,9 +166,15 @@ const DiffWrapper: React.FC = (props: any) => {
     }
   };
 
-  const onCommentClick = (comment: Record<string, any>) => {
-    console.log('[COMMENT]:', comment);
+  const onCommentClick = (comment: Record<string, any>, prefix: string) => {
+    console.log('[COMMENT]:', comment, prefix);
     setHighlightLines(comment.commentLines);
+  };
+
+  const onAddNewCommentStart = (selectedLines: string[], prefix: string) => {
+    const prefixRegex = new RegExp(`${prefix}`, 'g');
+    const formattedLines = selectedLines.map(line => line.replace(prefixRegex, 'line'));
+    console.log('[SELECTED LINES]:', formattedLines, prefix);
   };
 
   const onClearHighlights = (): void => {
@@ -181,23 +187,28 @@ const DiffWrapper: React.FC = (props: any) => {
       highlightLines={highlightLines}
       onLineNumberClick={onLineNumberClick}
       onCommentClick={onCommentClick}
+      onAddNewCommentStart={onAddNewCommentStart}
       onClearHighlights={onClearHighlights}
       comments={diffComments}
     />
   );
 };
 
-export default {
+const story: ComponentMeta<typeof DiffWrapper> = {
   title: 'Components/Diff Viewer',
-  // component: DiffViewer,
   component: DiffWrapper,
   argTypes: {
     // backgroundColor: { control: 'color' },
   },
-} as ComponentMeta<typeof DiffViewer>;
+};
 
-// const Template: ComponentStory<typeof DiffViewer> = (args) => <DiffViewer {...args} />;
-const Template: ComponentStory<typeof DiffWrapper> = args => <DiffWrapper {...args} />;
+export default story;
+
+const Template: ComponentStory<typeof DiffWrapper> = (
+  args: Record<string, any>,
+): React.ReactNode => (
+  <DiffWrapper {...args} />
+);
 
 export const SplitView = Template.bind({});
 export const InlineView = Template.bind({});
@@ -226,7 +237,7 @@ if(a === 10) {
 
 const highlightLines: string[] = [];
 const canSelectLines = {
-  L: true,
+  L: false,
   R: true,
 };
 

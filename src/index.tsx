@@ -75,6 +75,13 @@ export interface ReactDiffViewerProps {
   // Event handler for comment click.
   onCommentClick?: (
     comment: Record<string, any>,
+    prefix: string,
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => void;
+  // Event handler for initialing the process for adding a new comment click.
+  onAddNewCommentStart?: (
+    selectedLines: string[],
+    prefix: string,
     event: React.MouseEvent<HTMLButtonElement>,
   ) => void;
   // Array of line ids to highlight lines.
@@ -237,12 +244,36 @@ ReactDiffViewerState
   ) => ReactDiffViewerStyles = memoize(computeStyles);
 
   /**
+	 * Returns a function with highlighted lines in the closure.
+     * Returns an no-op function when no onCommentClick handler is supplied.
+	 *
+	 * @param selectedLines the line ids of the lines to attribute the comment to.
+	 * @param prefix the line id prefix indication what half of the split view triggered the event.
+	 */
+  private onAddNewCommentProxy = (selectedLines: string[], prefix: string): any => {
+    if (this.props.onAddNewCommentStart) {
+      return (e: React.MouseEvent<HTMLButtonElement>): void => {
+        const {
+          onAddNewCommentStart,
+          splitView,
+        } = this.props;
+
+        if (splitView) {
+          onAddNewCommentStart(selectedLines, prefix, e);
+        }
+      };
+    }
+    return (): void => {};
+  };
+
+  /**
 	 * Returns a function with clicked comment data in the closure.
      * Returns an no-op function when no onCommentClick handler is supplied.
 	 *
 	 * @param comment the comment data object bound to the clicked button.
+	 * @param prefix the line id prefix indication what half of the split view triggered the event.
 	 */
-  private onCommentClickProxy = (comment: Record<string, any>): any => {
+  private onCommentClickProxy = (comment: Record<string, any>, prefix: string): any => {
     if (this.props.onCommentClick) {
       return (e: React.MouseEvent<HTMLButtonElement>): void => {
         const {
@@ -255,7 +286,7 @@ ReactDiffViewerState
         });
 
         if (splitView) {
-          onCommentClick(comment, e);
+          onCommentClick(comment, prefix, e);
         }
       };
     }
@@ -552,7 +583,10 @@ ReactDiffViewerState
           { canSelectLines && isLastHighlightLine && (
             <div className={cn(this.styles.highlightActionButtons)}>
               { canAddNewComment && (
-                <button className={cn(this.styles.addCommentButton)}>
+                <button
+                  className={cn(this.styles.addCommentButton)}
+                  onClick={this.onAddNewCommentProxy(highlightLines, prefix)}
+                >
                   + Add comment
                 </button>
               )}
@@ -575,7 +609,7 @@ ReactDiffViewerState
                   key={id}
                   className={cn(this.styles.viewCommentButton)}
                   data-hidden-comments-count={`+${lineComments.length - 1}`}
-                  onClick={this.onCommentClickProxy(comment)}
+                  onClick={this.onCommentClickProxy(comment, prefix)}
                 >
                   { comment.commentLabel }
                 </button>
