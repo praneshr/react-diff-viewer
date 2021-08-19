@@ -1,5 +1,5 @@
 {
-  "name": "react-diff-viewer",
+  "name": "@chunxei/react-diff-viewer",
   "version": "3.1.1",
   "private": false,
   "description": "A simple and beautiful text diff viewer component made with diff and React",
@@ -13,15 +13,22 @@
     "react-component",
     "ui"
   ],
-  "repository": "git@github.com:praneshr/react-diff-viewer.git",
+  "repository": "git@github.com:chunxei/react-diff-viewer.git",
   "license": "MIT",
-  "author": "Pranesh Ravi<praneshpranesh@gmail.com>",
+  "author": {
+    "name": "Mel Jatau",
+    "email": "meljatau@gmail.com"
+  },
+  "contributors": [
+    { "name": "Pranesh Ravi", "email": "praneshpranesh@gmail.com" }
+  ],
   "main": "lib/index",
   "typings": "lib/index",
   "scripts": {
     "build": "tsc --outDir lib/",
     "build:examples": "webpack --progress --colors",
     "build:watch": "tsc --outDir lib/ -w",
+    "prepublishOnly": "yarn build",
     "publish:examples": "NODE_ENV=production yarn build:examples && gh-pages -d examples/dist -r $GITHUB_REPO_URL",
     "publish:examples:local": "NODE_ENV=production yarn build:examples && gh-pages -d examples/dist",
     "start:examples": "webpack-dev-server --open --hot --inline",

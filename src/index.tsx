@@ -458,7 +458,7 @@ ReactDiffViewerState
         && (sortedHighlightLines[prefix][sortedHighlightLines[prefix]
           .length - 1] === lineNumberTemplate);
 
-      lineComments = comments[prefix].filter((comment) => (
+      lineComments = comments && comments[prefix].filter((comment): boolean => (
         comment.commentLines[0] === lineNumberTemplate
       ));
     }
@@ -600,14 +600,17 @@ ReactDiffViewerState
             </div>
           )}
 
-          { !!lineComments.length && (
+          { !!lineComments && !!lineComments.length && (
             <div className={cn(this.styles.commentActionButtons, {
               _stacked: lineComments.length > 1,
+              _urgent: lineComments.some((comment): boolean => comment.isUrgent),
             })}>
               { lineComments.map((comment, id): React.ReactNode => (
                 <button
                   key={id}
-                  className={cn(this.styles.viewCommentButton)}
+                  className={cn(this.styles.viewCommentButton, {
+                    _urgent: comment.isUrgent,
+                  })}
                   data-hidden-comments-count={`+${lineComments.length - 1}`}
                   onClick={this.onCommentClickProxy(comment, prefix)}
                 >

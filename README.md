@@ -12,23 +12,23 @@ A simple and beautiful text diff viewer component made with [Diff](https://githu
 
 Inspired from Github diff viewer, it includes features like split view, inline view, word diff, line highlight and more. It is highly customizable and it supports almost all languages.
 
-Check [here](https://github.com/praneshr/react-diff-viewer/tree/v2.0) for v2.0
+[comment]: <> (Check [here]&#40;https://github.com/praneshr/react-diff-viewer/tree/v2.0&#41; for v2.0)
 
 ## Install
 
 ```bash
-yarn add react-diff-viewer
+yarn add @chunxei/react-diff-viewer
 
 # or
 
-npm i react-diff-viewer
+npm i @chunxei/react-diff-viewer
 ```
 
 ## Usage
 
 ```javascript
 import React, { PureComponent } from 'react';
-import ReactDiffViewer from 'react-diff-viewer';
+import ReactDiffViewer from '@chunxei/react-diff-viewer';
 
 const oldCode = `
 const a = 10
@@ -41,6 +41,7 @@ if(a > 10) {
 
 console.log('done')
 `;
+
 const newCode = `
 const a = 10
 const boo = 10
@@ -75,7 +76,7 @@ class Diff extends PureComponent {
 | highlightLines            | `array[string]` | `[]`                           | List of lines to be highlighted. Works together with `onLineNumberClick`. Line number are prefixed with `L` and `R` for the left and right section of the diff viewer, respectively. For example, `L-20` means 20th line in the left pane. To highlight a range of line numbers, pass the prefixed line number as an array. For example, `[L-2, L-3, L-4, L-5]` will highlight the lines `2-5` in the left pane.  |
 | onClearHighlights         | `function`      | `undefined`                     | Event handler for when the clear button is clicked. Expected to trigger a wipe for `highlightLines`.                                                                                                                                                                                                                                                                                                            |
 | onHighlightLines          | `function`      | `undefined`                     | Event handler triggered when lines are highlighted in a batch, such as when a comment that references a set of lines is clicked.                                                                                                                                                                                                                                                                                |
-| comments      | `{ L: array[object]; R: array[object] }`     | `{ L: [], R: [] }`      | Comments for the respective panels. Each comment object must contain a `commentLines: string[]` field that holds the line ids of the lines the comment is for, and a `commentLabel: string` field holding the label to be displayed on the comment button.                                                                                                                                              |
+| comments      | `{ L: array[object]; R: array[object] }`     | `{ L: [], R: [] }`      | Comments for the respective panels. Each comment object must contain a `commentLines: string[]` field that holds the line ids of the lines the comment is for, a `commentLabel: string` field holding the label to be displayed on the comment button, and a `isUrgent: boolean` field to style the button with the `_urgent` class.                                                                      |
 | onCommentClick            | `function`      | `undefined`                     | Event handler for comment click.                                                                                                                                                                                                                                                                                                                                                                                 |
 | onAddNewCommentStart      | `function`      | `undefined`                     | Returns a function with highlighted lines in the closure.                                                                                                                                                                                                                                                                                                                                                        |
 | showDiffOnly              | `boolean`       | `true`                         | Shows only the diffed lines and folds the unchanged lines                                                                                                                                                                                                                                                                                                                                                        |
@@ -109,7 +110,7 @@ An example using [Prism JS](https://prismjs.com)
 
 ```javascript
 import React, { PureComponent } from 'react';
-import ReactDiffViewer from 'react-diff-viewer';
+import ReactDiffViewer from '@chunxei/react-diff-viewer';
 
 const oldCode = `
 const a = 10
@@ -122,6 +123,7 @@ if(a > 10) {
 
 console.log('done')
 `;
+
 const newCode = `
 const a = 10
 const boo = 10
@@ -172,7 +174,7 @@ enum DiffMethod {
 
 ```javascript
 import React, { PureComponent } from 'react';
-import ReactDiffViewer, { DiffMethod } from 'react-diff-viewer';
+import ReactDiffViewer, { DiffMethod } from '@chunxei/react-diff-viewer';
 
 const oldCode = `
 {
@@ -180,6 +182,7 @@ const oldCode = `
   "description": null
 }
 `;
+
 const newCode = `
 {
   "name": "My updated name",
@@ -302,7 +305,7 @@ For keys other than `variables`, the value can either be an object or string int
 
 ```javascript
 import React, { PureComponent } from 'react';
-import ReactDiffViewer from 'react-diff-viewer';
+import ReactDiffViewer from '@chunxei/react-diff-viewer';
 
 const oldCode = `
 const a = 10
@@ -315,6 +318,7 @@ if(a > 10) {
 
 console.log('done')
 `;
+
 const newCode = `
 const a = 10
 const boo = 10
