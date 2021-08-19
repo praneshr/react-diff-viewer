@@ -430,7 +430,7 @@ export default (
     justify-content: center;
     align-items: center;
     height: min(100%, 25px);
-    width: 30px;
+    min-width: 30px;
     font-family: Monospace, sans-serif;
     font-size: 10px;
     color: #fff;
@@ -438,6 +438,7 @@ export default (
     background: #00a4db;
     opacity: 0.7;
     border-radius: 5px;
+    padding: 0 5px;
     cursor: pointer;
     transform: translateX(0);
     transition: 0.2s;
@@ -466,6 +467,11 @@ export default (
     
     &:focus {
       outline: 0;
+    }
+    
+    &._urgent {
+      font-weight: 700;
+      background: red;
     }
   `;
 
@@ -511,6 +517,17 @@ export default (
             padding: 0 2px;
             transform: translateX(0);
             transition: 0.2s;
+          }
+        }
+      }
+      
+      &._urgent {
+        .${viewCommentButton} {
+          &:last-of-type {
+            &::after {
+              color: red;
+              border: 1px solid red;
+            }
           }
         }
       }

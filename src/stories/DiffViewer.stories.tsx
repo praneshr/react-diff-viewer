@@ -13,6 +13,7 @@ const comments = {
       replies: [1, 2, 3],
       resolved: false,
       subscribed: [] as Record<string, any>[],
+      isUrgent: true,
       target: {
         createdAt: '2021-07-09T14:36:49.542Z',
         description: 'line-1,line-2,line-3,line-4',
@@ -65,6 +66,7 @@ const comments = {
       replies: [1,2,3],
       resolved: false,
       subscribed: [] as Record<string, any>[],
+      isUrgent: true,
       target: {
         createdAt: '2021-07-09T14:36:49.542Z',
         description: 'line-3,line-4',
@@ -235,33 +237,22 @@ if(a === 10) {
 }
 `;
 
-const highlightLines: string[] = [];
-const canSelectLines = {
-  L: false,
-  R: true,
-};
-
-const onLineNumberClick = (lineNumber: string, isNewSelection: boolean): void => {
-  if (isNewSelection) {
-    highlightLines.push(lineNumber);
-  } else {
-    highlightLines.splice(highlightLines.indexOf(lineNumber), 1);
-  }
-};
-
 SplitView.args = {
   oldValue: oldCode,
   newValue: newCode,
   splitView: true,
-  onLineNumberClick,
-  highlightLines,
-  canSelectLines,
+  canSelectLines: {
+    L: false,
+    R: true,
+  },
 };
 
 InlineView.args = {
   oldValue: oldCode,
   newValue: newCode,
   splitView: false,
-  onLineNumberClick,
-  highlightLines,
+  canSelectLines: {
+    L: false,
+    R: false,
+  },
 };
