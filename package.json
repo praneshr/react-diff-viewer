@@ -17,7 +17,8 @@
   "license": "MIT",
   "author": {
     "name": "Mel Jatau",
-    "email": "meljatau@gmail.com"
+    "email": "meljatau@gmail.com",
+    "website": "https://github.com/Chunxei/react-diff-viewer"
   },
   "contributors": [
     {
