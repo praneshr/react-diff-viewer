@@ -5,16 +5,14 @@
 <br/>
 
 [![Build Status](https://travis-ci.com/praneshr/react-diff-viewer.svg?branch=master)](https://travis-ci.com/praneshr/react-diff-viewer)
-[![npm version](https://badge.fury.io/js/react-diff-viewer.svg)](https://badge.fury.io/js/react-diff-viewer)
-[![GitHub license](https://img.shields.io/github/license/praneshr/react-diff-viewer.svg)](https://github.com/praneshr/react-diff-viewer/blob/master/LICENSE)
+[![npm version](https://badge.fury.io/js/%40chunxei%2Freact-diff-viewer.svg)](https://badge.fury.io/js/%40chunxei%2Freact-diff-viewer.svg)
+[![GitHub license](https://img.shields.io/github/license/Chunxei/react-diff-viewer)](https://github.com/chunxei/react-diff-viewer/blob/master/LICENSE)
 
-**NOTE: This is a fork of Pranesh Ravi's [react-diff-viewer](https://github.com/praneshr/react-diff-viewer) with added hooks and features that allow for a more fluid multilline selection, and commenting.**
+**NOTE: This is a fork of Pranesh Ravi's [react-diff-viewer](https://github.com/praneshr/react-diff-viewer) with added hooks and features that allow for more fluid multilline selection and enable commenting.**
 
 A simple and beautiful text diff viewer component made with [Diff](https://github.com/kpdecker/jsdiff) and [React](https://reactjs.org).
 
 Inspired from Github diff viewer, it includes features like split view, inline view, word diff, line highlight and more. It is highly customizable and it supports almost all languages.
-
-[comment]: <> (Check [here]&#40;https://github.com/praneshr/react-diff-viewer/tree/v2.0&#41; for v2.0)
 
 ## Install
 
@@ -89,7 +87,7 @@ class Diff extends PureComponent {
 | rightTitle                | `string`        | `undefined`                    | Column title for right section of the diff in split view. This will be ignored in inline view.                                                                                                                                                                                                                                                                                                                   |
 | linesOffset               | `number`        | `0`                            | Number to start count code lines from.                                                                                                                                                                                                                                                                                                                                                                           |
 
-### Added from 3.2.0
+### Added from v3.2.0
 | Prop                      | Type            | Default                        | Description                                                                                                                                                                                                                                                                                                                                                                                                      |
 | ------------------------- | --------------- | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | onHighlightLines          | `function`      | `undefined`                     | Event handler triggered when lines are highlighted in a batch, such as when a comment that references a set of lines is clicked.                                                                                                                                                                                                                                                                                |
@@ -301,7 +299,7 @@ const defaultStyles = {
   titleBlock?: {}, // style object
   splitView?: {}, // style object
   
-  // Added from 3.2.0
+  // Added from v3.2.0
   highlightActionButtons?: {}, // style object
   lineSelectButton?: {}, // style object
   addCommentButton?: {}, // style object

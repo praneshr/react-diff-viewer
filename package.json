@@ -1,6 +1,6 @@
 {
   "name": "@chunxei/react-diff-viewer",
-  "version": "3.2.0",
+  "version": "3.2.1",
   "private": false,
   "description": "A simple and beautiful text diff viewer component made with diff and React",
   "keywords": [
@@ -17,7 +17,8 @@
   "license": "MIT",
   "author": {
     "name": "Mel Jatau",
-    "email": "meljatau@gmail.com"
+    "email": "meljatau@gmail.com",
+    "website": "https://github.com/Chunxei/react-diff-viewer"
   },
   "contributors": [
     {
