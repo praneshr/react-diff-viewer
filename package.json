@@ -1,6 +1,6 @@
 {
   "name": "@chunxei/react-diff-viewer",
-  "version": "3.1.1",
+  "version": "3.2.0",
   "private": false,
   "description": "A simple and beautiful text diff viewer component made with diff and React",
   "keywords": [
@@ -20,7 +20,10 @@
     "email": "meljatau@gmail.com"
   },
   "contributors": [
-    { "name": "Pranesh Ravi", "email": "praneshpranesh@gmail.com" }
+    {
+      "name": "Pranesh Ravi",
+      "email": "praneshpranesh@gmail.com"
+    }
   ],
   "main": "lib/index",
   "typings": "lib/index",
