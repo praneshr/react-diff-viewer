@@ -931,10 +931,26 @@ ReactDiffViewerState
           colSpan={splitView ? colSpanOnSplitView : colSpanOnInlineView}
           className={this.styles.titleBlock}>
           <pre className={this.styles.contentText}>{leftTitle}</pre>
+
+          { splitView && (
+            <span className={cn(this.styles.accessTag, {
+              _readonly: !this.props.canSelectLines.L,
+              _readwrite: this.props.canSelectLines.L,
+            })}>
+              { this.props.canSelectLines.L ? 'read/write' : 'readonly' }
+            </span>
+          )}
         </td>
         {splitView && (
           <td colSpan={colSpanOnSplitView} className={this.styles.titleBlock}>
             <pre className={this.styles.contentText}>{rightTitle}</pre>
+
+            <span className={cn(this.styles.accessTag, {
+              _readonly: !this.props.canSelectLines.R,
+              _readwrite: this.props.canSelectLines.R,
+            })}>
+              { this.props.canSelectLines.R ? 'read/write' : 'readonly' }
+            </span>
           </td>
         )}
       </tr>

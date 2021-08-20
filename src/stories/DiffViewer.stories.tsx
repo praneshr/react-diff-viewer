@@ -16,7 +16,7 @@ const comments = {
       isUrgent: true,
       target: {
         createdAt: '2021-07-09T14:36:49.542Z',
-        description: 'line-2,line-3,line-4',
+        description: 'line-1,line-3,line-4',
         id: '60e85bc129eea948453cd3ad',
         type: 'code-fragment',
         updatedAt: '2021-07-09T14:36:49.542Z',
@@ -42,7 +42,7 @@ const comments = {
       isUrgent: false,
       target: {
         createdAt: '2021-07-09T14:36:49.542Z',
-        description: 'line-2,line-3,line-4',
+        description: 'line-1,line-3,line-4',
         id: '60e85bc129eea948453cd3ad',
         type: 'code-fragment',
         updatedAt: '2021-07-09T14:36:49.542Z',

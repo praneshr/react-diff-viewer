@@ -28,6 +28,7 @@ export interface ReactDiffViewerStyles {
   clearHighlightButton?: string;
   commentActionButtons?: string;
   viewCommentButton?: string;
+  accessTag?: string;
   [key: string]: string | undefined;
 }
 
@@ -88,6 +89,7 @@ export interface ReactDiffViewerStylesOverride {
   clearHighlightButton?: Interpolation;
   commentActionButtons?: Interpolation;
   viewCommentButton?: Interpolation;
+  accessTag?: Interpolation;
 }
 
 export default (
@@ -197,6 +199,7 @@ export default (
   });
 
   const titleBlock = css({
+    position: 'relative',
     background: variables.diffViewerTitleBackground,
     padding: 10,
     borderBottom: `1px solid ${variables.diffViewerTitleBorderColor}`,
@@ -480,7 +483,7 @@ export default (
       color: #fff;
       font-weight: 700;
       background: rgba(255, 0, 0, 0.7);
-      border: 1px solid rgba(255, 0, 0, 0.7);
+      border: 1px solid rgba(255, 0, 0, 0);
 
       &:hover {
         background: rgba(255, 0, 0, 1);
@@ -559,6 +562,29 @@ export default (
     }
   `;
 
+  const accessTag = css`
+    position: absolute;
+    right: 20px;
+    top: calc(50% - 8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: monospace, sans-serif;
+    font-size: 10px;
+    opacity: 0.7;
+    color: #fff;
+    border-radius: 5px;
+    padding: 2px 7px 4px 7px;
+
+    &._readonly {
+      background: #b8b3b3;
+    }
+
+    &._readwrite {
+      background: #00a4db;
+    }
+  `;
+
   const defaultStyles: ReactDiffViewerStyles = {
     diffContainer,
     diffRemoved,
@@ -587,6 +613,7 @@ export default (
     clearHighlightButton,
     commentActionButtons,
     viewCommentButton,
+    accessTag,
   };
 
   const computerOverrideStyles: ReactDiffViewerStyles = Object.keys(
