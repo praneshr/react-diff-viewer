@@ -434,9 +434,13 @@ export default (
     min-width: 25px;
     font-family: Monospace, sans-serif;
     font-size: 10px;
-    color: #fff;
-    border: none;
-    background: rgba(0, 164, 219, 0.7);
+    font-weight: 700;
+    color: #f15832;
+    //color: #fff;
+    //border: none;
+    //background: rgba(0, 164, 219, 0.7);
+    background: rgba(241, 88, 50, 0.2);
+    border: 1px solid rgba(241, 88, 50, 0.5);
     opacity: 1;
     //opacity: 0.7;
     border-radius: 5px;
@@ -447,6 +451,7 @@ export default (
 
     &:last-of-type {
       z-index: 9;
+      border-right: none;
       border-top-right-radius: 0;
       border-bottom-right-radius: 0;
     }
@@ -456,16 +461,15 @@ export default (
     }
 
     &:not(:last-of-type) {
-      //display: none;
-      position: absolute;
       opacity: 0;
-      transform: translateX(-10px);
+      transform: translateX(30px);
       pointer-events: none;
     }
 
     &:hover {
-      //opacity: 1 !important;
-      background: rgb(0, 164, 219);
+      //background: rgb(0, 164, 219);
+      background: rgba(241, 88, 50, 0.5);
+      color: #fff;
     }
 
     &:focus {
@@ -473,10 +477,12 @@ export default (
     }
 
     &._urgent {
+      color: #fff;
       font-weight: 700;
       background: rgba(255, 0, 0, 0.7);
+      border: 1px solid rgba(255, 0, 0, 0.7);
+
       &:hover {
-        //opacity: 1 !important;
         background: rgba(255, 0, 0, 1);
       }
     }
@@ -501,30 +507,24 @@ export default (
     &._stacked {
       ${interpolateClassname(viewCommentButton)} {
         &:last-of-type {
-          //border-top-right-radius: 5px;
-          //border-bottom-right-radius: 5px;
-          //box-shadow: -2px -2px 0 rgba(17, 65, 82, 0.7), -4px -4px 0 rgba(17, 65, 82, 0.7);
           &::after {
             z-index: 9;
             position: absolute;
-            right: 0;
-            bottom: -6px;
+            left: -20px;
+            bottom: 2px;
             content: attr(data-hidden-comments-count);
             display: flex;
             justify-content: center;
             align-items: center;
             min-width: 10px;
-            height: 9px;
             background: #fff;
             opacity: 1;
-            //color: #00a4db;
-            color: #5840bf;
+            color: #00a4db;
             font-size: 8px;
             font-weight: 800;
-            //border: 1px solid #00a4db;
-            border: 1px solid #5840bf;
+            border: 1px solid #00a4db;
             border-radius: 2px;
-            padding: 0 2px;
+            padding: 1px 2px;
             transform: translateX(0);
             transition: 0.2s;
           }
@@ -545,20 +545,14 @@ export default (
 
     &:hover {
       ${interpolateClassname(viewCommentButton)} {
-        //display: flex;
-        position: relative;
         opacity: 1;
         pointer-events: all;
         transform: translateX(0);
 
         &:last-of-type {
-          //border-top-right-radius: 5px;
-          //border-bottom-right-radius: 5px;
-          //box-shadow: 0 0 0 rgba(0,0,0,0.3), 0 0 0 rgba(0,0,0,0.3);
-          
           &::after {
             opacity: 0;
-            transform: translateX(5px);
+            transform: translateX(20px);
           }
         }
       }

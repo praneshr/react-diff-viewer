@@ -302,12 +302,15 @@ ReactDiffViewerState
       return (e: React.MouseEvent<HTMLButtonElement>): void => {
         const {
           onCommentClick,
+          onClearHighlights,
           splitView,
         } = this.props;
 
         this.setState({
           canAddNewComment: false,
         });
+
+        onClearHighlights();
 
         if (splitView) {
           onCommentClick(comment, comment.commentLines, prefix, e);

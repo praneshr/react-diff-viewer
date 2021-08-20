@@ -31,6 +31,32 @@ const comments = {
       },
       _id: '60e85f014a0640540764617e',
     },
+    {
+      app: '6070158da0299934b7037d17',
+      comment: "* check's pulse *",
+      createdAt: '2021-07-09T14:36:49.542Z',
+      module: '60e859d3b267df4bc3c6159d',
+      replies: [1],
+      resolved: false,
+      subscribed: [] as Record<string, any>[],
+      isUrgent: false,
+      target: {
+        createdAt: '2021-07-09T14:36:49.542Z',
+        description: 'line-2,line-3,line-4',
+        id: '60e85bc129eea948453cd3ad',
+        type: 'code-fragment',
+        updatedAt: '2021-07-09T14:36:49.542Z',
+      },
+      user: {
+        avatar: '',
+        avatarColor: '#C9C9C9',
+        email: 'enterprise@mailinator.com',
+        name: 'Enterprise Architect',
+        _id: '607013b3731c4c20f01eaab5',
+        __v: 0,
+      },
+      _id: '60e85f014a0640540764617e',
+    },
   ] as Record<string, any>[],
   R: [
     {
