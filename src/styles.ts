@@ -517,10 +517,12 @@ export default (
             height: 9px;
             background: #fff;
             opacity: 1;
-            color: #00a4db;
+            //color: #00a4db;
+            color: #5840bf;
             font-size: 8px;
             font-weight: 800;
-            border: 1px solid #00a4db;
+            //border: 1px solid #00a4db;
+            border: 1px solid #5840bf;
             border-radius: 2px;
             padding: 0 2px;
             transform: translateX(0);

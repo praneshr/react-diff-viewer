@@ -158,7 +158,8 @@ const DiffWrapper: React.FC = (props: any) => {
       });
   });
 
-  const onLineNumberClick = (lineId: string, isNewSelection: boolean): void => {
+  const onLineNumberClick = (lineId: string, isNewSelection: boolean, prefix: string): void => {
+    console.log('[SELECTED LINE]:', lineId, prefix);
     if (isNewSelection) {
       setHighlightLines((prevState: string[]) => [...prevState, lineId]);
     } else {
@@ -168,9 +169,9 @@ const DiffWrapper: React.FC = (props: any) => {
     }
   };
 
-  const onCommentClick = (comment: Record<string, any>, prefix: string) => {
-    console.log('[COMMENT]:', comment, prefix);
-    setHighlightLines(comment.commentLines);
+  const onCommentClick = (comment: Record<string, any>, commentLines: string[], prefix: string) => {
+    console.log('[COMMENT]:', comment, commentLines, prefix);
+    setHighlightLines(commentLines);
   };
 
   const onAddNewCommentStart = (selectedLines: string[], prefix: string) => {

@@ -76,6 +76,7 @@ export interface ReactDiffViewerProps {
   // Event handler for comment click.
   onCommentClick?: (
     comment: Record<string, any>,
+    commentLines: string[],
     prefix: string,
     event: React.MouseEvent<HTMLButtonElement>,
   ) => void;
@@ -93,9 +94,9 @@ export interface ReactDiffViewerProps {
   onClearHighlights?: () => void;
   /** Event handler triggered when lines are highlighted in a batch,
    * such as when a comment that references a set of lines is clicked.
-   * @param highlightedLines
+   * @param highlightedLines array of line Ids of the highlighted lines
    */
-  onHighlightLines?: (highlightedLines: string[]) => void;
+  onHighlightLines?: (highlightedLines: string[], prefix: string) => void;
   // Style overrides.
   styles?: ReactDiffViewerStylesOverride;
   // Use dark theme.
@@ -287,7 +288,7 @@ ReactDiffViewerState
         });
 
         if (splitView) {
-          onCommentClick(comment, prefix, e);
+          onCommentClick(comment, comment.commentLines, prefix, e);
         }
       };
     }
