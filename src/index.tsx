@@ -65,6 +65,7 @@ export interface ReactDiffViewerProps {
   onLineNumberClick?: (
     lineId: string,
     isNewSelection: boolean,
+    prefix: string,
     event: React.MouseEvent<HTMLTableCellElement>,
   ) => void;
   // Comments for the left and right panels
@@ -299,7 +300,7 @@ ReactDiffViewerState
 	 *
 	 * @param id Line id of a line.
 	 */
-  private onLineNumberClickProxy = (id: string): any => {
+  private onLineNumberClickProxy = (id: string, prefix: string): any => {
     if (this.props.onLineNumberClick) {
       return (e: any): void => {
         const {
@@ -316,7 +317,7 @@ ReactDiffViewerState
           });
 
           const isNewSelection = !highlightLines.includes(id);
-          onLineNumberClick(id, isNewSelection, e);
+          onLineNumberClick(id, isNewSelection, prefix, e);
         }
       };
     }
@@ -488,7 +489,7 @@ ReactDiffViewerState
         {!this.props.hideLineNumbers && (
           <td
             onClick={lineNumber && canSelectLines[prefix]
-              ? this.onLineNumberClickProxy(lineNumberTemplate)
+              ? this.onLineNumberClickProxy(lineNumberTemplate, prefix)
               : (): void => {}
             }
             onMouseEnter={lineNumber && canSelectLines[prefix]
@@ -526,6 +527,7 @@ ReactDiffViewerState
             onClick={additionalLineNumber && canSelectLines[prefix]
               ? this.onLineNumberClickProxy(
                 additionalLineNumberTemplate,
+                additionalPrefix,
               )
               : (): void => {}
             }
@@ -592,7 +594,7 @@ ReactDiffViewerState
               )}
 
               <button
-                className={cn(this.styles.clearHighlightButton)}
+                className={cn(this.styles.addCommentButton, this.styles.clearHighlightButton)}
                 onClick={onClearHighlights}
               >
                 Clear

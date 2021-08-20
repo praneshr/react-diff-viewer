@@ -159,6 +159,8 @@ export default (
 
   const variables = useDarkTheme ? themeVariables.dark : themeVariables.light;
 
+  const interpolateClassname = (classname: string): string => `.${classname}`;
+
   const content = css({
     position: 'relative',
     width: '100%',
@@ -411,7 +413,6 @@ export default (
   });
 
   const clearHighlightButton = css`
-    ${addCommentButton};
     label: clear-highlight-button;
     background: #de3838;
     &:hover {
@@ -429,14 +430,15 @@ export default (
     display: flex;
     justify-content: center;
     align-items: center;
-    height: min(100%, 25px);
-    min-width: 30px;
+    height: min(100%, 20px);
+    min-width: 25px;
     font-family: Monospace, sans-serif;
     font-size: 10px;
     color: #fff;
     border: none;
-    background: #00a4db;
-    opacity: 0.7;
+    background: rgba(0, 164, 219, 0.7);
+    opacity: 1;
+    //opacity: 0.7;
     border-radius: 5px;
     padding: 0 5px;
     cursor: pointer;
@@ -462,16 +464,21 @@ export default (
     }
 
     &:hover {
-      opacity: 1 !important;
+      //opacity: 1 !important;
+      background: rgb(0, 164, 219);
     }
-    
+
     &:focus {
       outline: 0;
     }
-    
+
     &._urgent {
       font-weight: 700;
-      background: red;
+      background: rgba(255, 0, 0, 0.7);
+      &:hover {
+        //opacity: 1 !important;
+        background: rgba(255, 0, 0, 1);
+      }
     }
   `;
 
@@ -492,28 +499,29 @@ export default (
     transition: 0.2s;
     
     &._stacked {
-      .${viewCommentButton} {
+      ${interpolateClassname(viewCommentButton)} {
         &:last-of-type {
           //border-top-right-radius: 5px;
           //border-bottom-right-radius: 5px;
           //box-shadow: -2px -2px 0 rgba(17, 65, 82, 0.7), -4px -4px 0 rgba(17, 65, 82, 0.7);
           &::after {
+            z-index: 9;
             position: absolute;
             right: 0;
-            bottom: -7px;
+            bottom: -6px;
             content: attr(data-hidden-comments-count);
             display: flex;
             justify-content: center;
             align-items: center;
             min-width: 10px;
-            height: 10px;
+            height: 9px;
+            background: #fff;
             opacity: 1;
             color: #00a4db;
             font-size: 8px;
             font-weight: 800;
             border: 1px solid #00a4db;
             border-radius: 2px;
-            background-color: #fff;
             padding: 0 2px;
             transform: translateX(0);
             transition: 0.2s;
@@ -522,7 +530,7 @@ export default (
       }
       
       &._urgent {
-        .${viewCommentButton} {
+        ${interpolateClassname(viewCommentButton)} {
           &:last-of-type {
             &::after {
               color: red;
@@ -534,10 +542,10 @@ export default (
     }
 
     &:hover {
-      .${viewCommentButton} {
+      ${interpolateClassname(viewCommentButton)} {
         //display: flex;
         position: relative;
-        opacity: 0.7;
+        opacity: 1;
         pointer-events: all;
         transform: translateX(0);
 

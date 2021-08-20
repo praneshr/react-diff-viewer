@@ -5,7 +5,7 @@
 <br/>
 
 [![Build Status](https://travis-ci.com/praneshr/react-diff-viewer.svg?branch=master)](https://travis-ci.com/praneshr/react-diff-viewer)
-[![npm version](https://badge.fury.io/js/%40chunxei%2Freact-diff-viewer.svg)](https://badge.fury.io/js/%40chunxei%2Freact-diff-viewer.svg)
+[![npm version](https://badge.fury.io/js/%40chunxei%2Freact-diff-viewer.svg)](https://badge.fury.io/js/%40chunxei%2Freact-diff-viewer)
 [![GitHub license](https://img.shields.io/github/license/Chunxei/react-diff-viewer)](https://github.com/chunxei/react-diff-viewer/blob/master/LICENSE)
 
 **NOTE: This is a fork of Pranesh Ravi's [react-diff-viewer](https://github.com/praneshr/react-diff-viewer) with added hooks and features that allow for more fluid multilline selection and enable commenting.**
