@@ -16,7 +16,7 @@ const comments = {
       isUrgent: true,
       target: {
         createdAt: '2021-07-09T14:36:49.542Z',
-        description: 'line-1,line-2,line-3,line-4',
+        description: 'line-2,line-3,line-4',
         id: '60e85bc129eea948453cd3ad',
         type: 'code-fragment',
         updatedAt: '2021-07-09T14:36:49.542Z',
@@ -43,7 +43,7 @@ const comments = {
       subscribed: [] as Record<string, any>[],
       target: {
         createdAt: '2021-07-09T14:36:49.542Z',
-        description: 'line-3,line-4',
+        description: 'line-2,line-4',
         id: '60e85bc129eea948453cd3ad',
         type: 'code-fragment',
         updatedAt: '2021-07-09T14:36:49.542Z',
@@ -63,13 +63,13 @@ const comments = {
       comment: "* check's pulse *",
       createdAt: '2021-07-09T14:36:49.542Z',
       module: '60e859d3b267df4bc3c6159d',
-      replies: [1,2,3],
+      replies: [1, 2, 3],
       resolved: false,
       subscribed: [] as Record<string, any>[],
       isUrgent: true,
       target: {
         createdAt: '2021-07-09T14:36:49.542Z',
-        description: 'line-3,line-4',
+        description: 'line-1,line-3,line-4',
         id: '60e85bc129eea948453cd3ad',
         type: 'code-fragment',
         updatedAt: '2021-07-09T14:36:49.542Z',
@@ -94,7 +94,7 @@ const comments = {
       subscribed: [] as Record<string, any>[],
       target: {
         createdAt: '2021-07-09T14:36:49.542Z',
-        description: 'line-3,line-4',
+        description: 'line-1',
         id: '60e85bc129eea948453cd3ad',
         type: 'code-fragment',
         updatedAt: '2021-07-09T14:36:49.542Z',
@@ -237,9 +237,14 @@ if(a === 10) {
 }
 `;
 
+const leftTitle = 'Left Title';
+const rightTitle = 'Right Title';
+
 SplitView.args = {
   oldValue: oldCode,
   newValue: newCode,
+  leftTitle,
+  rightTitle,
   splitView: true,
   canSelectLines: {
     L: false,
@@ -250,6 +255,8 @@ SplitView.args = {
 InlineView.args = {
   oldValue: oldCode,
   newValue: newCode,
+  leftTitle,
+  rightTitle,
   splitView: false,
   canSelectLines: {
     L: false,
