@@ -95,6 +95,7 @@ export interface ReactDiffViewerProps {
   /** Event handler triggered when lines are highlighted in a batch,
    * such as when a comment that references a set of lines is clicked.
    * @param highlightedLines array of line Ids of the highlighted lines
+   * @param prefix prefix for the direction of the viewer the highlights were from.
    */
   onHighlightLines?: (highlightedLines: string[], prefix: string) => void;
   // Style overrides.
@@ -184,12 +185,7 @@ ReactDiffViewerState
   }
 
   public componentDidMount() {
-    this.setState({
-      sortedHighlightLines: {
-        L: this.props.highlightLines.filter((lineId): boolean => lineId.startsWith('L')).sort(),
-        R: this.props.highlightLines.filter((lineId): boolean => lineId.startsWith('R')).sort(),
-      },
-    });
+    this.sortAndStoreHighlightLinesByPrefix(this.props.highlightLines);
   }
 
   public componentDidUpdate(
@@ -198,13 +194,39 @@ ReactDiffViewerState
     snapshot?: any,
   ) {
     if (prevProps.highlightLines.length !== this.props.highlightLines.length) {
-      this.setState({
-        sortedHighlightLines: {
-          L: this.props.highlightLines.filter((lineId): boolean => lineId.startsWith('L')).sort(),
-          R: this.props.highlightLines.filter((lineId): boolean => lineId.startsWith('R')).sort(),
-        },
-      });
+      this.sortAndStoreHighlightLinesByPrefix(this.props.highlightLines);
     }
+  }
+
+  private filterLinesByPrefix = (lineIdArray: string[], prefix: string) => (
+    lineIdArray.filter((lineId): boolean => lineId.startsWith(prefix))
+  );
+
+  private arrangeSelectedLines = (lineIdArray: string[]) => (
+    /* create a sorted array of unique lineIds */
+    [
+      ...new Set(
+        lineIdArray.sort((a, b) => {
+          const aLineNumber = +a.match(/\d+/g)[0];
+          const bLineNumber = +b.match(/\d+/g)[0];
+          if (aLineNumber > bLineNumber) return 1;
+          return -1;
+        }),
+      ),
+    ]
+  );
+
+  private sortAndStoreHighlightLinesByPrefix = (highlightLines: string[]) => {
+    this.setState({
+      sortedHighlightLines: {
+        L: this.arrangeSelectedLines(
+          this.filterLinesByPrefix(highlightLines, 'L'),
+        ),
+        R: this.arrangeSelectedLines(
+          this.filterLinesByPrefix(highlightLines, 'R'),
+        ),
+      },
+    });
   }
 
   /**
