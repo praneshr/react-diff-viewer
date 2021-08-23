@@ -506,7 +506,7 @@ export default (
     border-bottom-left-radius: 5px;
     will-change: padding-right;
     transition: 0.2s;
-    
+
     &._stacked {
       ${interpolateClassname(viewCommentButton)} {
         &:last-of-type {
@@ -533,13 +533,17 @@ export default (
           }
         }
       }
-      
+
       &._urgent {
         ${interpolateClassname(viewCommentButton)} {
           &:last-of-type {
-            &::after {
-              color: red;
-              border: 1px solid red;
+            &:not(._urgent) {
+              &::after {
+                //color: red;
+                color: #fff;
+                background: rgba(255, 0, 0, 0.94);
+                border: 1px solid red;
+              }
             }
           }
         }

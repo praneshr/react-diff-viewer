@@ -64,6 +64,16 @@ class Diff extends PureComponent {
 }
 ```
 
+## Preview
+
+<p align="center">
+  <img src='https://res.cloudinary.com/chunxei/image/upload/v1629725473/projects/react-diff-viewer/ui-1.png' width="100%" alt='React Diff Viewer' />
+</p>
+<p align="center">
+  <img src='https://res.cloudinary.com/chunxei/image/upload/v1629725755/projects/react-diff-viewer/ui-2.png' width="100%" alt='React Diff Viewer' />
+</p>
+<br/>
+
 ## Props
 
 | Prop                      | Type            | Default                        | Description                                                                                                                                                                                                                                                                                                                                                                                                      |
