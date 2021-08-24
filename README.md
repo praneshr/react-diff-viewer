@@ -14,6 +14,16 @@ A simple and beautiful text diff viewer component made with [Diff](https://githu
 
 Inspired from Github diff viewer, it includes features like split view, inline view, word diff, line highlight and more. It is highly customizable and it supports almost all languages.
 
+## Preview (v3.2.0)
+
+<p align="center">
+  <img src='https://res.cloudinary.com/chunxei/image/upload/v1629725473/projects/react-diff-viewer/ui-1.png' width="100%" alt='React Diff Viewer' />
+</p>
+<p align="center">
+  <img src='https://res.cloudinary.com/chunxei/image/upload/v1629725755/projects/react-diff-viewer/ui-2.png' width="100%" alt='React Diff Viewer' />
+</p>
+<br/>
+
 ## Install
 
 ```bash
@@ -64,16 +74,6 @@ class Diff extends PureComponent {
 }
 ```
 
-## Preview
-
-<p align="center">
-  <img src='https://res.cloudinary.com/chunxei/image/upload/v1629725473/projects/react-diff-viewer/ui-1.png' width="100%" alt='React Diff Viewer' />
-</p>
-<p align="center">
-  <img src='https://res.cloudinary.com/chunxei/image/upload/v1629725755/projects/react-diff-viewer/ui-2.png' width="100%" alt='React Diff Viewer' />
-</p>
-<br/>
-
 ## Props
 
 | Prop                      | Type            | Default                        | Description                                                                                                                                                                                                                                                                                                                                                                                                      |
@@ -96,7 +96,7 @@ class Diff extends PureComponent {
 | leftTitle                 | `string`        | `undefined`                    | Column title for left section of the diff in split view. This will be used as the only title in inline view.                                                                                                                                                                                                                                                                                                     |
 | rightTitle                | `string`        | `undefined`                    | Column title for right section of the diff in split view. This will be ignored in inline view.                                                                                                                                                                                                                                                                                                                   |
 | linesOffset               | `number`        | `0`                            | Number to start count code lines from.                                                                                                                                                                                                                                                                                                                                                                           |
-
+<br/>
 ### Added from v3.2.0
 | Prop                      | Type            | Default                        | Description                                                                                                                                                                                                                                                                                                                                                                                                      |
 | ------------------------- | --------------- | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
