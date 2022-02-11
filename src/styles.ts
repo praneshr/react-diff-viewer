@@ -1,5 +1,5 @@
-import { css, cx } from 'emotion';
-import { Interpolation } from 'create-emotion';
+import { css, cx } from '@emotion/css';
+import { CSSInterpolation } from '@emotion/serialize';
 
 export interface ReactDiffViewerStyles {
 	diffContainer?: string;
@@ -57,25 +57,25 @@ export interface ReactDiffViewerStylesOverride {
 		dark?: ReactDiffViewerStylesVariables;
 		light?: ReactDiffViewerStylesVariables;
 	};
-	diffContainer?: Interpolation;
-	diffRemoved?: Interpolation;
-	diffAdded?: Interpolation;
-	marker?: Interpolation;
-	emptyGutter?: Interpolation;
-	highlightedLine?: Interpolation;
-	lineNumber?: Interpolation;
-	highlightedGutter?: Interpolation;
-	contentText?: Interpolation;
-	gutter?: Interpolation;
-	line?: Interpolation;
-	wordDiff?: Interpolation;
-	wordAdded?: Interpolation;
-	wordRemoved?: Interpolation;
-	codeFoldGutter?: Interpolation;
-	emptyLine?: Interpolation;
-	content?: Interpolation;
-	titleBlock?: Interpolation;
-	splitView?: Interpolation;
+	diffContainer?: CSSInterpolation;
+	diffRemoved?: CSSInterpolation;
+	diffAdded?: CSSInterpolation;
+	marker?: CSSInterpolation;
+	emptyGutter?: CSSInterpolation;
+	highlightedLine?: CSSInterpolation;
+	lineNumber?: CSSInterpolation;
+	highlightedGutter?: CSSInterpolation;
+	contentText?: CSSInterpolation;
+	gutter?: CSSInterpolation;
+	line?: CSSInterpolation;
+	wordDiff?: CSSInterpolation;
+	wordAdded?: CSSInterpolation;
+	wordRemoved?: CSSInterpolation;
+	codeFoldGutter?: CSSInterpolation;
+	emptyLine?: CSSInterpolation;
+	content?: CSSInterpolation;
+	titleBlock?: CSSInterpolation;
+	splitView?: CSSInterpolation;
 }
 
 export default (
