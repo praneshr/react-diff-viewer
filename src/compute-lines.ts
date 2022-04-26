@@ -90,9 +90,9 @@ const constructLines = (value: string): string[] => {
 const computeDiff = (
 	oldValue: string,
 	newValue: string,
-	compareMethod: string = DiffMethod.CHARS,
+	compareMethod: string | ((oldStr: string, newStr: string) => diff.Change[]) = DiffMethod.CHARS,
 ): ComputedDiffInformation => {
-	const diffArray: JsDiffChangeObject[] = jsDiff[compareMethod](
+	const diffArray: JsDiffChangeObject[] = ((typeof compareMethod === 'string') ? jsDiff[compareMethod] : compareMethod)(
 		oldValue,
 		newValue,
 	);
@@ -143,7 +143,7 @@ const computeLineInformation = (
 	oldString: string,
 	newString: string,
 	disableWordDiff: boolean = false,
-	compareMethod: string = DiffMethod.CHARS,
+	compareMethod: string | ((oldStr: string, newStr: string) => diff.Change[]) = DiffMethod.CHARS,
 	linesOffset: number = 0,
 ): ComputedLineInformation => {
 	const diffArray = diff.diffLines(

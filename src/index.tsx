@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import cn from 'classnames';
+import { Change } from 'diff';
 
 import {
 	computeLineInformation,
@@ -36,7 +37,7 @@ export interface ReactDiffViewerProps {
 	// Enable/Disable word diff.
 	disableWordDiff?: boolean;
 	// JsDiff text diff method from https://github.com/kpdecker/jsdiff/tree/v4.0.1#api
-	compareMethod?: DiffMethod;
+	compareMethod?: DiffMethod | ((oldStr: string, newStr: string) => Change[]);
 	// Number of unmodified lines surrounding each line diff.
 	extraLinesSurroundingDiff?: number;
 	// Show/hide line number.
@@ -99,7 +100,7 @@ class DiffViewer extends React.Component<
 		newValue: PropTypes.string.isRequired,
 		splitView: PropTypes.bool,
 		disableWordDiff: PropTypes.bool,
-		compareMethod: PropTypes.oneOf(Object.values(DiffMethod)),
+		compareMethod: PropTypes.oneOfType([PropTypes.oneOf(Object.values(DiffMethod)), PropTypes.func]),
 		renderContent: PropTypes.func,
 		onLineNumberClick: PropTypes.func,
 		extraLinesSurroundingDiff: PropTypes.number,
