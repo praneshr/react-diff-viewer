@@ -66,6 +66,8 @@ export interface ReactDiffViewerProps {
 	leftTitle?: string | JSX.Element;
 	// Title for left column
 	rightTitle?: string | JSX.Element;
+	// Nonce
+	nonce?: string;
 }
 
 export interface ReactDiffViewerState {
@@ -92,6 +94,7 @@ class DiffViewer extends React.Component<
 		showDiffOnly: true,
 		useDarkTheme: false,
 		linesOffset: 0,
+		nonce: ''
 	};
 
 	public static propTypes = {
@@ -110,6 +113,7 @@ class DiffViewer extends React.Component<
 		leftTitle: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
 		rightTitle: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
 		linesOffset: PropTypes.number,
+		nonce: PropTypes.string,
 	};
 
 	public constructor(props: ReactDiffViewerProps) {
@@ -156,6 +160,7 @@ class DiffViewer extends React.Component<
 	private computeStyles: (
 		styles: ReactDiffViewerStylesOverride,
 		useDarkTheme: boolean,
+		nonce: string,
 	) => ReactDiffViewerStyles = memoize(computeStyles);
 
 	/**
@@ -549,13 +554,14 @@ class DiffViewer extends React.Component<
 			rightTitle,
 			splitView,
 			hideLineNumbers,
+			nonce
 		} = this.props;
 
 		if (typeof oldValue !== 'string' || typeof newValue !== 'string') {
 			throw Error('"oldValue" and "newValue" should be strings');
 		}
 
-		this.styles = this.computeStyles(this.props.styles, useDarkTheme);
+		this.styles = this.computeStyles(this.props.styles, useDarkTheme, nonce);
 		const nodes = this.renderDiff();
 		const colSpanOnSplitView = hideLineNumbers ? 2 : 3;
 		const colSpanOnInlineView = hideLineNumbers ? 2 : 4;
