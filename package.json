@@ -1,6 +1,6 @@
 {
 	"name": "react-diff-viewer",
-	"version": "3.1.1",
+	"version": "3.2.0",
 	"private": false,
 	"description": "A simple and beautiful text diff viewer component made with diff and React",
 	"keywords": [
@@ -31,14 +31,14 @@
 	"dependencies": {
 		"classnames": "^2.2.6",
 		"create-emotion": "^10.0.14",
-		"diff": "^4.0.1",
+		"diff": "^5.1.0",
 		"emotion": "^10.0.14",
 		"memoize-one": "^5.0.4",
 		"prop-types": "^15.6.2"
 	},
 	"devDependencies": {
 		"@types/classnames": "^2.2.6",
-		"@types/diff": "^4.0.2",
+		"@types/diff": "^5.0.2",
 		"@types/enzyme": "^3.1.14",
 		"@types/enzyme-adapter-react-16": "^1.0.3",
 		"@types/expect": "^1.20.3",

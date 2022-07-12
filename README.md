@@ -161,6 +161,7 @@ enum DiffMethod {
   TRIMMED_LINES = 'diffTrimmedLines',
   SENTENCES = 'diffSentences',
   CSS = 'diffCss',
+  JSON = 'diffJson',
 }
 ```
 
