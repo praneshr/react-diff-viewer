@@ -1,5 +1,4 @@
-import { css, cx } from '@emotion/css';
-import { CSSInterpolation } from '@emotion/serialize';
+import { css, CSSInterpolation, cx } from '@emotion/css';
 
 export interface ReactDiffViewerStyles {
 	diffContainer?: string;
