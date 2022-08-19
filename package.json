@@ -30,7 +30,6 @@
 	},
 	"dependencies": {
 		"@emotion/css": "^11.7.1",
-		"@emotion/serialize": "^1.0.2",
 		"classnames": "^2.2.6",
 		"diff": "^4.0.1",
 		"memoize-one": "^5.0.4",
