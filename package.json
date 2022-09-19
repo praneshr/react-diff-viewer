@@ -34,11 +34,11 @@
     }
   },
   "lint-staged": {
-    "**/*.{ts,tsx}": [
+    "*.{ts,tsx}": [
       "yarn build",
       "prettier --write"
     ],
-    "*.{json, md}": [
+    "*.{json,md}": [
       "prettier --write"
     ]
   },
