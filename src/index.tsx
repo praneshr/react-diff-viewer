@@ -43,8 +43,11 @@ export interface ReactDiffViewerProps {
   hideLineNumbers?: boolean;
   // Show only diff between the two values.
   showDiffOnly?: boolean;
-  // Render prop to format final string before displaying them in the UI.
-  renderContent?: (source: string) => JSX.Element;
+  // Custom rendering function for a single line. Provides the current diff viewer render context so optional rendering such as comments or code annotations can be implemented
+  renderContent?: (
+    source: string,
+    renderContext?: ReactDiffViewerRenderContext,
+  ) => JSX.Element;
   // Render prop to format code fold message.
   codeFoldMessageRenderer?: (
     totalFoldedLines: number,
@@ -71,6 +74,15 @@ export interface ReactDiffViewerProps {
 export interface ReactDiffViewerState {
   // Array holding the expanded code folding.
   expandedBlocks?: number[];
+}
+
+export interface ReactDiffViewerRenderContext {
+  lineNumber: number;
+  type: DiffType;
+  prefix: LineNumberPrefix;
+  value: string | DiffInformation[];
+  additionalLineNumber?: number;
+  additionalPrefix?: LineNumberPrefix;
 }
 
 class DiffViewer extends React.Component<
@@ -179,7 +191,11 @@ class DiffViewer extends React.Component<
    */
   private renderWordDiff = (
     diffArray: DiffInformation[],
-    renderer?: (chunk: string) => JSX.Element,
+    renderer?: (
+      chunk: string,
+      renderContext?: ReactDiffViewerRenderContext,
+    ) => JSX.Element,
+    renderContext?: ReactDiffViewerRenderContext,
   ): JSX.Element[] => {
     return diffArray.map((wordDiff, i): JSX.Element => {
       return (
@@ -190,7 +206,9 @@ class DiffViewer extends React.Component<
             [this.styles.wordRemoved]: wordDiff.type === DiffType.REMOVED,
           })}
         >
-          {renderer ? renderer(wordDiff.value as string) : wordDiff.value}
+          {renderer
+            ? renderer(wordDiff.value as string, renderContext)
+            : wordDiff.value}
         </span>
       );
     });
@@ -210,13 +228,16 @@ class DiffViewer extends React.Component<
    * @param additionalPrefix Similar to prefix but for additional line number.
    */
   private renderLine = (
-    lineNumber: number,
-    type: DiffType,
-    prefix: LineNumberPrefix,
-    value: string | DiffInformation[],
-    additionalLineNumber?: number,
-    additionalPrefix?: LineNumberPrefix,
+    renderContext: ReactDiffViewerRenderContext,
   ): JSX.Element => {
+    const {
+      lineNumber,
+      type,
+      prefix,
+      value,
+      additionalLineNumber,
+      additionalPrefix,
+    } = renderContext;
     const lineNumberTemplate = `${prefix}-${lineNumber}`;
     const additionalLineNumberTemplate = `${additionalPrefix}-${additionalLineNumber}`;
     const highlightLine =
@@ -228,7 +249,7 @@ class DiffViewer extends React.Component<
     if (Array.isArray(value)) {
       content = this.renderWordDiff(value, this.props.renderContent);
     } else if (this.props.renderContent) {
-      content = this.props.renderContent(value);
+      content = this.props.renderContent(value, renderContext);
     } else {
       content = value;
     }
@@ -307,18 +328,18 @@ class DiffViewer extends React.Component<
   ): JSX.Element => {
     return (
       <tr key={index} className={this.styles.line}>
-        {this.renderLine(
-          left.lineNumber,
-          left.type,
-          LineNumberPrefix.LEFT,
-          left.value,
-        )}
-        {this.renderLine(
-          right.lineNumber,
-          right.type,
-          LineNumberPrefix.RIGHT,
-          right.value,
-        )}
+        {this.renderLine({
+          lineNumber: left.lineNumber,
+          type: left.type,
+          prefix: LineNumberPrefix.LEFT,
+          value: left.value,
+        })}
+        {this.renderLine({
+          lineNumber: right.lineNumber,
+          type: right.type,
+          prefix: LineNumberPrefix.RIGHT,
+          value: right.value,
+        })}
       </tr>
     );
   };
@@ -340,53 +361,51 @@ class DiffViewer extends React.Component<
       return (
         <React.Fragment key={index}>
           <tr className={this.styles.line}>
-            {this.renderLine(
-              left.lineNumber,
-              left.type,
-              LineNumberPrefix.LEFT,
-              left.value,
-              null,
-            )}
+            {this.renderLine({
+              lineNumber: left.lineNumber,
+              type: left.type,
+              prefix: LineNumberPrefix.LEFT,
+              value: left.value,
+            })}
           </tr>
           <tr className={this.styles.line}>
-            {this.renderLine(
-              null,
-              right.type,
-              LineNumberPrefix.RIGHT,
-              right.value,
-              right.lineNumber,
-            )}
+            {this.renderLine({
+              lineNumber: null,
+              type: right.type,
+              prefix: LineNumberPrefix.RIGHT,
+              value: right.value,
+              additionalLineNumber: right.lineNumber,
+            })}
           </tr>
         </React.Fragment>
       );
     }
     if (left.type === DiffType.REMOVED) {
-      content = this.renderLine(
-        left.lineNumber,
-        left.type,
-        LineNumberPrefix.LEFT,
-        left.value,
-        null,
-      );
+      content = this.renderLine({
+        lineNumber: left.lineNumber,
+        type: left.type,
+        prefix: LineNumberPrefix.LEFT,
+        value: left.value,
+      });
     }
     if (left.type === DiffType.DEFAULT) {
-      content = this.renderLine(
-        left.lineNumber,
-        left.type,
-        LineNumberPrefix.LEFT,
-        left.value,
-        right.lineNumber,
-        LineNumberPrefix.RIGHT,
-      );
+      content = this.renderLine({
+        lineNumber: left.lineNumber,
+        type: left.type,
+        prefix: LineNumberPrefix.LEFT,
+        value: left.value,
+        additionalLineNumber: right.lineNumber,
+        additionalPrefix: LineNumberPrefix.RIGHT,
+      });
     }
     if (right.type === DiffType.ADDED) {
-      content = this.renderLine(
-        null,
-        right.type,
-        LineNumberPrefix.RIGHT,
-        right.value,
-        right.lineNumber,
-      );
+      content = this.renderLine({
+        lineNumber: null,
+        type: right.type,
+        prefix: LineNumberPrefix.RIGHT,
+        value: right.value,
+        additionalLineNumber: right.lineNumber,
+      });
     }
 
     return (
