@@ -1,6 +1,6 @@
-import * as React from "react";
-import * as PropTypes from "prop-types";
-import cn from "classnames";
+import * as React from 'react';
+import * as PropTypes from 'prop-types';
+import cn from 'classnames';
 
 import {
     computeLineInformation,
@@ -8,20 +8,20 @@ import {
     DiffInformation,
     DiffType,
     DiffMethod,
-} from "./compute-lines";
+} from './compute-lines';
 import computeStyles, {
     ReactDiffViewerStylesOverride,
     ReactDiffViewerStyles,
-} from "./styles";
+} from './styles';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const m = require("memoize-one");
+const m = require('memoize-one');
 
 const memoize = m.default || m;
 
 export enum LineNumberPrefix {
-    LEFT = "L",
-    RIGHT = "R",
+    LEFT = 'L',
+    RIGHT = 'R',
 }
 
 export interface ReactDiffViewerProps {
@@ -92,8 +92,8 @@ class DiffViewer extends React.Component<
     private styles: ReactDiffViewerStyles;
 
     public static defaultProps: ReactDiffViewerProps = {
-        oldValue: "",
-        newValue: "",
+        oldValue: '',
+        newValue: '',
         splitView: true,
         highlightLines: [],
         disableWordDiff: false,
@@ -305,8 +305,8 @@ class DiffViewer extends React.Component<
                     })}
                 >
                     <pre>
-                        {added && "+"}
-                        {removed && "-"}
+                        {added && '+'}
+                        {removed && '-'}
                     </pre>
                 </td>
                 <td
@@ -539,7 +539,7 @@ class DiffViewer extends React.Component<
                     if (
                         line.left.type === DiffType.DEFAULT &&
                         (currentPosition > extraLines ||
-                            typeof diffBlockStart === "undefined") &&
+                            typeof diffBlockStart === 'undefined') &&
                         !this.state.expandedBlocks.includes(diffBlockStart)
                     ) {
                         skippedLines.push(i + 1);
@@ -593,7 +593,7 @@ class DiffViewer extends React.Component<
             hideLineNumbers,
         } = this.props;
 
-        if (typeof oldValue !== "string" || typeof newValue !== "string") {
+        if (typeof oldValue !== 'string' || typeof newValue !== 'string') {
             throw Error('"oldValue" and "newValue" should be strings');
         }
 
