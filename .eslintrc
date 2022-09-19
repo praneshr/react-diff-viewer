@@ -1,12 +1,17 @@
 {
   "extends": ["airbnb-base", "plugin:@typescript-eslint/recommended"],
   "rules": {
+    "quotes": ["error", "single"],
     "no-tabs": "off",
-    "@typescript-eslint/indent": ["error", 2],
+    "indent": "off",
+    "comma-dangle": "off",
+    "operator-linebreak": "off",
+    "@typescript-eslint/indent": "off",
+    "implicit-arrow-linebreak": "off",
     "max-len": ["error", {
-      "code": 100
+      "code": 255
     }],
-    "arrow-body-style": "off",
+    "arrow-body-style": "off"
   },
   "settings": {
     "import/resolver": {
