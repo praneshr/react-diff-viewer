@@ -73,15 +73,6 @@ export interface ReactDiffViewerState {
   expandedBlocks?: number[];
 }
 
-export interface ReactDiffViewerRenderContext {
-  lineNumber: number;
-  type: DiffType;
-  prefix: LineNumberPrefix;
-  value: string | DiffInformation[];
-  additionalLineNumber?: number;
-  additionalPrefix?: LineNumberPrefix;
-}
-
 class DiffViewer extends React.Component<
   ReactDiffViewerProps,
   ReactDiffViewerState
