@@ -1,4 +1,5 @@
 node_modules
 dist
-lib
+# TODO: needs to be uncommented and updated after the npm packaging is working
+# lib
 *.log

@@ -1,4 +1,3 @@
-
 <p align="center">
   <img src='https://i.ibb.co/DKrGhVQ/Frame-1-1.png' width="100%" alt='React Diff Viewer' />
 </p>
@@ -126,7 +125,7 @@ if(a === 10) {
 `;
 
 class Diff extends PureComponent {
-  highlightSyntax = str => (
+  highlightSyntax = (str) => (
     <pre
       style={{ display: 'inline' }}
       dangerouslySetInnerHTML={{
@@ -313,7 +312,7 @@ if(a === 10) {
 `;
 
 class Diff extends PureComponent {
-  highlightSyntax = str => (
+  highlightSyntax = (str) => (
     <span
       style={{ display: 'inline' }}
       dangerouslySetInnerHTML={{

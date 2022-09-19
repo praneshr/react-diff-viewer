@@ -2,15 +2,18 @@
   "extends": ["airbnb-base", "plugin:@typescript-eslint/recommended"],
   "rules": {
     "quotes": ["error", "single"],
-    "no-tabs": "off",
+    "no-tabs": "error",
     "indent": "off",
     "comma-dangle": "off",
     "operator-linebreak": "off",
     "@typescript-eslint/indent": "off",
     "implicit-arrow-linebreak": "off",
-    "max-len": ["error", {
-      "code": 255
-    }],
+    "max-len": [
+      "error",
+      {
+        "code": 255
+      }
+    ],
     "arrow-body-style": "off"
   },
   "settings": {
@@ -23,6 +26,6 @@
   "env": {
     "mocha": true,
     "node": true,
-    "browser": true,
-  },
+    "browser": true
+  }
 }

@@ -25,29 +25,21 @@ const bb = 456
 
 describe('Testing react diff viewer', (): void => {
   it('It should render a table', (): void => {
-    const node = shallow(<DiffViewer
-      oldValue={oldCode}
-      newValue={newCode}
-    />);
+    const node = shallow(<DiffViewer oldValue={oldCode} newValue={newCode} />);
 
     expect(node.find('table').length).toEqual(1);
   });
 
   it('It should render diff lines in diff view', (): void => {
-    const node = shallow(<DiffViewer
-      oldValue={oldCode}
-      newValue={newCode}
-    />);
+    const node = shallow(<DiffViewer oldValue={oldCode} newValue={newCode} />);
 
     expect(node.find('table > tbody tr').length).toEqual(7);
   });
 
   it('It should render diff lines in inline view', (): void => {
-    const node = shallow(<DiffViewer
-      oldValue={oldCode}
-      newValue={newCode}
-      splitView={false}
-    />);
+    const node = shallow(
+      <DiffViewer oldValue={oldCode} newValue={newCode} splitView={false} />,
+    );
 
     expect(node.find('table > tbody tr').length).toEqual(9);
   });
