@@ -181,20 +181,19 @@ class DiffViewer extends React.Component<
 		diffArray: DiffInformation[],
 		renderer?: (chunk: string) => JSX.Element,
 	): JSX.Element[] => {
-		return diffArray.map(
-			(wordDiff, i): JSX.Element => {
-				return (
-					<span
-						key={i}
-						className={cn(this.styles.wordDiff, {
-							[this.styles.wordAdded]: wordDiff.type === DiffType.ADDED,
-							[this.styles.wordRemoved]: wordDiff.type === DiffType.REMOVED,
-						})}>
-						{renderer ? renderer(wordDiff.value as string) : wordDiff.value}
-					</span>
-				);
-			},
-		);
+		return diffArray.map((wordDiff, i): JSX.Element => {
+			return (
+				<span
+					key={i}
+					className={cn(this.styles.wordDiff, {
+						[this.styles.wordAdded]: wordDiff.type === DiffType.ADDED,
+						[this.styles.wordRemoved]: wordDiff.type === DiffType.REMOVED,
+					})}
+				>
+					{renderer ? renderer(wordDiff.value as string) : wordDiff.value}
+				</span>
+			);
+		});
 	};
 
 	/**
@@ -246,7 +245,8 @@ class DiffViewer extends React.Component<
 							[this.styles.diffAdded]: added,
 							[this.styles.diffRemoved]: removed,
 							[this.styles.highlightedGutter]: highlightLine,
-						})}>
+						})}
+					>
 						<pre className={this.styles.lineNumber}>{lineNumber}</pre>
 					</td>
 				)}
@@ -261,7 +261,8 @@ class DiffViewer extends React.Component<
 							[this.styles.diffAdded]: added,
 							[this.styles.diffRemoved]: removed,
 							[this.styles.highlightedGutter]: highlightLine,
-						})}>
+						})}
+					>
 						<pre className={this.styles.lineNumber}>{additionalLineNumber}</pre>
 					</td>
 				)}
@@ -271,7 +272,8 @@ class DiffViewer extends React.Component<
 						[this.styles.diffAdded]: added,
 						[this.styles.diffRemoved]: removed,
 						[this.styles.highlightedLine]: highlightLine,
-					})}>
+					})}
+				>
 					<pre>
 						{added && '+'}
 						{removed && '-'}
@@ -283,7 +285,8 @@ class DiffViewer extends React.Component<
 						[this.styles.diffAdded]: added,
 						[this.styles.diffRemoved]: removed,
 						[this.styles.highlightedLine]: highlightLine,
-					})}>
+					})}
+				>
 					<pre className={this.styles.contentText}>{content}</pre>
 				</td>
 			</React.Fragment>
@@ -398,8 +401,10 @@ class DiffViewer extends React.Component<
 	 *
 	 * @param id Cold fold block id.
 	 */
-	private onBlockClickProxy = (id: number): any => (): void =>
-		this.onBlockExpand(id);
+	private onBlockClickProxy =
+		(id: number): any =>
+		(): void =>
+			this.onBlockExpand(id);
 
 	/**
 	 * Generates cold fold block. It also uses the custom message renderer when available to show
@@ -437,7 +442,8 @@ class DiffViewer extends React.Component<
 		return (
 			<tr
 				key={`${leftBlockLineNumber}-${rightBlockLineNumber}`}
-				className={this.styles.codeFold}>
+				className={this.styles.codeFold}
+			>
 				{!hideLineNumbers && <td className={this.styles.codeFoldGutter} />}
 				<td
 					className={cn({
@@ -564,7 +570,8 @@ class DiffViewer extends React.Component<
 			<tr>
 				<td
 					colSpan={splitView ? colSpanOnSplitView : colSpanOnInlineView}
-					className={this.styles.titleBlock}>
+					className={this.styles.titleBlock}
+				>
 					<pre className={this.styles.contentText}>{leftTitle}</pre>
 				</td>
 				{splitView && (
@@ -579,7 +586,8 @@ class DiffViewer extends React.Component<
 			<table
 				className={cn(this.styles.diffContainer, {
 					[this.styles.splitView]: splitView,
-				})}>
+				})}
+			>
 				<tbody>
 					{title}
 					{nodes}
