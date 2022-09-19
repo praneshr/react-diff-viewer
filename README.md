@@ -361,6 +361,8 @@ yarn start:examples
 
 Check package.json for more build scripts.
 
+To build the examples, the `node` version needs to match the `node-sass` version, i.e. for Node 14 LTS, `node-sass@^4.14` is used. Refer [this post](https://stackoverflow.com/questions/70281346/node-js-sass-version-7-0-0-is-incompatible-with-4-0-0-5-0-0-6-0-0) to learn the appropriate version.
+
 ## License
 
 MIT

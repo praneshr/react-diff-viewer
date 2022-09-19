@@ -1,10 +1,14 @@
 {
   "extends": ["airbnb-base", "plugin:@typescript-eslint/recommended"],
   "rules": {
+    "quotes": "off",
     "no-tabs": "off",
-    "@typescript-eslint/indent": ["error", 2],
+    "comma-dangle": "off",
+    "operator-linebreak": "off",
+    "implicit-arrow-linebreak": "off",
+    "@typescript-eslint/indent": "off",
     "max-len": ["error", {
-      "code": 100
+      "code": 255
     }],
     "arrow-body-style": "off",
   },
