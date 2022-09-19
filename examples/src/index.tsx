@@ -1,12 +1,14 @@
-require('./style.scss');
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
 import ReactDiff, { DiffMethod } from '../../lib/index';
 
+require('./style.scss');
+
 const oldJs = require('./diff/javascript/old.rjs').default;
 const newJs = require('./diff/javascript/new.rjs').default;
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const logo = require('../../logo.png');
 
 interface ExampleState {
