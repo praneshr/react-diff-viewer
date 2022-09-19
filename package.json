@@ -35,8 +35,8 @@
   },
   "lint-staged": {
     "**/*.{ts,tsx}": [
-      "prettier --write",
-      "yarn build"
+      "yarn build",
+      "prettier --write"
     ],
     "*.{json, md}": [
       "prettier --write"
