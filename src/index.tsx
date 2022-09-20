@@ -43,7 +43,7 @@ export interface ReactDiffViewerProps {
   hideLineNumbers?: boolean;
   // Show only diff between the two values.
   showDiffOnly?: boolean;
-  // Custom rendering function for a single line, provides the current diff viewer render context so optional rendering such as comments or code annotations can be implemented
+  // Custom rendering function for a single line, provides the current diff viewer render context so optional rendering such as comments or code annotations can be implemented, test
   renderContent?: (
     source: string,
     renderContext?: ReactDiffViewerRenderContext,
