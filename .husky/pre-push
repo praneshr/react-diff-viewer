@@ -1,8 +1,6 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-# build the bundle files
-yarn build
 # check if something changed, exit if so
 changed_bundle_files=`git diff --name-only | grep lib/`
 if [ ! -z "$changed_bundle_files" -a "$changed_bundle_files" != " " ]; then
