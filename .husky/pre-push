@@ -11,4 +11,4 @@ if [ ! -z "$changed_bundle_files" -a "$changed_bundle_files" != " " ]; then
 fi
 
 # run the tests
-yarn test
+npm run test

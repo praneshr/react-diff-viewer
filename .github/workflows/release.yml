@@ -1,0 +1,47 @@
+on:
+  push:
+    branches:
+      - main
+
+name: release-packages
+jobs:
+  release-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: google-github-actions/release-please-action@v2
+        id: release-please
+        with:
+          default-branch: main
+          bump-minor-pre-major: true
+          token: ${{ secrets.GPR_TOKEN }}
+          release-type: node
+          command: release-pr
+
+  github-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: GoogleCloudPlatform/release-please-action@v2
+        id: tag-release
+        with:
+          bump-minor-pre-major: true
+          default-branch: main
+          token: ${{ secrets.GPR_TOKEN }}
+          release-type: node
+          command: github-release
+      - uses: actions/checkout@v2
+        if: ${{ steps.tag-release.outputs.release_created }}
+
+      - uses: actions/setup-node@v1
+        if: ${{ steps.tag-release.outputs.release_created }}
+        with:
+          node-version: 14
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@everestsystems'
+
+      - name: publish
+        if: ${{ steps.tag-release.outputs.release_created }}
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.GPR_TOKEN}}
+        run: |
+          npm install
+          npm publish

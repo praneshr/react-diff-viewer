@@ -1,6 +1,6 @@
 {
   "name": "@everestsystems/react-diff-viewer",
-  "version": "3.1.1",
+  "version": "3.2.0",
   "main": "lib/index",
   "types": "lib/index",
   "private": false,
@@ -40,7 +40,8 @@
     "start:examples": "webpack-dev-server --open --hot --inline",
     "test": "mocha --require ts-node/register --require enzyme.ts ./test/**",
     "test:watch": "mocha --require ts-node/register --require enzyme.ts --watch-extensions ts,tsx --watch ./test/**",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "pre-commit": "lint-staged"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
@@ -85,7 +86,7 @@
     "file-loader": "^4.0.0",
     "gh-pages": "^2.0.1",
     "html-webpack-plugin": "^3.2.0",
-    "husky": "^8.0.1",
+    "husky": "^8.0.0",
     "lint-staged": "^13.0.3",
     "mini-css-extract-plugin": "^0.7.0",
     "mocha": "^6.1.4",
