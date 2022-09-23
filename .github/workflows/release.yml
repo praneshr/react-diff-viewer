@@ -43,5 +43,5 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{secrets.GPR_TOKEN}}
         run: |
-          npm install
+          npm ci --no-optional
           npm publish

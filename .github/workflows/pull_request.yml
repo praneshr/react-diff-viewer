@@ -6,6 +6,7 @@ on:
     paths-ignore:
       - '**.md'
       - '.vscode/**'
+      - '.husky/**'
 
 jobs:
   unit:
@@ -24,7 +25,7 @@ jobs:
           node-version: 14
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci --no-optional
 
       - name: Run tests
         run: npm test
