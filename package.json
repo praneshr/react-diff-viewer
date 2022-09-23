@@ -1,8 +1,10 @@
 {
-  "name": "react-diff-viewer",
+  "name": "@everestsystems/react-diff-viewer",
   "version": "3.1.1",
+  "main": "lib/index",
+  "types": "lib/index",
   "private": false,
-  "description": "A simple and beautiful text diff viewer component made with diff and React",
+  "description": "A fork of react-diff-viewer by Pranesh Ravi",
   "keywords": [
     "review",
     "code-review",
@@ -13,11 +15,22 @@
     "react-component",
     "ui"
   ],
-  "repository": "git@github.com:praneshr/react-diff-viewer.git",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/everestsystems/react-diff-viewer.git"
+  },
+  "files": [
+    "lib",
+    "!**/examples/**/*",
+    "!**/test/**/*",
+    "!**/*.spec.{js,ts,d.ts}",
+    "CHANGELOG.md"
+  ],
   "license": "MIT",
-  "author": "Pranesh Ravi<praneshpranesh@gmail.com>",
-  "main": "lib/index",
-  "typings": "lib/index",
+  "author": "Sven Vowe<sven.vowe@everest-erp.com.com>",
   "scripts": {
     "build": "tsc --outDir lib/",
     "build:examples": "webpack --progress --colors",

@@ -43,10 +43,11 @@ export interface ReactDiffViewerProps {
   hideLineNumbers?: boolean;
   // Show only diff between the two values.
   showDiffOnly?: boolean;
-  // Custom rendering function for a single line, provides the current diff viewer render context so optional rendering such as comments or code annotations can be implemented, test
+  // Custom rendering function for a single line, provides the current diff viewer render context and DiffInformation if available, so optional rendering such as comments or code annotations can be implemented.
   renderContent?: (
     source: string,
     renderContext: ReactDiffViewerRenderContext,
+    diffArray?: DiffInformation[],
   ) => JSX.Element;
   // Render prop to format code fold message.
   codeFoldMessageRenderer?: (
@@ -194,6 +195,7 @@ class DiffViewer extends React.Component<
     renderer?: (
       chunk: string,
       renderContext?: ReactDiffViewerRenderContext,
+      diffArray?: DiffInformation[],
     ) => JSX.Element,
     renderContext?: ReactDiffViewerRenderContext,
   ): JSX.Element[] => {
@@ -207,7 +209,7 @@ class DiffViewer extends React.Component<
           })}
         >
           {renderer
-            ? renderer(wordDiff.value as string, renderContext)
+            ? renderer(wordDiff.value as string, renderContext, diffArray)
             : wordDiff.value}
         </span>
       );
