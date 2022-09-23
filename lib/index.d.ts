@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
-import { LineInformation, DiffMethod } from './compute-lines';
+import { LineInformation, DiffInformation, DiffType, DiffMethod } from './compute-lines';
 import { ReactDiffViewerStylesOverride } from './styles';
 export declare enum LineNumberPrefix {
     LEFT = "L",
@@ -16,7 +16,7 @@ export interface ReactDiffViewerProps {
     extraLinesSurroundingDiff?: number;
     hideLineNumbers?: boolean;
     showDiffOnly?: boolean;
-    renderContent?: (source: string) => JSX.Element;
+    renderContent?: (source: string, renderContext: ReactDiffViewerRenderContext, diffArray?: DiffInformation[]) => JSX.Element;
     codeFoldMessageRenderer?: (totalFoldedLines: number, leftStartLineNumber: number, rightStartLineNumber: number) => JSX.Element;
     onLineNumberClick?: (lineId: string, event: React.MouseEvent<HTMLTableCellElement>) => void;
     highlightLines?: string[];
@@ -27,6 +27,14 @@ export interface ReactDiffViewerProps {
 }
 export interface ReactDiffViewerState {
     expandedBlocks?: number[];
+}
+export interface ReactDiffViewerRenderContext {
+    lineNumber: number;
+    type: DiffType;
+    prefix: LineNumberPrefix;
+    value: string | DiffInformation[];
+    additionalLineNumber?: number;
+    additionalPrefix?: LineNumberPrefix;
 }
 declare class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerState> {
     private styles;

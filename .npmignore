@@ -2,3 +2,6 @@ examples
 test
 *.svg
 src
+.github
+.husky
+

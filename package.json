@@ -1,8 +1,10 @@
 {
-  "name": "react-diff-viewer",
-  "version": "3.1.1",
+  "name": "@everestsystems/react-diff-viewer",
+  "version": "3.2.0",
+  "main": "lib/index",
+  "types": "lib/index",
   "private": false,
-  "description": "A simple and beautiful text diff viewer component made with diff and React",
+  "description": "A fork of react-diff-viewer by Pranesh Ravi",
   "keywords": [
     "review",
     "code-review",
@@ -13,11 +15,22 @@
     "react-component",
     "ui"
   ],
-  "repository": "git@github.com:praneshr/react-diff-viewer.git",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/everestsystems/react-diff-viewer.git"
+  },
+  "files": [
+    "lib",
+    "!**/examples/**/*",
+    "!**/test/**/*",
+    "!**/*.spec.{js,ts,d.ts}",
+    "CHANGELOG.md"
+  ],
   "license": "MIT",
-  "author": "Pranesh Ravi<praneshpranesh@gmail.com>",
-  "main": "lib/index",
-  "typings": "lib/index",
+  "author": "Sven Vowe<sven.vowe@everest-erp.com.com>",
   "scripts": {
     "build": "tsc --outDir lib/",
     "build:examples": "webpack --progress --colors",
@@ -26,16 +39,12 @@
     "publish:examples:local": "NODE_ENV=production yarn build:examples && gh-pages -d examples/dist",
     "start:examples": "webpack-dev-server --open --hot --inline",
     "test": "mocha --require ts-node/register --require enzyme.ts ./test/**",
-    "test:watch": "mocha --require ts-node/register --require enzyme.ts --watch-extensions ts,tsx --watch ./test/**"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
+    "test:watch": "mocha --require ts-node/register --require enzyme.ts --watch-extensions ts,tsx --watch ./test/**",
+    "prepare": "husky install",
+    "pre-commit": "lint-staged"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
-      "yarn build",
       "prettier --write"
     ],
     "*.{json,md}": [
@@ -77,11 +86,12 @@
     "file-loader": "^4.0.0",
     "gh-pages": "^2.0.1",
     "html-webpack-plugin": "^3.2.0",
-    "husky": "^8.0.1",
+    "husky": "^8.0.0",
     "lint-staged": "^13.0.3",
     "mini-css-extract-plugin": "^0.7.0",
     "mocha": "^6.1.4",
     "node-sass": "^4.14",
+    "prettier": "^2.7.1",
     "raw-loader": "^3.0.0",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",

@@ -1,0 +1,14 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# check if something changed, exit if so
+changed_bundle_files=`git diff --name-only | grep lib/` || true
+
+if [ ! -z "$changed_bundle_files" -a "$changed_bundle_files" != " " ]; then
+  echo 'The bundle files are not updated. Please check them in now:';
+  echo $changed_bundle_files;
+  exit 1;
+fi
+
+# run the tests
+npm run test
