@@ -46,7 +46,7 @@ export interface ReactDiffViewerProps {
   // Custom rendering function for a single line, provides the current diff viewer render context so optional rendering such as comments or code annotations can be implemented, test
   renderContent?: (
     source: string,
-    renderContext?: ReactDiffViewerRenderContext,
+    renderContext: ReactDiffViewerRenderContext,
   ) => JSX.Element;
   // Render prop to format code fold message.
   codeFoldMessageRenderer?: (
@@ -247,7 +247,11 @@ class DiffViewer extends React.Component<
     const removed = type === DiffType.REMOVED;
     let content;
     if (Array.isArray(value)) {
-      content = this.renderWordDiff(value, this.props.renderContent);
+      content = this.renderWordDiff(
+        value,
+        this.props.renderContent,
+        renderContext,
+      );
     } else if (this.props.renderContent) {
       content = this.props.renderContent(value, renderContext);
     } else {
