@@ -146,15 +146,52 @@ const computeLineInformation = (
 	compareMethod: string = DiffMethod.CHARS,
 	linesOffset: number = 0,
 ): ComputedLineInformation => {
-	const diffArray = diff.diffLines(
-		oldString.trimRight(),
-		newString.trimRight(),
-		{
+	let diffArray: diff.Change[] = [];
+	let long = false;
+	let num = 100;
+	if (oldString.length > 1000 || newString.length > 1000) {
+		long = true;
+	}
+
+	if (long) {
+		const oldArr = getArr(oldString, {
 			newlineIsToken: true,
 			ignoreWhitespace: false,
 			ignoreCase: false,
-		},
-	);
+		});
+
+		const newArr = getArr(newString, {
+			newlineIsToken: true,
+			ignoreWhitespace: false,
+			ignoreCase: false,
+		});
+
+		let oa = oldArr.splice(0, num);
+		let na = newArr.splice(0, num);
+
+		while (oa.length > 0 || na.length > 0) {
+			const o = oa.join("");
+			const n = na.join("");
+			diffArray = diffArray.concat(
+				diff.diffLines(o, n, {
+					newlineIsToken: true,
+					ignoreWhitespace: false,
+					ignoreCase: false,
+				})
+			);
+			oa = oldArr.splice(0, num);
+			na = newArr.splice(0, num);
+		}
+	} else {
+		diffArray = diffArray.concat(
+			diff.diffLines(oldString, newString, {
+				newlineIsToken: true,
+				ignoreWhitespace: false,
+				ignoreCase: false,
+			})
+		);
+	}
+
 	let rightLineNumber = linesOffset;
 	let leftLineNumber = linesOffset;
 	let lineInformation: LineInformation[] = [];
@@ -267,5 +304,31 @@ const computeLineInformation = (
 		diffLines,
 	};
 };
+
+function getArr(value: string, options: diff.LinesOptions) {
+	let retLines = [],
+		linesAndNewlines = value.split(/(\n|\r\n)/);
+
+	// Ignore the final empty token that occurs if the string ends with a new line
+	if (!linesAndNewlines[linesAndNewlines.length - 1]) {
+		linesAndNewlines.pop();
+	}
+
+	// Merge the content and line separators into single tokens
+	for (let i = 0; i < linesAndNewlines.length; i++) {
+		let line = linesAndNewlines[i];
+
+		if (i % 2 && !options.newlineIsToken) {
+			retLines[retLines.length - 1] += line;
+		} else {
+			if (options.ignoreWhitespace) {
+				line = line.trim();
+			}
+			retLines.push(line);
+		}
+	}
+
+	return retLines;
+}
 
 export { computeLineInformation };
