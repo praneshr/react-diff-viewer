@@ -72,6 +72,7 @@ export interface ReactDiffViewerStylesOverride {
 	wordAdded?: Interpolation;
 	wordRemoved?: Interpolation;
 	codeFoldGutter?: Interpolation;
+	codeFold?: Interpolation;
 	emptyLine?: Interpolation;
 	content?: Interpolation;
 	titleBlock?: Interpolation;
