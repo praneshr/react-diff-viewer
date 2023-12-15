@@ -41,6 +41,8 @@ export interface ReactDiffViewerProps {
 	extraLinesSurroundingDiff?: number;
 	// Show/hide line number.
 	hideLineNumbers?: boolean;
+	// Show/hide markers.
+	hideMarkers?: boolean;
 	// Show only diff between the two values.
 	showDiffOnly?: boolean;
 	// Render prop to format final string before displaying them in the UI.
@@ -88,6 +90,7 @@ class DiffViewer extends React.Component<
 		compareMethod: DiffMethod.CHARS,
 		styles: {},
 		hideLineNumbers: false,
+		hideMarkers: false,
 		extraLinesSurroundingDiff: 3,
 		showDiffOnly: true,
 		useDarkTheme: false,
@@ -105,6 +108,7 @@ class DiffViewer extends React.Component<
 		extraLinesSurroundingDiff: PropTypes.number,
 		styles: PropTypes.object,
 		hideLineNumbers: PropTypes.bool,
+		hideMarkers: PropTypes.bool,
 		showDiffOnly: PropTypes.bool,
 		highlightLines: PropTypes.arrayOf(PropTypes.string),
 		leftTitle: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
@@ -265,18 +269,20 @@ class DiffViewer extends React.Component<
 						<pre className={this.styles.lineNumber}>{additionalLineNumber}</pre>
 					</td>
 				)}
-				<td
-					className={cn(this.styles.marker, {
-						[this.styles.emptyLine]: !content,
-						[this.styles.diffAdded]: added,
-						[this.styles.diffRemoved]: removed,
-						[this.styles.highlightedLine]: highlightLine,
-					})}>
-					<pre>
-						{added && '+'}
-						{removed && '-'}
-					</pre>
-				</td>
+				{!this.props.hideMarkers && (
+					<td
+						className={cn(this.styles.marker, {
+							[this.styles.emptyLine]: !content,
+							[this.styles.diffAdded]: added,
+							[this.styles.diffRemoved]: removed,
+							[this.styles.highlightedLine]: highlightLine,
+						})}>
+						<pre>
+							{added && '+'}
+							{removed && '-'}
+						</pre>
+					</td>
+				)}
 				<td
 					className={cn(this.styles.content, {
 						[this.styles.emptyLine]: !content,
@@ -549,6 +555,7 @@ class DiffViewer extends React.Component<
 			rightTitle,
 			splitView,
 			hideLineNumbers,
+			hideMarkers,
 		} = this.props;
 
 		if (typeof oldValue !== 'string' || typeof newValue !== 'string') {
@@ -557,8 +564,28 @@ class DiffViewer extends React.Component<
 
 		this.styles = this.computeStyles(this.props.styles, useDarkTheme);
 		const nodes = this.renderDiff();
-		const colSpanOnSplitView = hideLineNumbers ? 2 : 3;
-		const colSpanOnInlineView = hideLineNumbers ? 2 : 4;
+		let colSpanOnSplitView: number;
+		let colSpanOnInlineView: number;
+		
+		if (hideLineNumbers) {
+			if (hideMarkers) {
+				colSpanOnSplitView = 1;
+				colSpanOnInlineView = 1;
+			} else {
+				colSpanOnSplitView = 2;
+				colSpanOnInlineView = 2;
+			}
+		} else {
+			if (hideMarkers) {
+				colSpanOnSplitView = 2;
+				colSpanOnInlineView = 3;
+			} else {
+				colSpanOnSplitView = 3;
+				colSpanOnInlineView = 4;
+			}
+		}
+		
+		
 
 		const title = (leftTitle || rightTitle) && (
 			<tr>
